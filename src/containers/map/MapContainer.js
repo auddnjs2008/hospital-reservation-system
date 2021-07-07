@@ -1,0 +1,63 @@
+import React from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { initialWhere } from "../../modules/map";
+import MapComponent from "../../components/map/MapComponent";
+
+const MapContainer = () => {
+  const dispatch = useDispatch();
+  const { latitude, longitude, kind } = useSelector(({ map, hospital }) => ({
+    latitude: map.latitude,
+    longitude: map.longitude,
+    kind: hospital.hospital.kind,
+  }));
+
+  const kakao = window.kakao;
+
+  const findCallBack = (result, status) => {
+    if (status === kakao.maps.services.Status.OK) {
+      dispatch(initialWhere({ latitude, longitude, hospitals: result }));
+    }
+  };
+
+  const findNearHospitals = () => {
+    const Lat = new kakao.maps.LatLng(latitude, longitude);
+    const places = new kakao.maps.services.Places();
+    places.keywordSearch(`${kind}`, findCallBack, {
+      location: Lat,
+      radius: 4000,
+    });
+  };
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const result = window.confirm("위치정보를 공유해주세요");
+      if (result) {
+        dispatch(
+          initialWhere({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          })
+        );
+      } else {
+        //에러처리;
+        //to do  에러처리
+        console.log("error");
+      }
+    });
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (latitude && longitude) {
+      findNearHospitals();
+    }
+  }, [latitude, longitude]);
+
+  useEffect(() => {
+    console.log("맵컨테이너 시작");
+  }, []);
+
+  return <MapComponent></MapComponent>;
+};
+
+export default MapContainer;

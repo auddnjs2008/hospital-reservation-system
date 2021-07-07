@@ -3,7 +3,8 @@ import { useDispatch } from "react-redux";
 import { clickHospital } from "../../modules/hospital";
 import AskComponent from "../../components/asks/AskComponent";
 import { useEffect } from "react";
-const AskContainer = () => {
+import { withRouter } from "react-router-dom";
+const AskContainer = ({ history }) => {
   const dispatch = useDispatch();
   const itemClick = (kind) => {
     dispatch(clickHospital({ kind: `${kind}` }));
@@ -13,9 +14,10 @@ const AskContainer = () => {
       target: { id: kind },
     } = e;
     itemClick(kind);
+    history.push("/map");
   };
 
   return <AskComponent onItemClick={onItemClick}></AskComponent>;
 };
 
-export default AskContainer;
+export default withRouter(AskContainer);
