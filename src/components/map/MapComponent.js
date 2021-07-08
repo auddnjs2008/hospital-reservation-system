@@ -1,7 +1,8 @@
 import React, { useRef } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { initialMap } from "../../modules/map";
 import styled from "styled-components";
 import Loading from "../common/Loading";
 
@@ -9,10 +10,13 @@ const MapComponentBlock = styled.div``;
 const MapContainer = styled.div`
   width: 70vw;
   height: 100vh;
+  transition: transform 0.2s ease-in-out;
 `;
 
 const MapComponent = () => {
   const kakao = window.kakao;
+  const dispatch = useDispatch();
+
   const [map, setMap] = useState();
   const { lat, long, hospitals } = useSelector(({ map }) => ({
     lat: map.latitude,
@@ -50,6 +54,7 @@ const MapComponent = () => {
     };
     const newMap = new kakao.maps.Map(mapContainer.current, options);
     setMap(newMap);
+    dispatch(initialMap({ map: newMap, mapBox: mapContainer }));
   }, [lat, long]);
 
   useEffect(() => {

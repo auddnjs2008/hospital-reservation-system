@@ -6,6 +6,7 @@ const PlaceInfoContainer = () => {
   const { hospitals } = useSelector(({ map }) => ({
     hospitals: map.hospitals,
   }));
+
   return <PlaceInfoComponent hospitals={hospitals}></PlaceInfoComponent>;
 };
 

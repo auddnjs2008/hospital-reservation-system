@@ -53,10 +53,6 @@ const MapContainer = () => {
     }
   }, [latitude, longitude]);
 
-  useEffect(() => {
-    console.log("맵컨테이너 시작");
-  }, []);
-
   return <MapComponent></MapComponent>;
 };
 
