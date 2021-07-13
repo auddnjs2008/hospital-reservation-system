@@ -10,6 +10,7 @@ import pallet from "../../lib/styles/pallet";
 import InfoToggleBtn from "./InfoToggleBtn";
 import Menu from "../common/Menu";
 import SearchComponent from "../search/SearchComponent";
+import { Link } from "react-router-dom";
 
 const PlaceInfoComponentBlock = styled.div`
   position: relative;
@@ -102,6 +103,7 @@ const PlaceInfoComponent = ({ hospitals }) => {
   const { map } = useSelector(({ map }) => ({ map: map.map }));
   const [toggle, setToggle] = useState(0);
   let markerControl = null;
+  let infoWindow = null;
   const placeInfoWrapper = useRef();
   const hospitalList = useRef();
   const main = useRef();
@@ -135,7 +137,17 @@ const PlaceInfoComponent = ({ hospitals }) => {
       title: target.place_name,
       image: markerImage,
     });
+    infoWindow = new kakao.maps.InfoWindow({
+      position: eachLang,
+      content: `<div style="padding:2px;  border:none;">${target.place_name}</div>`,
+    });
+    infoWindow.open(map, marker);
     markerControl = marker;
+  };
+
+  const onMouseOut = () => {
+    if (markerControl !== null) markerControl.setMap(null);
+    infoWindow.close();
   };
 
   const onMouseOver = (e) => {
@@ -161,14 +173,14 @@ const PlaceInfoComponent = ({ hospitals }) => {
               id="0"
               className="hospital"
               onMouseOver={onMouseOver}
-              onMouseOut={() => {
-                if (markerControl !== null) markerControl.setMap(null);
-              }}
+              onMouseOut={onMouseOut}
             >
               <h2>{hospitals[0]?.place_name}</h2>
               <div>
                 {hospitals[0]?.address_name}
-                <span className="distance">{hospitals[0]?.distance}m</span>
+                {hospitals[0]?.distance && (
+                  <span className="distance">{hospitals[0].distance}m</span>
+                )}
               </div>
               <div className="detailInfo">
                 <span>{hospitals[0]?.phone}</span>
@@ -193,14 +205,14 @@ const PlaceInfoComponent = ({ hospitals }) => {
                     id={`${index}`}
                     className="hospital"
                     onMouseOver={onListMouseOver}
-                    onMouseOut={() => {
-                      if (markerControl !== null) markerControl.setMap(null);
-                    }}
+                    onMouseOut={onMouseOut}
                   >
                     <h2>{item.place_name}</h2>
                     <div>
                       {item.address_name}
-                      <span className="distance">{item.distance}m</span>
+                      {item.distance && (
+                        <span className="distance">{item.distance}m</span>
+                      )}
                     </div>
                     <div className="detailInfo">
                       <span>{item.phone}</span>

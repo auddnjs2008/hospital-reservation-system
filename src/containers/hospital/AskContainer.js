@@ -7,6 +7,7 @@ import { withRouter } from "react-router-dom";
 const AskContainer = ({ history }) => {
   const dispatch = useDispatch();
   const itemClick = (kind) => {
+    localStorage.setItem("hospital_kind", kind);
     dispatch(clickHospital({ kind: `${kind}` }));
   };
   const onItemClick = (e) => {

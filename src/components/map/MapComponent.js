@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { initialMap } from "../../modules/map";
+import { drawMarker, initialMap } from "../../modules/map";
 import styled from "styled-components";
 import Loading from "../common/Loading";
 
@@ -32,6 +32,7 @@ const MapComponent = () => {
     const imageSize = new kakao.maps.Size(24, 35);
     const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
     const bounds = new kakao.maps.LatLngBounds();
+    const markers = [];
     if (hospitals) {
       hospitals.forEach((item, index) => {
         const eachLang = new kakao.maps.LatLng(item.y, item.x);
@@ -42,7 +43,9 @@ const MapComponent = () => {
           title: item.place_name,
           image: markerImage,
         });
+        markers.push(marker);
       });
+      dispatch(drawMarker({ markers }));
     }
     if (map) map.setBounds(bounds);
   };

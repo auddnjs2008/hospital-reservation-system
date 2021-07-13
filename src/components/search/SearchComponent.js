@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { searchMap } from "../../modules/map";
+import { eraseMarker, searchMap } from "../../modules/map";
 import styled from "styled-components";
 import { useEffect } from "react";
 import { useRef } from "react";
@@ -45,9 +45,10 @@ const SearchComponentBlock = styled.form`
 const SearchComponent = () => {
   const [text, SetText] = useState("");
   const dispatch = useDispatch();
-  const { latitude, longitude } = useSelector(({ map }) => ({
+  const { latitude, longitude, markers } = useSelector(({ map }) => ({
     latitude: map.latitude,
     longitude: map.longitude,
+    markers: map.markers,
   }));
   const checkBox = useRef();
   const onChange = (e) => {
@@ -60,9 +61,11 @@ const SearchComponent = () => {
       const filterResult = result.filter(
         (item) => item.category_group_code === "HP8"
       );
-      if (filterResult.length !== 0)
+      if (filterResult.length !== 0) {
+        eraseMarkers();
+        dispatch(eraseMarker());
         dispatch(searchMap({ hospitals: filterResult }));
-      else {
+      } else {
         window.alert("검색어에 일치하는 병원이 없습니다");
       }
     }
@@ -78,6 +81,14 @@ const SearchComponent = () => {
       });
     } else {
       places.keywordSearch(`${text}`, findCallBack);
+    }
+  };
+
+  const eraseMarkers = () => {
+    if (markers) {
+      for (let i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+      }
     }
   };
 

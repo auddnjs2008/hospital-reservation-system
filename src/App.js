@@ -4,6 +4,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import AskPage from "./pages/AskPage";
 import MapPage from "./pages/MapPage";
+import AwsAuthForm from "./components/auth/AwsAuthForm";
 function App() {
   return (
     <>
@@ -11,6 +12,7 @@ function App() {
       <Route path="/login" component={LoginPage} />
       <Route path="/register" component={RegisterPage} />
       <Route path="/map" component={MapPage} />
+      <Route path="/test" component={AwsAuthForm} />
     </>
   );
 }

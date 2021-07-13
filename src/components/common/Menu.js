@@ -7,6 +7,8 @@ import {
   faHospital,
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const MenuBlock = styled.ul`
   width: 100%;
@@ -23,16 +25,24 @@ const MenuBlock = styled.ul`
 `;
 
 const Menu = () => {
+  const { auth } = useSelector(({ auth }) => ({ auth: auth.auth }));
+
   return (
     <MenuBlock>
       <li>
-        <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
+        <Link to={auth.email ? "" : "/login"}>
+          <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
+        </Link>
       </li>
       <li>
-        <FontAwesomeIcon icon={faCalendarCheck}></FontAwesomeIcon>
+        <Link>
+          <FontAwesomeIcon icon={faCalendarCheck}></FontAwesomeIcon>
+        </Link>
       </li>
       <li>
-        <FontAwesomeIcon icon={faHospital}></FontAwesomeIcon>
+        <Link>
+          <FontAwesomeIcon icon={faHospital}></FontAwesomeIcon>
+        </Link>
       </li>
     </MenuBlock>
   );

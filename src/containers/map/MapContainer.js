@@ -23,10 +23,14 @@ const MapContainer = () => {
   const findNearHospitals = () => {
     const Lat = new kakao.maps.LatLng(latitude, longitude);
     const places = new kakao.maps.services.Places();
-    places.keywordSearch(`${kind}`, findCallBack, {
-      location: Lat,
-      radius: 4000,
-    });
+    places.keywordSearch(
+      kind || localStorage.getItem("hospital_kind"),
+      findCallBack,
+      {
+        location: Lat,
+        radius: 4000,
+      }
+    );
   };
 
   useEffect(() => {
