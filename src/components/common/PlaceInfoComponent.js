@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import pallet from "../../lib/styles/pallet";
 import InfoToggleBtn from "./InfoToggleBtn";
-import Menu from "../common/Menu";
+import Menu from "./Menu";
 import SearchComponent from "../search/SearchComponent";
 import { Link } from "react-router-dom";
 
@@ -108,7 +108,10 @@ const PlaceInfoComponent = ({ hospitals }) => {
   const hospitalList = useRef();
   const main = useRef();
   const onInfoToggleClick = (e) => {
-    if (hospitalList.current.style.opacity === "0") {
+    if (
+      hospitalList.current.style.opacity === "0" ||
+      hospitalList.current.style.opacity === ""
+    ) {
       hospitalList.current.style.opacity = "1";
       main.current.scrollTop = main.current.scrollWidth;
       main.current.position = "fixed";
@@ -124,30 +127,31 @@ const PlaceInfoComponent = ({ hospitals }) => {
   const createBigMarker = (index) => {
     const kakao = window.kakao;
     const target = hospitals[index];
+    if (target) {
+      const imageSrc =
+        "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+      const imageSize = new kakao.maps.Size(24 * 1.5, 35 * 1.5);
+      const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
-    const imageSrc =
-      "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-    const imageSize = new kakao.maps.Size(24 * 1.5, 35 * 1.5);
-    const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-
-    const eachLang = new kakao.maps.LatLng(target.y, target.x);
-    const marker = new kakao.maps.Marker({
-      map,
-      position: eachLang,
-      title: target.place_name,
-      image: markerImage,
-    });
-    infoWindow = new kakao.maps.InfoWindow({
-      position: eachLang,
-      content: `<div style="padding:2px;  border:none;">${target.place_name}</div>`,
-    });
-    infoWindow.open(map, marker);
-    markerControl = marker;
+      const eachLang = new kakao.maps.LatLng(target.y, target.x);
+      const marker = new kakao.maps.Marker({
+        map,
+        position: eachLang,
+        title: target.place_name,
+        image: markerImage,
+      });
+      infoWindow = new kakao.maps.InfoWindow({
+        position: eachLang,
+        content: `<div style="padding:2px;  border:none;">${target.place_name}</div>`,
+      });
+      infoWindow.open(map, marker);
+      markerControl = marker;
+    }
   };
 
   const onMouseOut = () => {
     if (markerControl !== null) markerControl.setMap(null);
-    infoWindow.close();
+    infoWindow?.close();
   };
 
   const onMouseOver = (e) => {

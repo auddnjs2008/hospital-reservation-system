@@ -1,13 +1,17 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { clickHospital } from "../../modules/hospital";
+import { clickHospital, initialHospital } from "../../modules/hospital";
 import AskComponent from "../../components/asks/AskComponent";
 import { useEffect } from "react";
 import { withRouter } from "react-router-dom";
+import { initialMapHospitals } from "../../modules/map";
+
 const AskContainer = ({ history }) => {
   const dispatch = useDispatch();
   const itemClick = (kind) => {
     localStorage.setItem("hospital_kind", kind);
+    dispatch(initialHospital());
+    dispatch(initialMapHospitals());
     dispatch(clickHospital({ kind: `${kind}` }));
   };
   const onItemClick = (e) => {

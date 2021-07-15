@@ -1,8 +1,13 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, withRouter } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../common/Button";
 import pallet from "../../lib/styles/pallet";
+import { CognitoUser, AuthenticationDetails } from "amazon-cognito-identity-js";
+import userPool from "../../lib/awsconfig";
+
+import { useRef } from "react";
+import ConfirmForm from "./ConfirmForm";
 
 const AuthFormBlock = styled.div`
   width: 400px;
@@ -55,35 +60,82 @@ const AuthFormBlock = styled.div`
   }
 `;
 
-const AuthForm = ({ onChange, onSubmit, content, text }) => {
+const AuthForm = ({ onChange, content, text, history }) => {
+  const [confirmSw, setConfirmSw] = useState(false);
+  const id = useRef();
+  const password = useRef();
+  const email = useRef();
+
+  const LogInSubmit = async (e) => {
+    e.preventDefault();
+    const user = new CognitoUser({
+      Username: id.current.value,
+      Pool: userPool,
+    });
+    const authDetails = new AuthenticationDetails({
+      Username: id.current.value,
+      Password: password.current.value,
+    });
+
+    user.authenticateUser(authDetails, {
+      onSuccess: (data) => {
+        history.push("/user");
+      },
+      onFailure: (err) => alert(err),
+    });
+  };
+  const SignUpSubmit = async (e) => {
+    e.preventDefault();
+    userPool.signUp(
+      id.current.value,
+      password.current.value,
+      [{ Name: "email", Value: email.current.value }],
+      null,
+      (err, data) => {
+        if (err) console.log(err);
+        setConfirmSw(true);
+      }
+    );
+  };
+
   return (
     <AuthFormBlock>
       <h2>{content || "LOGIN"}</h2>
-      <form>
-        <input
-          onChange={onChange}
-          type="email"
-          placeholder="email"
-          value={text.email}
-          name="email"
-        ></input>
-        <input
-          onChange={onChange}
-          type="password"
-          placeholder="password"
-          name="password"
-          value={text.password}
-        ></input>
-        {content === "SIGN UP" && (
+      {confirmSw ? (
+        <ConfirmForm />
+      ) : (
+        <form onSubmit={content === "Login" ? LogInSubmit : SignUpSubmit}>
           <input
-            type="password"
-            placeholder="password-confirm"
-            name={"passwordConfirm"}
-            style={{ marginBottom: "20px" }}
+            onChange={onChange}
+            type="text"
+            ref={id}
+            placeholder="id"
+            value={text.email}
+            name="id"
           ></input>
-        )}
-        <Button content={content}></Button>
-      </form>
+          <input
+            onChange={onChange}
+            type="password"
+            ref={password}
+            placeholder="password"
+            name="password"
+            value={text.password}
+          ></input>
+          {content === "SIGN UP" && (
+            <input
+              onChange={onChange}
+              type="email"
+              ref={email}
+              placeholder="email"
+              name="email"
+              value={text.email}
+              style={{ marginBottom: "20px" }}
+            ></input>
+          )}
+
+          <Button content={content}></Button>
+        </form>
+      )}
       <footer>
         <Link to={content === "Login" ? "/register" : "/login"}>
           {content === "Login" ? "SIGN UP" : "Login"}
@@ -93,4 +145,4 @@ const AuthForm = ({ onChange, onSubmit, content, text }) => {
   );
 };
 
-export default AuthForm;
+export default withRouter(AuthForm);

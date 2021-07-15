@@ -62,7 +62,7 @@ const MapComponent = () => {
 
   useEffect(() => {
     if (hospitals) markerDraw();
-  }, [hospitals]);
+  }, [hospitals, map]);
 
   return (
     <MapComponentBlock>

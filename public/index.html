@@ -30,6 +30,34 @@
       type="text/javascript"
       src="//dapi.kakao.com/v2/maps/sdk.js?appkey=%REACT_APP_KAKAO_MAP_KEY%&libraries=services,clusterer,drawing"
     ></script>
+    <script type="text/javascript">
+      (function (w, d, x, id) {
+        s = d.createElement("script");
+        s.src =
+          "https://d2ct74a929wa9a.cloudfront.net/amazon-connect-chat-interface-client.js";
+        s.async = 1;
+        s.id = id;
+        d.getElementsByTagName("head")[0].appendChild(s);
+        w[x] =
+          w[x] ||
+          function () {
+            (w[x].ac = w[x].ac || []).push(arguments);
+          };
+      })(
+        window,
+        document,
+        "amazon_connect",
+        "abdb1182-2a41-4a93-b434-cbbb58c1515d"
+      );
+      amazon_connect("styles", {
+        openChat: { color: "white", backgroundColor: "#123456", zindex: 30 },
+        closeChat: { color: "white", backgroundColor: "#123456" },
+      });
+      amazon_connect(
+        "snippetId",
+        "QVFJREFIaFNiTmErOFNCemR3ZU9wOXNKeER1MTZkbUt4UmJkVUs2eGdYVkpPZlF3cWdGcFQ5ejZ4RkpTL3dzZUR5S3BDQnc0QUFBQWJqQnNCZ2txaGtpRzl3MEJCd2FnWHpCZEFnRUFNRmdHQ1NxR1NJYjNEUUVIQVRBZUJnbGdoa2dCWlFNRUFTNHdFUVFNeERnNHRTVnZLQSs5NFU5MUFnRVFnQ3NTaU9FeUMyZVRrcXFLbjZ3M1ZDSkJwNk5rbXNBZTBNcVZYb3F5SGN0ZExWQ2NtVGd1L1EvbWk5R3c6OnZHSnVYem4reEpYcDByN3lTTWd1MlltYnIxbmJmMmVwdWV3T05KNGJELzMzMEpqbnVmUGRORlk0NDlPSmFneTVocjJRWGpoeXFxQ2JPditTeTJuV2N4TG8vL2R4ZE5FSzEzenFVZDV4dnVWWXp6TUR4VDVlTkR5ZnlNYWMxcTFxMFRuWThvVmduL1ZJMXZXeHVMQktEUkNGRTBMbkNDUT0="
+      );
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

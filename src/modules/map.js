@@ -2,12 +2,14 @@ import { createAction, handleActions } from "redux-actions";
 
 const INITIAL_WHERE = "map/INITIAL_WHERE";
 const INITIAL_MAP = "map/INITIAL_MAP";
+const INITIAL_HOSPITALS = "map/INITAL_HOSPITALS";
 const SEARCH_MAP = "map/SEARCH_MAP";
 const DRAW_MARKER = "map/DRAW_MARKER";
 const ERASE_MARKER = "map/ERASE_MARKER";
 
 export const initialWhere = createAction(INITIAL_WHERE);
 export const initialMap = createAction(INITIAL_MAP);
+export const initialMapHospitals = createAction(INITIAL_HOSPITALS);
 export const searchMap = createAction(SEARCH_MAP);
 export const drawMarker = createAction(DRAW_MARKER);
 export const eraseMarker = createAction(ERASE_MARKER);
@@ -37,6 +39,8 @@ const map = handleActions(
       map,
       mapBox,
     }),
+    [INITIAL_HOSPITALS]: (state) => ({ ...state, hospitals: [] }),
+
     [SEARCH_MAP]: (state, { payload: { hospitals } }) => ({
       ...state,
       hospitals,

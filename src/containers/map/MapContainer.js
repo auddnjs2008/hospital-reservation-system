@@ -6,11 +6,14 @@ import MapComponent from "../../components/map/MapComponent";
 
 const MapContainer = () => {
   const dispatch = useDispatch();
-  const { latitude, longitude, kind } = useSelector(({ map, hospital }) => ({
-    latitude: map.latitude,
-    longitude: map.longitude,
-    kind: hospital.hospital.kind,
-  }));
+  const { latitude, longitude, kind, hospitals } = useSelector(
+    ({ map, hospital }) => ({
+      latitude: map.latitude,
+      longitude: map.longitude,
+      kind: hospital.hospital.kind,
+      hospitals: map.hospitals,
+    })
+  );
 
   const kakao = window.kakao;
 
@@ -34,6 +37,7 @@ const MapContainer = () => {
   };
 
   useEffect(() => {
+    if (latitude && latitude) return;
     navigator.geolocation.getCurrentPosition((position) => {
       const result = window.confirm("위치정보를 공유해주세요");
       if (result) {
@@ -41,6 +45,7 @@ const MapContainer = () => {
           initialWhere({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
+            hospitals: [],
           })
         );
       } else {
@@ -52,10 +57,11 @@ const MapContainer = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (latitude && longitude) {
+    if (latitude && longitude && hospitals.length === 0) {
+      console.log("실행");
       findNearHospitals();
     }
-  }, [latitude, longitude]);
+  }, [latitude, longitude, hospitals]);
 
   return <MapComponent></MapComponent>;
 };

@@ -1,13 +1,12 @@
 import React from "react";
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AuthForm from "../../components/auth/AuthForm";
 import { changeField } from "../../modules/auth";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const { email, password } = useSelector(({ auth }) => ({
-    email: auth.email,
+  const { id, password } = useSelector(({ auth }) => ({
+    id: auth.id,
     password: auth.password,
   }));
 
@@ -16,16 +15,11 @@ const LoginForm = () => {
     dispatch(changeField({ key, text }));
   };
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-  };
-
   return (
     <AuthForm
       onChange={onChange}
-      onSubmit={onSubmit}
       content="Login"
-      text={{ email, password }}
+      text={{ id, password }}
     ></AuthForm>
   );
 };

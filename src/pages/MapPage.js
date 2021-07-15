@@ -1,6 +1,6 @@
 import React from "react";
 import MapContainer from "../containers/map/MapContainer";
-import PlaceInfoContainer from "../containers/map/PlaceInfoContainer";
+import PlaceInfoContainer from "../containers/PlaceInfoContainer";
 import styled from "styled-components";
 
 const MapWrapper = styled.div`

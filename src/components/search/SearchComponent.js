@@ -61,6 +61,7 @@ const SearchComponent = () => {
       const filterResult = result.filter(
         (item) => item.category_group_code === "HP8"
       );
+
       if (filterResult.length !== 0) {
         eraseMarkers();
         dispatch(eraseMarker());

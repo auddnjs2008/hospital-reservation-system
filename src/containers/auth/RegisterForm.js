@@ -2,18 +2,27 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import AuthForm from "../../components/auth/AuthForm";
+import { changeField } from "../../modules/auth";
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
-  const { email, password } = useSelector(({ auth }) => ({
+  const { id, password, email } = useSelector(({ auth }) => ({
+    id: auth.id,
+    password: auth.password,
     email: auth.email,
-    password: auth.email,
   }));
-  const onChange = () => {};
+  const onChange = (e) => {
+    const { value: text, name: key } = e.target;
+    dispatch(changeField({ key, text }));
+  };
 
-  const onSubmit = () => {};
-
-  return <AuthForm content="SIGN UP" text={{ email, password }}></AuthForm>;
+  return (
+    <AuthForm
+      content="SIGN UP"
+      onChange={onChange}
+      text={{ id, password, email }}
+    ></AuthForm>
+  );
 };
 
 export default RegisterForm;

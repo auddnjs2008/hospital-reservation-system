@@ -1,14 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import pallet from "../../lib/styles/pallet";
-import {
-  faUser,
-  faCalendarCheck,
-  faHospital,
-} from "@fortawesome/free-regular-svg-icons";
+import { faUser, faHospital } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { faMapMarked } from "@fortawesome/free-solid-svg-icons";
 
 const MenuBlock = styled.ul`
   width: 100%;
@@ -24,28 +21,35 @@ const MenuBlock = styled.ul`
   }
 `;
 
-const Menu = () => {
+const StyledLink = styled(Link)`
+  color: ${(props) => (props.current ? pallet.green[3] : "")};
+`;
+
+const Menu = ({ location }) => {
   const { auth } = useSelector(({ auth }) => ({ auth: auth.auth }));
 
   return (
     <MenuBlock>
       <li>
-        <Link to={auth.email ? "" : "/login"}>
+        <StyledLink
+          current={location.pathname === "/user"}
+          to={auth.id ? "/user" : "/login"}
+        >
           <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
-        </Link>
+        </StyledLink>
       </li>
       <li>
-        <Link>
-          <FontAwesomeIcon icon={faCalendarCheck}></FontAwesomeIcon>
-        </Link>
+        <StyledLink current={location.pathname === "/map"} to="/map">
+          <FontAwesomeIcon icon={faMapMarked}></FontAwesomeIcon>
+        </StyledLink>
       </li>
       <li>
-        <Link>
+        <StyledLink to="/">
           <FontAwesomeIcon icon={faHospital}></FontAwesomeIcon>
-        </Link>
+        </StyledLink>
       </li>
     </MenuBlock>
   );
 };
 
-export default Menu;
+export default withRouter(Menu);
