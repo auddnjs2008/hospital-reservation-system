@@ -1,16 +1,16 @@
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
-import { useEffect } from "react";
 import { useRef } from "react";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import pallet from "../../lib/styles/pallet";
 import InfoToggleBtn from "./InfoToggleBtn";
 import Menu from "./Menu";
 import SearchComponent from "../search/SearchComponent";
-import { Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
+import { changeCoordinate } from "../../modules/roadmap";
 
 const PlaceInfoComponentBlock = styled.div`
   position: relative;
@@ -69,6 +69,7 @@ const Hospital = styled.div`
     }
     a {
       color: red;
+      z-index: 30;
     }
   }
   .distance {
@@ -99,8 +100,9 @@ const ToggleBtn = styled.button`
   }
 `;
 
-const PlaceInfoComponent = ({ hospitals }) => {
+const PlaceInfoComponent = ({ hospitals, history }) => {
   const { map } = useSelector(({ map }) => ({ map: map.map }));
+  const dispatch = useDispatch();
   const [toggle, setToggle] = useState(0);
   let markerControl = null;
   let infoWindow = null;
@@ -163,6 +165,11 @@ const PlaceInfoComponent = ({ hospitals }) => {
     }
   };
 
+  const onBoxClick = (e) => {
+    // if (e.target.id !== "detail") history.push(`/reservation/${id}`);
+    const hospital = hospitals[e.currentTarget.id];
+    dispatch(changeCoordinate({ latitude: hospital.y, longitude: hospital.x }));
+  };
   return (
     <PlaceInfoComponentBlock ref={placeInfoWrapper}>
       <header>
@@ -172,12 +179,13 @@ const PlaceInfoComponent = ({ hospitals }) => {
       <main ref={main}>
         <h1>Best Place</h1>
         {hospitals && (
-          <li key="0" style={{ listStyle: "none" }}>
+          <div>
             <Hospital
               id="0"
               className="hospital"
               onMouseOver={onMouseOver}
               onMouseOut={onMouseOut}
+              onClick={onBoxClick}
             >
               <h2>{hospitals[0]?.place_name}</h2>
               <div>
@@ -188,10 +196,12 @@ const PlaceInfoComponent = ({ hospitals }) => {
               </div>
               <div className="detailInfo">
                 <span>{hospitals[0]?.phone}</span>
-                <a href={hospitals[0]?.place_url}>상세보기</a>
+                <a id="detail" href={hospitals[0]?.place_url} target="_blank">
+                  상세보기
+                </a>
               </div>
             </Hospital>
-          </li>
+          </div>
         )}
         <ToggleBtn onClick={onInfoToggleClick}>
           {toggle === 0 ? (
@@ -204,12 +214,13 @@ const PlaceInfoComponent = ({ hospitals }) => {
           <HospitalList ref={hospitalList}>
             {hospitals.map((item, index) =>
               index !== 0 ? (
-                <li key={index}>
+                <div>
                   <Hospital
                     id={`${index}`}
                     className="hospital"
                     onMouseOver={onListMouseOver}
                     onMouseOut={onMouseOut}
+                    onClick={onBoxClick}
                   >
                     <h2>{item.place_name}</h2>
                     <div>
@@ -220,10 +231,12 @@ const PlaceInfoComponent = ({ hospitals }) => {
                     </div>
                     <div className="detailInfo">
                       <span>{item.phone}</span>
-                      <a href={item.place_url}>상세보기</a>
+                      <a id="detail" href={item.place_url} target="_blank">
+                        상세보기
+                      </a>
                     </div>
                   </Hospital>
-                </li>
+                </div>
               ) : (
                 ""
               )
@@ -236,4 +249,4 @@ const PlaceInfoComponent = ({ hospitals }) => {
   );
 };
 
-export default PlaceInfoComponent;
+export default withRouter(PlaceInfoComponent);

@@ -8,6 +8,8 @@ import userPool from "../../lib/awsconfig";
 
 import { useRef } from "react";
 import ConfirmForm from "./ConfirmForm";
+import { useDispatch } from "react-redux";
+import { emptyField } from "../../modules/auth";
 
 const AuthFormBlock = styled.div`
   width: 400px;
@@ -61,6 +63,7 @@ const AuthFormBlock = styled.div`
 `;
 
 const AuthForm = ({ onChange, content, text, history }) => {
+  const dispatch = useDispatch();
   const [confirmSw, setConfirmSw] = useState(false);
   const id = useRef();
   const password = useRef();
@@ -81,9 +84,12 @@ const AuthForm = ({ onChange, content, text, history }) => {
       onSuccess: (data) => {
         history.push("/user");
       },
-      onFailure: (err) => alert(err),
+      onFailure: (err) => alert(`${err}`),
     });
+
+    dispatch(emptyField());
   };
+
   const SignUpSubmit = async (e) => {
     e.preventDefault();
     userPool.signUp(
@@ -96,6 +102,7 @@ const AuthForm = ({ onChange, content, text, history }) => {
         setConfirmSw(true);
       }
     );
+    dispatch(emptyField());
   };
 
   return (

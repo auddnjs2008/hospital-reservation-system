@@ -8,16 +8,9 @@ import { useEffect } from "react";
 import userPool from "./lib/awsconfig";
 import { useDispatch } from "react-redux";
 import { loaded } from "./modules/auth";
+import ReservationPage from "./pages/ReservationPage";
 
 function App() {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    const currentUser = userPool.getCurrentUser();
-
-    if (currentUser) {
-      dispatch(loaded(currentUser.username));
-    }
-  }, []);
   return (
     <>
       <Route path="/" exact component={AskPage} />
@@ -25,6 +18,7 @@ function App() {
       <Route path="/register" component={RegisterPage} />
       <Route path="/map" component={MapPage} />
       <Route path="/user" component={UserPage} />
+      <Route path="/reservation/:id" component={ReservationPage} />
     </>
   );
 }

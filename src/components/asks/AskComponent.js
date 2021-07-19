@@ -12,8 +12,8 @@ const AskComponentBlock = styled.div`
   justify-content: space-evenly;
   h1 {
     font-size: 3rem;
-    @media (max-width: 400px) {
-      font-size: 2rem;
+    @media (max-width: 480px) {
+      font-size: 2.5rem;
     }
   }
 `;
@@ -27,8 +27,9 @@ const QuestionBox = styled.div`
   overflow: hidden;
   scroll-behavior: smooth;
   box-shadow: 0px 3px 7px ${pallet.black[6]};
-  @media (max-width: 400px) {
+  @media (max-width: 480px) {
     width: 20rem;
+
     grid-template-columns: repeat(2, 20rem);
   }
   height: 50%;
@@ -39,11 +40,13 @@ const QuestionWrapper = styled.ul`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   li {
+    padding: 5px;
     border: 1px solid black;
     font-size: 1.3rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
     cursor: pointer;
     &:hover {
       background-color: ${pallet.green[3]};

@@ -4,7 +4,8 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { drawMarker, initialMap } from "../../modules/map";
 import styled from "styled-components";
-import Loading from "../common/Loading";
+import MapController from "./MapController";
+import RoadviewComponent from "./RoadviewComponent";
 
 const MapComponentBlock = styled.div``;
 const MapContainer = styled.div`
@@ -56,6 +57,8 @@ const MapComponent = () => {
       level: 3,
     };
     const newMap = new kakao.maps.Map(mapContainer.current, options);
+    // const control = new kakao.maps.ZoomControl();
+    // newMap.addControl(control, window.kakao.maps.ControlPosition.TOPRIGHT);
     setMap(newMap);
     dispatch(initialMap({ map: newMap, mapBox: mapContainer }));
   }, [lat, long]);
@@ -67,6 +70,8 @@ const MapComponent = () => {
   return (
     <MapComponentBlock>
       <MapContainer ref={mapContainer}></MapContainer>
+      <MapController map={map} />
+      <RoadviewComponent />
     </MapComponentBlock>
   );
 };

@@ -1,8 +1,13 @@
 import React from "react";
-import AskComponent from "../components/asks/AskComponent";
+import GoogleMapComponent from "../components/map/GoogleMapComponent";
 import AskContainer from "../containers/hospital/AskContainer";
 const AskPage = () => {
-  return <AskContainer></AskContainer>;
+  return (
+    <>
+      <AskContainer></AskContainer>
+      {/* <GoogleMapComponent /> */}
+    </>
+  );
 };
 
 export default AskPage;

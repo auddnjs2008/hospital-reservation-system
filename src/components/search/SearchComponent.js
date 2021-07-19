@@ -76,12 +76,19 @@ const SearchComponent = () => {
     const places = new window.kakao.maps.services.Places();
     if (checkBox.current.checked) {
       const Lat = new window.kakao.maps.LatLng(latitude, longitude);
-      places.keywordSearch(`${text}`, findCallBack, {
-        location: Lat,
-        radius: 4000,
-      });
+      places.keywordSearch(
+        `${text.includes("병원") ? text : text + "병원"}`,
+        findCallBack,
+        {
+          location: Lat,
+          radius: 4000,
+        }
+      );
     } else {
-      places.keywordSearch(`${text}`, findCallBack);
+      places.keywordSearch(
+        `${text.includes("병원") ? text : text + "병원"}`,
+        findCallBack
+      );
     }
   };
 

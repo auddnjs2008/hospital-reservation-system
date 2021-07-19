@@ -10,8 +10,8 @@ const initialState = {};
 
 const menupage = handleActions(
   {
-    [USER_PAGE]: (state, { payload: userpage }) => ({ ...state, userpage }),
-    [RESERVATION_PAGE]: (state, { payload: rvpage }) => ({ ...state, rvpage }),
+    [USER_PAGE]: (state, { payload: userpage }) => ({ userpage }),
+    [RESERVATION_PAGE]: (state, { payload: rvpage }) => ({ rvpage }),
   },
   initialState
 );
