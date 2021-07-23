@@ -8,6 +8,9 @@ import GlobalStyles from "./components/common/GlobalStyle";
 import { Provider } from "react-redux";
 import rootReducer from "./modules";
 import { composeWithDevTools } from "redux-devtools-extension";
+import Amplify from "aws-amplify";
+import config from "../src/lib/amplifyconfig";
+Amplify.configure(config);
 
 const store = createStore(rootReducer, composeWithDevTools());
 

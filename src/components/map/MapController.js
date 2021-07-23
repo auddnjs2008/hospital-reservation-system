@@ -1,6 +1,17 @@
+import {
+  faCar,
+  faMap,
+  faMapMarkerAlt,
+  faPlane,
+  faPlaneSlash,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import pallet from "../../lib/styles/pallet";
+import { viewBothMode } from "../../modules/roadmap";
 
 const MapControllerBlock = styled.ul`
   display: flex;
@@ -12,11 +23,13 @@ const MapControllerBlock = styled.ul`
   z-index: 50;
 
   li {
+    padding: 3px;
     cursor: pointer;
-    font-size: 50px;
-    border: 1px solid black;
+    font-size: 40px;
     display: flex;
     align-items: center;
+    color: ${pallet.green[3]};
+    background-color: #ecf0f1;
     div {
       background-color: #ecf0f1;
     }
@@ -25,7 +38,17 @@ const MapControllerBlock = styled.ul`
 
 const MapController = ({ map }) => {
   const [sky, setSky] = useState(false);
-
+  const [road, setRoad] = useState(false);
+  const [both, setBoth] = useState(false);
+  const { mapBox, roadMapBox, roadLat, roadLong, menuView } = useSelector(
+    ({ map, roadmap, menupage }) => ({
+      mapBox: map.mapBox,
+      roadMapBox: roadmap.roadmap,
+      roadLat: roadmap.latitude,
+      roadLong: roadmap.longitude,
+      menuView: menupage.infoBtn,
+    })
+  );
   const onSkyToggleClick = (e) => {
     if (!sky) {
       map.setMapTypeId(window.kakao.maps.MapTypeId.HYBRID);
@@ -34,13 +57,97 @@ const MapController = ({ map }) => {
     }
     setSky((item) => !item);
   };
+
+  const onRoadMapToggleClick = (e) => {
+    if (!both) {
+      // 두개 모드 아닐때
+      if (!road) {
+        // 로드맵만 크게 켜진다
+        roadMapBox.a.style.zIndex = "18";
+        mapBox.current.style.zIndex = "15";
+        roadMapBox.a.style.width = menuView ? "70vw" : "100vw";
+      } else {
+        //지도만 크게 켜진다.
+        roadMapBox.a.style.zIndex = "15";
+        mapBox.current.style.zIndex = "18";
+        mapBox.current.style.width = menuView ? "70vw" : "100vw";
+      }
+    } else {
+      //두개모드일 떄 => 로드맵 크기 : 15rem ,15rem
+      if (!road) {
+        // 로드맵크기를 크게 , 맵 크기를 작게   맵 zindex:18 로드맵 zindex15
+        // 맵 포지션 바꾸기
+        roadMapBox.a.style.width = menuView ? "" : "100vw";
+        roadMapBox.a.style.height = "";
+        roadMapBox.a.style.zIndex = "15";
+        mapBox.current.style.zIndex = "18";
+        mapBox.current.style.width = "15rem";
+        mapBox.current.style.height = "15rem";
+      } else {
+        // 맵크기를 크게 로드맵 크기를 작게 로드맵 zindex:18  맵 zindex 15
+        roadMapBox.a.style.height = "15rem";
+        roadMapBox.a.style.width = "15rem";
+        roadMapBox.a.style.zIndex = "18";
+        mapBox.current.style.zIndex = "15";
+        mapBox.current.style.width = menuView ? "" : "100vw";
+        mapBox.current.style.height = "";
+      }
+    }
+    map.relayout();
+    roadMapBox.relayout();
+    map.setCenter(new window.kakao.maps.LatLng(roadLat, roadLong));
+    setRoad((item) => !item);
+  };
+
+  const onBothToggleClick = (e) => {
+    if (!both) {
+      // 두개동시 모드 킬때
+      // mapBox.current.style.height = "50vh";
+      e.target.style.color = "blue";
+      if (!road) {
+        mapBox.current.style.zIndex = "15";
+        roadMapBox.a.style.zIndex = "18";
+        roadMapBox.a.style.height = "15rem";
+        roadMapBox.a.style.width = "15rem";
+      } else {
+        mapBox.current.style.zIndex = "18";
+        roadMapBox.a.style.zIndex = "15";
+        roadMapBox.a.style.height = "100vh";
+        roadMapBox.a.style.width = menuView ? "70vw" : "100vw";
+        mapBox.current.style.height = "15rem";
+        mapBox.current.style.width = "15rem";
+      }
+    } else {
+      // 두개동시 모드 끌때
+      // mapBox.current.style.height = "100vh";
+      e.target.style.color = `${pallet.green[3]}`;
+      if (!road) {
+        roadMapBox.a.style.zIndex = "15";
+        mapBox.current.style.zIndex = "18";
+        roadMapBox.a.style.height = "";
+        roadMapBox.a.style.width = "";
+      } else {
+        mapBox.current.style.width = "";
+        mapBox.current.style.height = "";
+        mapBox.current.style.zIndex = "15";
+      }
+    }
+    map.relayout();
+    roadMapBox.relayout();
+    map.setCenter(new window.kakao.maps.LatLng(roadLat, roadLong));
+    setBoth((item) => !item);
+  };
+
   return (
     <MapControllerBlock>
       <li onClick={onSkyToggleClick}>
-        <div>🛫</div>
+        <FontAwesomeIcon icon={!sky ? faPlane : faPlaneSlash}></FontAwesomeIcon>
       </li>
-      <li>
-        <div>🚗</div>
+      <li onClick={onRoadMapToggleClick}>
+        <FontAwesomeIcon icon={!road ? faCar : faMap}></FontAwesomeIcon>
+      </li>
+      <li onClick={onBothToggleClick}>
+        <FontAwesomeIcon icon={faMapMarkerAlt}></FontAwesomeIcon>
       </li>
     </MapControllerBlock>
   );

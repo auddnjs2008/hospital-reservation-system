@@ -3,13 +3,13 @@ import { Link, withRouter } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../common/Button";
 import pallet from "../../lib/styles/pallet";
-import { CognitoUser, AuthenticationDetails } from "amazon-cognito-identity-js";
-import userPool from "../../lib/awsconfig";
 
 import { useRef } from "react";
 import ConfirmForm from "./ConfirmForm";
 import { useDispatch } from "react-redux";
 import { emptyField } from "../../modules/auth";
+
+import { Auth } from "aws-amplify";
 
 const AuthFormBlock = styled.div`
   width: 400px;
@@ -71,38 +71,34 @@ const AuthForm = ({ onChange, content, text, history }) => {
 
   const LogInSubmit = async (e) => {
     e.preventDefault();
-    const user = new CognitoUser({
-      Username: id.current.value,
-      Pool: userPool,
-    });
-    const authDetails = new AuthenticationDetails({
-      Username: id.current.value,
-      Password: password.current.value,
-    });
-
-    user.authenticateUser(authDetails, {
-      onSuccess: (data) => {
-        history.push("/user");
-      },
-      onFailure: (err) => alert(`${err}`),
-    });
+    try {
+      const user = await Auth.signIn(id.current.value, password.current.value);
+    } catch (e) {
+      alert(`${e}`);
+    }
 
     dispatch(emptyField());
   };
 
   const SignUpSubmit = async (e) => {
     e.preventDefault();
-    userPool.signUp(
-      id.current.value,
-      password.current.value,
-      [{ Name: "email", Value: email.current.value }],
-      null,
-      (err, data) => {
-        if (err) console.log(err);
-        setConfirmSw(true);
-      }
-    );
-    dispatch(emptyField());
+
+    try {
+      const { user } = await Auth.signUp({
+        username: id.current.value,
+        password: password.current.value,
+        attributes: {
+          email: email.current.value,
+        },
+      });
+
+      setConfirmSw(true);
+    } catch (error) {
+      alert(`${error}`);
+      console.log(error);
+    }
+
+    // dispatch(emptyField());
   };
 
   return (

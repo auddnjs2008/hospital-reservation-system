@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import userPool from "../../lib/awsconfig";
+
 import { withRouter } from "react-router";
 import { useDispatch } from "react-redux";
 import { logout } from "../../modules/auth";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { userPage } from "../../modules/menupage";
+import { Auth } from "aws-amplify";
 
 const MypageComponentBlock = styled.div`
   width: 70vw;
@@ -16,8 +17,12 @@ const MypageComponentBlock = styled.div`
 const MypageComponent = ({ history }) => {
   const dispatch = useDispatch();
   const mypage = useRef();
+
   const onClick = () => {
-    const cognitoUser = userPool.getCurrentUser();
+    let cognitoUser = null;
+    Auth.currentAuthenticatedUser()
+      .then((user) => (cognitoUser = user))
+      .catch((err) => alert(`${err}`));
     if (cognitoUser !== null) {
       cognitoUser.signOut();
       dispatch(logout());

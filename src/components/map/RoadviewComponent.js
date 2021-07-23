@@ -2,86 +2,178 @@ import React from "react";
 import { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import pallet from "../../lib/styles/pallet";
+import MapWalker from "../../lib/createmapwalker";
+import roadmap, {
+  changeCoordinate,
+  initialzeRoadmap,
+} from "../../modules/roadmap";
 
 const RoadviewComponentBlock = styled.div`
-  width: 500px;
-  height: 500px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 15;
+  width: 70vw;
+  height: 100vh;
+  .overlay_info {
+    width: 200px;
+    height: 50px;
+    background-color: ${pallet.green[3]};
+  }
 `;
 
 const RoadviewComponent = () => {
-  const { latitude, longitude } = useSelector(({ map }) => ({
-    latitude: map.latitude,
-    longitude: map.longitude,
-  }));
+  const dispatch = useDispatch();
+  const { map, hospitals, roadLat, roadLong, name } = useSelector(
+    ({ map, roadmap }) => ({
+      map: map.map,
+      hospitals: map.hospitals,
+      roadLat: roadmap.latitude,
+      roadLong: roadmap.longitude,
+      name: roadmap.name,
+    })
+  );
   const roadViewBox = useRef();
   const [roadview, setRoadView] = useState();
+  const [mapPrevWalker, setPrevMapWalker] = useState(null);
   const roadviewClient = new window.kakao.maps.RoadviewClient();
-  const [position, setPosition] = useState(
-    new window.kakao.maps.LatLng(latitude, longitude)
-  );
 
-  function MapWalker(position) {
-    //커스텀 오버레이에 사용할 map walker 엘리먼트
-    var content = document.createElement("div");
-    var figure = document.createElement("div");
-    var angleBack = document.createElement("div");
+  let startOverlayPoint = null;
+  let start = [];
 
-    //map walker를 구성하는 각 노드들의 class명을 지정 - style셋팅을 위해 필요
-    content.className = "MapWalker";
-    figure.className = "figure";
-    angleBack.className = "angleBack";
-
-    content.appendChild(angleBack);
-    content.appendChild(figure);
-
-    //커스텀 오버레이 객체를 사용하여, map walker 아이콘을 생성
-    var walker = new window.kakao.maps.CustomOverlay({
+  const rvCustomOverlay = (position, content) => {
+    if (mapPrevWalker) mapPrevWalker.setMap(null);
+    const result = new window.kakao.maps.CustomOverlay({
       position: position,
-      content: content,
-      yAnchor: 1,
+      content,
+      xAnchor: 0.5,
+      yAnchor: 1.1,
     });
 
-    this.walker = walker;
-    this.content = content;
-  }
-  MapWalker.prototype.setAngle = function (angle) {
-    var threshold = 22.5; //이미지가 변화되어야 되는(각도가 변해야되는) 임계 값
-    for (var i = 0; i < 16; i++) {
-      //각도에 따라 변화되는 앵글 이미지의 수가 16개
-      if (angle > threshold * i && angle < threshold * (i + 1)) {
-        //각도(pan)에 따라 아이콘의 class명을 변경
-        var className = "m" + i;
-        this.content.className = this.content.className.split(" ")[0];
-        this.content.className += " " + className;
-        break;
+    result.setMap(roadview);
+
+    setTimeout(() => {
+      const projection = roadview.getProjection();
+      const viewPoint = projection.viewpointFromCoords(
+        result.getPosition(),
+        result.getAltitude()
+      );
+      roadview.setViewpoint(viewPoint);
+    }, 850);
+    const newWalker = new MapWalker(position);
+    setPrevMapWalker(newWalker);
+    newWalker.setMap(map);
+    walkerViewChange(newWalker);
+  };
+
+  const walkerViewChange = (mapWalker) => {
+    window.kakao.maps.event.addListener(
+      roadview,
+      "viewpoint_changed",
+      function () {
+        // 이벤트가 발생할 때마다 로드뷰의 viewpoint값을 읽어, map walker에 반영
+        const viewpoint = roadview.getViewpoint();
+        mapWalker.setAngle(viewpoint.pan);
       }
-    }
+    );
+
+    window.kakao.maps.event.addListener(
+      roadview,
+      "position_changed",
+      function () {
+        // 이벤트가 발생할 때마다 로드뷰의 position값을 읽어, map walker에 반영
+        const position = roadview.getPosition();
+        mapWalker.setPosition(position);
+        map.setCenter(position);
+      }
+    );
   };
 
-  //map walker의 위치를 변경시키는 함수
-  MapWalker.prototype.setPosition = function (position) {
-    this.walker.setPosition(position);
+  const onMouseDown = (e) => {
+    const proj = map.getProjection();
+    const overlayPos = mapPrevWalker.walker.getPosition();
+
+    window.kakao.maps.event.preventMap();
+    start = [e.clientY, e.clientX];
+
+    startOverlayPoint = proj.containerPointFromCoords(overlayPos);
+    map.a.addEventListener("mousemove", onMouseMove);
   };
 
-  //map walker를 지도위에 올리는 함수
-  MapWalker.prototype.setMap = function (map) {
-    this.walker.setMap(map);
+  const onMouseMove = (e) => {
+    const proj = map.getProjection();
+    const deltaX = start[1] - e.clientX;
+    const deltaY = start[0] - e.clientY;
+    const newPoint = new window.kakao.maps.Point(
+      startOverlayPoint.x - deltaX,
+      startOverlayPoint.y - deltaY
+    );
+    const newPos = proj.coordsFromContainerPoint(newPoint);
+
+    mapPrevWalker.walker.setPosition(newPos);
   };
+
+  const onMouseUp = (e) => {
+    const position = mapPrevWalker.walker.getPosition();
+    map.setCenter(position);
+
+    dispatch(
+      changeCoordinate({
+        latitude: position.Ma,
+        longitude: position.La,
+        name: "여행중",
+      })
+    );
+    map.a.removeEventListener("mousemove", onMouseMove);
+  };
+
+  // useEffect(() => {
+  //   dispatch(initialzeRoadmap(roadViewBox));
+  // }, []);
 
   useEffect(() => {
     setRoadView(new window.kakao.maps.Roadview(roadViewBox.current));
-  }, []);
+    if (roadview) {
+      dispatch(initialzeRoadmap(roadview));
+      try {
+        const position = new window.kakao.maps.LatLng(roadLat, roadLong);
+        // : new window.kakao.maps.LatLng(hospitals[0].y, hospitals[0].x);
+        roadviewClient.getNearestPanoId(position, 300, function (panoId) {
+          roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
+        });
+
+        window.kakao.maps.event.addListener(roadview, "init", () =>
+          rvCustomOverlay(
+            position,
+            `<div class="overlay_info"><span>${
+              name ? name : "나의 위치"
+            }</span></div>`
+          )
+        );
+        return () =>
+          window.kakao.maps.event.addListener(roadview, "init", () =>
+            rvCustomOverlay(
+              position,
+              `<div class="overlay_info"><span>${
+                name ? name : "나의 위치"
+              }</span></div>`
+            )
+          );
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }, [roadLat, roadLong]);
 
   useEffect(() => {
-    if (roadview) {
-      console.log(position);
-      roadviewClient.getNearestPanoId(position, 300, function (panoId) {
-        roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
-      });
+    if (mapPrevWalker) {
+      mapPrevWalker.content.addEventListener("mousedown", onMouseDown);
+      mapPrevWalker.content.addEventListener("mouseup", onMouseUp);
     }
-  }, [roadview]);
+  }, [mapPrevWalker]);
 
   return <RoadviewComponentBlock ref={roadViewBox}></RoadviewComponentBlock>;
 };

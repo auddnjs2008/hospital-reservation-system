@@ -5,8 +5,9 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { infoToggleClick } from "../../modules/menupage";
 
 const InfoToggleBtnBlock = styled.button`
   position: absolute;
@@ -26,29 +27,36 @@ const InfoToggleBtnBlock = styled.button`
 `;
 
 const InfoToggleBtn = ({ placeInfoWrapper, mapContainer }) => {
+  const dispatch = useDispatch();
   const [slider, setSlider] = useState(false);
-  const { mapBox } = useSelector(({ map }) => ({ mapBox: map.mapBox }));
+  const { mapBox, roadMapBox } = useSelector(({ map, roadmap }) => ({
+    mapBox: map.mapBox,
+    roadMapBox: roadmap.roadmap,
+  }));
   const { page } = useSelector(({ menupage }) => ({
     page: menupage.userpage || menupage.rvpage,
   }));
   const onSlideClick = (e) => {
+    const mapWidth = mapBox.current?.style.width;
+    const roadMapWidth = roadMapBox?.a.style.width;
+
     if (!slider) {
+      // 넓게 보여진다.
       placeInfoWrapper.current.style.transform = "translateX(-100%)";
       if (mapBox?.current) {
-        mapBox.current.style.position = "absolute";
-        mapBox.current.style.left = "0";
-        mapBox.current.style.width = "100vw";
+        mapBox.current.style.width = mapWidth === "15rem" ? "15rem" : "100vw";
+        roadMapBox.a.style.width = roadMapWidth === "15rem" ? "15rem" : "100vw";
       } else {
         page.current.style.position = "absolute";
         page.current.style.left = "0";
         page.current.style.width = "100vw";
       }
     } else {
+      // 좁게 보여진다.
       placeInfoWrapper.current.style.transform = "";
       if (mapBox?.current) {
-        mapBox.current.style.position = "block";
-        mapBox.current.style.left = "";
-        mapBox.current.style.width = "70vw";
+        mapBox.current.style.width = mapWidth === "15rem" ? "15rem" : "70vw";
+        roadMapBox.a.style.width = roadMapWidth === "15rem" ? "15rem" : "70vw";
       } else {
         page.current.style.position = "";
         page.current.style.left = "";
@@ -56,7 +64,9 @@ const InfoToggleBtn = ({ placeInfoWrapper, mapContainer }) => {
       }
     }
     mapContainer?.relayout();
+    roadMapBox?.relayout();
     setSlider(!slider);
+    dispatch(infoToggleClick());
   };
 
   return (

@@ -4,10 +4,7 @@ import RegisterPage from "./pages/RegisterPage";
 import AskPage from "./pages/AskPage";
 import MapPage from "./pages/MapPage";
 import UserPage from "./pages/UserPage";
-import { useEffect } from "react";
-import userPool from "./lib/awsconfig";
-import { useDispatch } from "react-redux";
-import { loaded } from "./modules/auth";
+
 import ReservationPage from "./pages/ReservationPage";
 
 function App() {

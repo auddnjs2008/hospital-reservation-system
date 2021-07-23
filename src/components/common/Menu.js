@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, withRouter } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { faMapMarked } from "@fortawesome/free-solid-svg-icons";
-import userPool from "../../lib/awsconfig";
+import { Auth } from "aws-amplify";
 
 const MenuBlock = styled.ul`
   width: 100%;
@@ -28,7 +28,8 @@ const StyledLink = styled(Link)`
 
 const Menu = ({ location }) => {
   const { auth } = useSelector(({ auth }) => ({ auth: auth.auth }));
-  const currentUser = userPool.getCurrentUser();
+  let currentUser = null;
+  Auth.currentAuthenticatedUser().then((user) => (currentUser = user));
 
   return (
     <MenuBlock>

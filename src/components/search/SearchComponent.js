@@ -4,6 +4,7 @@ import { eraseMarker, searchMap } from "../../modules/map";
 import styled from "styled-components";
 import { useEffect } from "react";
 import { useRef } from "react";
+import { changeCoordinate } from "../../modules/roadmap";
 
 const SearchComponentBlock = styled.form`
   margin: auto;
@@ -66,6 +67,13 @@ const SearchComponent = () => {
         eraseMarkers();
         dispatch(eraseMarker());
         dispatch(searchMap({ hospitals: filterResult }));
+        dispatch(
+          changeCoordinate({
+            latitude: filterResult[0].y,
+            longitude: filterResult[0].x,
+            name: filterResult[0].place_name,
+          })
+        );
       } else {
         window.alert("검색어에 일치하는 병원이 없습니다");
       }

@@ -9,7 +9,7 @@ import pallet from "../../lib/styles/pallet";
 import InfoToggleBtn from "./InfoToggleBtn";
 import Menu from "./Menu";
 import SearchComponent from "../search/SearchComponent";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { changeCoordinate } from "../../modules/roadmap";
 
 const PlaceInfoComponentBlock = styled.div`
@@ -18,6 +18,7 @@ const PlaceInfoComponentBlock = styled.div`
   min-width: 24rem;
   height: 100vh;
   transition: transform 0.2s ease-in-out;
+  background-color: white;
   header {
     height: 30%;
     display: flex;
@@ -70,6 +71,7 @@ const Hospital = styled.div`
     a {
       color: red;
       z-index: 30;
+      margin-right: 10px;
     }
   }
   .distance {
@@ -168,7 +170,14 @@ const PlaceInfoComponent = ({ hospitals, history }) => {
   const onBoxClick = (e) => {
     // if (e.target.id !== "detail") history.push(`/reservation/${id}`);
     const hospital = hospitals[e.currentTarget.id];
-    dispatch(changeCoordinate({ latitude: hospital.y, longitude: hospital.x }));
+    dispatch(
+      changeCoordinate({
+        latitude: hospital.y,
+        longitude: hospital.x,
+        name: hospital.place_name,
+      })
+    );
+    onMouseOut();
   };
   return (
     <PlaceInfoComponentBlock ref={placeInfoWrapper}>
@@ -183,9 +192,9 @@ const PlaceInfoComponent = ({ hospitals, history }) => {
             <Hospital
               id="0"
               className="hospital"
+              onClick={onBoxClick}
               onMouseOver={onMouseOver}
               onMouseOut={onMouseOut}
-              onClick={onBoxClick}
             >
               <h2>{hospitals[0]?.place_name}</h2>
               <div>
@@ -199,6 +208,7 @@ const PlaceInfoComponent = ({ hospitals, history }) => {
                 <a id="detail" href={hospitals[0]?.place_url} target="_blank">
                   상세보기
                 </a>
+                <Link to={`/reservation/${hospitals[0]?.id}`}>예약하기</Link>
               </div>
             </Hospital>
           </div>
@@ -234,6 +244,7 @@ const PlaceInfoComponent = ({ hospitals, history }) => {
                       <a id="detail" href={item.place_url} target="_blank">
                         상세보기
                       </a>
+                      <Link to={`/reservation/${item.id}`}>예약하기</Link>
                     </div>
                   </Hospital>
                 </div>

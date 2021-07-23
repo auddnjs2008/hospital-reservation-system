@@ -1,17 +1,32 @@
 import { createAction, handleActions } from "redux-actions";
 
 const CHANGE_COORDINATE = "roadmap/CHANGE_COORDINATE";
+const INITIALIZE_ROADMAP = "roadmap/INITIALIZE_ROADMAP";
 
 export const changeCoordinate = createAction(CHANGE_COORDINATE);
+export const initialzeRoadmap = createAction(INITIALIZE_ROADMAP);
 
-const initialState = {};
+const initialState = {
+  latitude: "",
+  longitude: "",
+  name: "",
+  roadmap: null,
+};
 
 const roadmap = handleActions(
   {
-    [CHANGE_COORDINATE]: (state, payload) => ({
+    [INITIALIZE_ROADMAP]: (state, { payload }) => ({
       ...state,
-      latitude: payload.latitude,
-      longitude: payload.longitude,
+      roadmap: payload,
+    }),
+    [CHANGE_COORDINATE]: (
+      state,
+      { payload: { latitude, longitude, name } }
+    ) => ({
+      ...state,
+      latitude,
+      longitude,
+      name,
     }),
   },
   initialState
