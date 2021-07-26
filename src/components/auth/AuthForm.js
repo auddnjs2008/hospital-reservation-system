@@ -7,16 +7,18 @@ import pallet from "../../lib/styles/pallet";
 import { useRef } from "react";
 import ConfirmForm from "./ConfirmForm";
 import { useDispatch } from "react-redux";
-import { emptyField } from "../../modules/auth";
+import { emptyField, isManager, login } from "../../modules/auth";
 
-import { Auth } from "aws-amplify";
+import Amplify, { Auth } from "aws-amplify";
+import AuthCheckBoxes from "./AuthCheckBoxes";
+import { managerConfig, config } from "../../lib/amplifyconfig";
 
 const AuthFormBlock = styled.div`
   width: 400px;
   height: 500px;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   margin: auto;
   border-radius: 10px;
   border: 3px solid ${pallet.green[2]};
@@ -29,7 +31,7 @@ const AuthFormBlock = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: space-between;
     width: inherit;
     height: 60%;
     padding: 20px;
@@ -65,33 +67,60 @@ const AuthFormBlock = styled.div`
 const AuthForm = ({ onChange, content, text, history }) => {
   const dispatch = useDispatch();
   const [confirmSw, setConfirmSw] = useState(false);
+  const [hospitalName, setHospital] = useState("");
   const id = useRef();
   const password = useRef();
   const email = useRef();
+  const manager = useRef();
+  const user = useRef();
 
   const LogInSubmit = async (e) => {
+    let user;
     e.preventDefault();
+
     try {
-      const user = await Auth.signIn(id.current.value, password.current.value);
+      manager.current.checked
+        ? Amplify.configure(managerConfig)
+        : Amplify.configure(config);
+      user = await Auth.signIn(id.current.value, password.current.value);
+      if (manager.current.checked) dispatch(isManager());
+      history.push("/user");
     } catch (e) {
       alert(`${e}`);
     }
-
-    dispatch(emptyField());
+    if (user) dispatch(login({ id: user.username }));
   };
 
   const SignUpSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const { user } = await Auth.signUp({
-        username: id.current.value,
-        password: password.current.value,
-        attributes: {
-          email: email.current.value,
-        },
-      });
+      if (manager.current.checked) {
+        if (!hospitalName) {
+          alert("병원이름을 적어주세요!!");
+          return;
+        }
+        Amplify.configure(managerConfig);
 
+        await Auth.signUp({
+          username: id.current.value,
+          password: password.current.value,
+          attributes: {
+            email: email.current.value,
+            "custom:hospital_name": hospitalName,
+          },
+        });
+        dispatch(isManager());
+      } else {
+        Amplify.configure(config);
+        await Auth.signUp({
+          username: id.current.value,
+          password: password.current.value,
+          attributes: {
+            email: email.current.value,
+          },
+        });
+      }
       setConfirmSw(true);
     } catch (error) {
       alert(`${error}`);
@@ -114,14 +143,14 @@ const AuthForm = ({ onChange, content, text, history }) => {
             ref={id}
             placeholder="id"
             value={text.email}
-            name="id"
+            name="Inputid"
           ></input>
           <input
             onChange={onChange}
             type="password"
             ref={password}
             placeholder="password"
-            name="password"
+            name="InputPassword"
             value={text.password}
           ></input>
           {content === "SIGN UP" && (
@@ -135,7 +164,13 @@ const AuthForm = ({ onChange, content, text, history }) => {
               style={{ marginBottom: "20px" }}
             ></input>
           )}
-
+          <AuthCheckBoxes
+            manager={manager}
+            user={user}
+            setHospital={setHospital}
+            value={hospitalName}
+            content={content}
+          />
           <Button content={content}></Button>
         </form>
       )}

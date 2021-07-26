@@ -7,6 +7,8 @@ import { Link, withRouter } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { faMapMarked } from "@fortawesome/free-solid-svg-icons";
 import { Auth } from "aws-amplify";
+import { useEffect } from "react";
+import { loaded } from "../../modules/auth";
 
 const MenuBlock = styled.ul`
   width: 100%;
@@ -28,15 +30,13 @@ const StyledLink = styled(Link)`
 
 const Menu = ({ location }) => {
   const { auth } = useSelector(({ auth }) => ({ auth: auth.auth }));
-  let currentUser = null;
-  Auth.currentAuthenticatedUser().then((user) => (currentUser = user));
 
   return (
     <MenuBlock>
       <li>
         <StyledLink
           current={location.pathname === "/user"}
-          to={currentUser ? "/user" : "/login"}
+          to={auth.id ? "/user" : "/login"}
         >
           <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
         </StyledLink>

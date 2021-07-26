@@ -2,13 +2,18 @@ import React, { useRef } from "react";
 import { withRouter } from "react-router";
 import styled from "styled-components";
 import Button from "../common/Button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Auth } from "aws-amplify";
+import { login } from "../../modules/auth";
 
 const ConfirmFormBlock = styled.form``;
 
 const ConfirmForm = ({ history }) => {
-  const { id } = useSelector(({ auth: { auth } }) => ({ id: auth.id }));
+  const dispatch = useDispatch();
+  const { id, password } = useSelector(({ auth: { auth } }) => ({
+    id: auth.Inputid,
+    password: auth.InputPassword,
+  }));
   const confirm = useRef();
 
   const onSubmit = async (e) => {
@@ -16,7 +21,8 @@ const ConfirmForm = ({ history }) => {
 
     try {
       await Auth.confirmSignUp(id, confirm.current.value);
-
+      await Auth.signIn(id, password);
+      dispatch(login({ id }));
       history.push("/user");
     } catch (error) {
       alert(`${error}`);

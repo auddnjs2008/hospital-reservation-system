@@ -6,6 +6,7 @@ const ButtonBlock = styled.button`
   background-color: ${pallet.green[0]};
   text-align: center;
   width: 100%;
+  min-height: 2.3rem;
   height: 2.5rem;
   color: black;
   font-weight: 700;

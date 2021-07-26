@@ -73,8 +73,6 @@ const MapComponent = () => {
       level: 3,
     };
     const newMap = new kakao.maps.Map(mapContainer.current, options);
-    // const control = new kakao.maps.ZoomControl();
-    // newMap.addControl(control, window.kakao.maps.ControlPosition.TOPRIGHT);
     setMap(newMap);
     dispatch(initialMap({ map: newMap, mapBox: mapContainer }));
   }, [lat, long]);

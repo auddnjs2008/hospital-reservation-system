@@ -2,20 +2,23 @@ import { createAction, handleActions } from "redux-actions";
 
 const CHANGE_FIELD = "auth/CHANGE_FIELD";
 const EMPTY_FIELD = "auth/EMPTY_FIELD";
-const LOADED = "auth/LOADED";
-const LOG_OUT = "aith/LOG_OUT";
+const LOG_IN = "auth/LOG_IN";
+const LOG_OUT = "auth/LOG_OUT";
+const IS_MANAGER = "auth/IS_MANAGER";
 
 export const changeField = createAction(CHANGE_FIELD);
 export const emptyField = createAction(EMPTY_FIELD);
-export const loaded = createAction(LOADED);
+export const login = createAction(LOG_IN);
 export const logout = createAction(LOG_OUT);
+export const isManager = createAction(IS_MANAGER);
 
 const initialState = {
   auth: {
     id: "",
-    password: "",
-    confirm: false,
+    Inputid: "",
+    InputPassword: "",
     email: "",
+    manager: false,
   },
 };
 
@@ -27,15 +30,25 @@ const auth = handleActions(
     }),
     [EMPTY_FIELD]: (state) => ({
       ...state,
-      auth: { id: "", password: "", email: "" },
+      auth: { Inputid: "", InputPassword: "", email: "" },
     }),
-    [LOADED]: (state, { payload: id }) => ({
+    [LOG_IN]: (state, { payload: id }) => ({
       ...state,
-      auth: { ...state.auth, id },
+      auth: { ...state.auth, id, Inputid: "", InputPassword: "" },
     }),
     [LOG_OUT]: (state) => ({
       ...state,
-      auth: { id: "", password: "", confrim: false, eamil: "" },
+      auth: {
+        id: "",
+        Inputid: "",
+        InputPassword: "",
+        eamil: "",
+        manager: false,
+      },
+    }),
+    [IS_MANAGER]: (state) => ({
+      ...state,
+      auth: { ...state.auth, manager: !state.auth.manager },
     }),
   },
   initialState

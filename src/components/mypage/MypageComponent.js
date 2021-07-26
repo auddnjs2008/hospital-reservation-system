@@ -18,9 +18,9 @@ const MypageComponent = ({ history }) => {
   const dispatch = useDispatch();
   const mypage = useRef();
 
-  const onClick = () => {
+  const onClick = async () => {
     let cognitoUser = null;
-    Auth.currentAuthenticatedUser()
+    await Auth.currentAuthenticatedUser()
       .then((user) => (cognitoUser = user))
       .catch((err) => alert(`${err}`));
     if (cognitoUser !== null) {
