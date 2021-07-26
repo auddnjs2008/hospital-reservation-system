@@ -7,7 +7,7 @@ export default function createRequestSaga(type, request) {
 
   return function* (action) {
     try {
-      const response = yield call(request, action.payload);
+      const response = yield call(request, { info: action.payload.hospitals });
       console.log(response);
       yield put({
         type: SUCCESS,

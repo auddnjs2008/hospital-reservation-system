@@ -43,11 +43,21 @@ export const writeAxios = async () => {
 export const readAxios = async () => {
   try {
     const response = await axios({
-      method: "get",
-      url: "https://u7npsu62nj.execute-api.ap-northeast-2.amazonaws.com/api_test/review-get",
+      method: "post",
+      url: "https://u7npsu62nj.execute-api.ap-northeast-2.amazonaws.com/api_test/review",
       data: {
-        type: "all",
-        hospitalName: "서울숭실병원",
+        method: "GET",
+        body: {
+          TableName: "review",
+          ScanFilter: {
+            HospitalName: {
+              AttributeValueList: {
+                S: "서울숭실병원",
+              },
+              ComparisonOperator: "EQ",
+            },
+          },
+        },
       },
     });
     console.log(response);
@@ -56,13 +66,85 @@ export const readAxios = async () => {
   }
 };
 
-export const getRecentPage = async () => {
+export const postRecentPage = async () => {
   try {
     const response = await axios({
       method: "post",
       url: "https://u7npsu62nj.execute-api.ap-northeast-2.amazonaws.com/api_test/contentsview",
       data: {
-        type: "GET",
+        type: "POST",
+        body: {
+          TableName: "contentsView",
+          Key: {
+            userName: "명원최고",
+          },
+          hospitalName: "명원최고병원",
+        },
+      },
+    });
+    console.log(response);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const onePostReservation = async () => {
+  try {
+    const response = await axios({
+      method: "post",
+      url: "https://u7npsu62nj.execute-api.ap-northeast-2.amazonaws.com/api_test/reservation",
+      data: {
+        method: "GET",
+        body: {
+          TableName: "reservation",
+          ScanFilter: {
+            hospitalName: {
+              AttributeValueList: {
+                S: "미엘피부과 송산그린시티점",
+              },
+              ComparisonOperator: "EQ",
+            },
+          },
+        },
+      },
+    });
+    console.log(response);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const postReservation = async () => {
+  try {
+    const response = await axios({
+      method: "post",
+      url: "https://u7npsu62nj.execute-api.ap-northeast-2.amazonaws.com/api_test/reservation",
+      data: {
+        method: "POST",
+        body: {
+          TableName: "reservation",
+          Item: {
+            number: "100",
+            hospitalName: "서울숭실병원",
+            name: "xodnjs",
+            time: "07/26 19:00",
+          },
+        },
+      },
+    });
+    console.log(response);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getReservation = async () => {
+  try {
+    const response = await axios({
+      method: "post",
+      url: "https://u7npsu62nj.execute-api.ap-northeast-2.amazonaws.com/api_test/reservation",
+      data: {
+        method: "GET",
         body: {
           TableName: "contentsView",
           Key: {
@@ -76,5 +158,4 @@ export const getRecentPage = async () => {
     console.log(e);
   }
 };
-
 export default recommendAxios;

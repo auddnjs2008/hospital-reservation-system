@@ -5,6 +5,12 @@ import { initialWhere } from "../../modules/map";
 import MapComponent from "../../components/map/MapComponent";
 import { changeCoordinate } from "../../modules/roadmap";
 import { recommendPlace } from "../../lib/api/recommend";
+import recommendAxios, {
+  readAxios,
+  getReservation,
+  postReservation,
+  getRecentPage,
+} from "../../lib/axiosTest";
 
 const MapContainer = () => {
   const dispatch = useDispatch();
@@ -21,7 +27,6 @@ const MapContainer = () => {
 
   const findCallBack = (result, status) => {
     if (status === kakao.maps.services.Status.OK) {
-      recommendPlace(result);
       dispatch(initialWhere({ latitude, longitude, hospitals: result }));
       dispatch(
         changeCoordinate({
@@ -30,6 +35,8 @@ const MapContainer = () => {
           name: result[0].place_name,
         })
       );
+
+      getReservation();
     }
   };
 

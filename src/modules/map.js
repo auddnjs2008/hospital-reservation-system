@@ -20,10 +20,13 @@ export const eraseMarker = createAction(ERASE_MARKER);
 
 // 사가 생성
 
-const recommendSaga = createRequestSaga(RECOMMEND, recommendApi.recommendPlace);
+const recommendSaga = createRequestSaga(
+  INITIAL_WHERE,
+  recommendApi.recommendPlace
+);
 
 export function* mapSaga() {
-  yield takeLatest(RECOMMEND, recommendSaga);
+  yield takeLatest(INITIAL_WHERE, recommendSaga);
 }
 
 const initialState = {
