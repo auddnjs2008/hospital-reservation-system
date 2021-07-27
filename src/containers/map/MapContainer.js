@@ -35,8 +35,6 @@ const MapContainer = () => {
           name: result[0].place_name,
         })
       );
-
-      getReservation();
     }
   };
 

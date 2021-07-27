@@ -188,7 +188,7 @@ const PlaceInfoComponent = ({ hospitals, history }) => {
       <main ref={main}>
         <h1>Best Place</h1>
         {hospitals && (
-          <div>
+          <div key={hospitals[0]?.id}>
             <Hospital
               id="0"
               className="hospital"
@@ -224,7 +224,7 @@ const PlaceInfoComponent = ({ hospitals, history }) => {
           <HospitalList ref={hospitalList}>
             {hospitals.map((item, index) =>
               index !== 0 ? (
-                <div>
+                <div key={item.id}>
                   <Hospital
                     id={`${index}`}
                     className="hospital"

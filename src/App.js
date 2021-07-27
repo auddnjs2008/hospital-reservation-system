@@ -13,9 +13,11 @@ import { isManager, login } from "./modules/auth";
 
 import Amplify from "aws-amplify";
 import { config, managerConfig } from "../src/lib/amplifyconfig";
+import ChatContainer from "./containers/chat/ChatContainer";
 
 function App() {
   const dispatch = useDispatch();
+
   const userIconClick = async () => {
     let currentUser;
     await Auth.currentAuthenticatedUser()
@@ -42,6 +44,7 @@ function App() {
 
   return (
     <>
+      {<ChatContainer />}
       <Route path="/" exact component={AskPage} />
       <Route path="/login" component={LoginPage} />
       <Route path="/register" component={RegisterPage} />
