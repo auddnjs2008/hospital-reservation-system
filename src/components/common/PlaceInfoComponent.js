@@ -208,7 +208,9 @@ const PlaceInfoComponent = ({ hospitals, history }) => {
                 <a id="detail" href={hospitals[0]?.place_url} target="_blank">
                   상세보기
                 </a>
-                <Link to={`/reservation/${hospitals[0]?.id}`}>예약하기</Link>
+                <Link to={`/reservation/${hospitals[0]?.place_name}`}>
+                  예약하기
+                </Link>
               </div>
             </Hospital>
           </div>
@@ -244,7 +246,9 @@ const PlaceInfoComponent = ({ hospitals, history }) => {
                       <a id="detail" href={item.place_url} target="_blank">
                         상세보기
                       </a>
-                      <Link to={`/reservation/${item.id}`}>예약하기</Link>
+                      <Link to={`/reservation/${item.place_name}`}>
+                        예약하기
+                      </Link>
                     </div>
                   </Hospital>
                 </div>

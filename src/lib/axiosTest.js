@@ -1,19 +1,5 @@
 import axios from "axios";
 
-const recommendAxios = async (dataArray) => {
-  try {
-    const response = await axios({
-      method: "post",
-      url: "https://u7npsu62nj.execute-api.ap-northeast-2.amazonaws.com/api_test/testrecommend",
-      data: dataArray,
-    });
-    console.log(response.data.body);
-    console.log(JSON.parse(response.data.body));
-  } catch (e) {
-    console.log(e);
-  }
-};
-
 export const writeAxios = async () => {
   try {
     const response = await axios({
@@ -158,4 +144,3 @@ export const getReservation = async () => {
     console.log(e);
   }
 };
-export default recommendAxios;

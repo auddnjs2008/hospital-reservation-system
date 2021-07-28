@@ -14,6 +14,7 @@ import { isManager, login } from "./modules/auth";
 import Amplify from "aws-amplify";
 import { config, managerConfig } from "../src/lib/amplifyconfig";
 import ChatContainer from "./containers/chat/ChatContainer";
+import SocketPage from "./pages/SocketPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -51,6 +52,7 @@ function App() {
       <Route path="/map" component={MapPage} />
       <Route path="/user" component={UserPage} />
       <Route path="/reservation/:id" component={ReservationPage} />
+      <Route path="/socket" component={SocketPage} />
     </>
   );
 }

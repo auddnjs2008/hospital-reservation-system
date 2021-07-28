@@ -5,18 +5,26 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { reservationPage } from "../../modules/menupage";
 import Calender from "./Calender/Calender";
+import DoctorComponent from "./DoctorComponent";
 
-const ReservationComponentBlock = styled.div``;
+const ReservationComponentBlock = styled.div`
+  h1 {
+    border: 1px solid black;
+  }
+`;
 
-const ReservationComponent = () => {
+const ReservationComponent = ({ hospitalName }) => {
   const rvPage = useRef();
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(reservationPage(rvPage));
   }, []);
+
   return (
     <ReservationComponentBlock ref={rvPage}>
-      <div>예약페이지야 </div>
+      <h1>{hospitalName} </h1>
+      <DoctorComponent hospitalName={hospitalName} />
       <Calender />
     </ReservationComponentBlock>
   );
