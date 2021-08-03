@@ -6,19 +6,26 @@ import pallet from "../../../lib/styles/pallet";
 
 const CalenderHeaderBlock = styled.ul`
   display: flex;
+  flex-direction: column;
   padding: 5px;
   justify-content: space-between;
   align-items: center;
-  height: 40px;
+  height: 10rem;
   background-color: ${pallet.green[3]};
   color: white;
   font-size: 21px;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
   .control {
     width: 80px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 20px;
+  }
+  li:nth-child(1) {
+    margin-top: 50px;
+    font-size: 40px;
   }
   li:nth-child(2) {
     width: 230px;

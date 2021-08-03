@@ -26,32 +26,6 @@ export const writeAxios = async () => {
   }
 };
 
-export const readAxios = async () => {
-  try {
-    const response = await axios({
-      method: "post",
-      url: "https://u7npsu62nj.execute-api.ap-northeast-2.amazonaws.com/api_test/review",
-      data: {
-        method: "GET",
-        body: {
-          TableName: "review",
-          ScanFilter: {
-            HospitalName: {
-              AttributeValueList: {
-                S: "서울숭실병원",
-              },
-              ComparisonOperator: "EQ",
-            },
-          },
-        },
-      },
-    });
-    console.log(response);
-  } catch (e) {
-    console.log(e);
-  }
-};
-
 export const postRecentPage = async () => {
   try {
     const response = await axios({
@@ -100,21 +74,17 @@ export const onePostReservation = async () => {
   }
 };
 
-export const postReservation = async () => {
+export const sendMessage = async () => {
   try {
     const response = await axios({
-      method: "post",
-      url: "https://u7npsu62nj.execute-api.ap-northeast-2.amazonaws.com/api_test/reservation",
-      data: {
-        method: "POST",
-        body: {
-          TableName: "reservation",
-          Item: {
-            number: "100",
-            hospitalName: "서울숭실병원",
-            name: "xodnjs",
-            time: "07/26 19:00",
-          },
+      method: "POST",
+      body: {
+        TableName: "test",
+        Item: {
+          anything: "6",
+          userName: "미래의페이스북",
+          hospitalName: "숭실의원",
+          comment: "ㅁㄱㄴㄱ",
         },
       },
     });
@@ -124,18 +94,17 @@ export const postReservation = async () => {
   }
 };
 
-export const getReservation = async () => {
+export const getMessage = async () => {
   try {
     const response = await axios({
-      method: "post",
-      url: "https://u7npsu62nj.execute-api.ap-northeast-2.amazonaws.com/api_test/reservation",
-      data: {
-        method: "GET",
-        body: {
-          TableName: "contentsView",
-          Key: {
-            userName: "xodnjs",
-          },
+      method: "POST",
+      body: {
+        TableName: "test",
+        Item: {
+          anything: "2",
+          userName: "xodnjs",
+          hospitalName: "숭실의원",
+          comment: "ㅁㄱㄴㄱ",
         },
       },
     });

@@ -32,7 +32,7 @@ const auth = handleActions(
       ...state,
       auth: { Inputid: "", InputPassword: "", email: "" },
     }),
-    [LOG_IN]: (state, { payload: id }) => ({
+    [LOG_IN]: (state, { payload: { id } }) => ({
       ...state,
       auth: { ...state.auth, id, Inputid: "", InputPassword: "" },
     }),

@@ -18,13 +18,22 @@ export const getDoctors = (name) =>
 
 export const getDoctorTimes = (name, doctor) =>
   client.post(process.env.REACT_APP_HOSPIAL_INFO_URL, {
-    method: "POST",
+    method: "GET",
     body: {
-      TableName: "hospital_Info",
-      Item: {
-        number: "3",
-        HospitalName: name,
-        doctorName: doctor,
+      TableName: "reservation",
+      ScanFilter: {
+        hospitalName: {
+          AttributeValueList: {
+            S: name,
+          },
+          ComparisonOperator: "EQ",
+        },
+        doctorName: {
+          AttributeValueList: {
+            S: doctor,
+          },
+          ComparisonOperator: "EQ",
+        },
       },
     },
   });

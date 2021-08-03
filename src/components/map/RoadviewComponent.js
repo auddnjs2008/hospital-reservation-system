@@ -130,10 +130,6 @@ const RoadviewComponent = () => {
     map.a.removeEventListener("mousemove", onMouseMove);
   };
 
-  // useEffect(() => {
-  //   dispatch(initialzeRoadmap(roadViewBox));
-  // }, []);
-
   useEffect(() => {
     setRoadView(new window.kakao.maps.Roadview(roadViewBox.current));
     if (roadview) {
@@ -163,7 +159,7 @@ const RoadviewComponent = () => {
             )
           );
       } catch (e) {
-        console.log(e);
+        alert(`${e}`);
       }
     }
   }, [roadLat, roadLong]);

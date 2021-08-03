@@ -7,6 +7,7 @@ const DateBlock = styled.ul`
   flex-grow: 1;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(6, 2rem);
 
   li.lastMonth,
   li.nextMonth {
@@ -16,18 +17,17 @@ const DateBlock = styled.ul`
 `;
 const DateItem = styled.li`
   display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
   padding: 3px;
-  background-color: #f5f6fa;
+  /* background-color: #f5f6fa; */
   border: 1px solid white;
   color: ${(props) => props.color || "black"};
   cursor: pointer;
 `;
 
-const Dates = ({ mYear, mMonth }) => {
+const Dates = ({ mYear, mMonth, setDay, setTimeWindow }) => {
   const [datesArray, setArray] = useState([]);
-  const [rvdates, setRvDates] = useState([]);
 
   const [lastDate, setLastDate] = useState(
     new Date(mYear, mMonth, 0).getDate()
@@ -38,6 +38,14 @@ const Dates = ({ mYear, mMonth }) => {
   const [startDay, setStartDay] = useState(
     new Date(mYear, mMonth - 1, 1).getDay()
   );
+
+  const onClick = (e) => {
+    if (e.target === e.currentTarget) return;
+    if (e.target.className.includes("nowMonth")) {
+      setDay(e.target.innerText);
+      setTimeWindow(true);
+    }
+  };
 
   useEffect(() => {
     let testArray = [];
@@ -62,12 +70,8 @@ const Dates = ({ mYear, mMonth }) => {
     setLastMonthDate(new Date(mYear, mMonth - 1, 0).getDate());
   }, [mYear, mMonth]);
 
-  useEffect(() => {
-    //데이터 api 요청 추후 작업 필요
-    setRvDates([1, 3, 8, 15, 20]);
-  }, []);
   return (
-    <DateBlock>
+    <DateBlock onClick={onClick}>
       {datesArray.map((item, index) => (
         <DateItem
           key={index}

@@ -10,14 +10,14 @@ const DayLineBlock = styled.ul`
   align-items: center;
   column-gap: 1px;
   font-size: 18px;
-  background-color: ${pallet.black[5]};
+  /* background-color: ${pallet.black[5]}; */
   li {
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${pallet.green[2]};
+    /* background-color: ${pallet.green[2]}; */
     &:first-child {
       color: red;
     }

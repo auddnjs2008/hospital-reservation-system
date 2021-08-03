@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useEffect } from "react";
 import { useRef } from "react";
 import { changeCoordinate } from "../../modules/roadmap";
+import { withRouter } from "react-router-dom";
 
 const SearchComponentBlock = styled.form`
   margin: auto;
@@ -43,7 +44,7 @@ const SearchComponentBlock = styled.form`
   }
 `;
 
-const SearchComponent = () => {
+const SearchComponent = ({ history }) => {
   const [text, SetText] = useState("");
   const dispatch = useDispatch();
   const { latitude, longitude, markers } = useSelector(({ map }) => ({
@@ -67,6 +68,7 @@ const SearchComponent = () => {
         eraseMarkers();
         dispatch(eraseMarker());
         dispatch(searchMap({ hospitals: filterResult }));
+        history.push("/map");
         dispatch(
           changeCoordinate({
             latitude: filterResult[0].y,
@@ -136,4 +138,4 @@ const SearchComponent = () => {
   );
 };
 
-export default SearchComponent;
+export default withRouter(SearchComponent);

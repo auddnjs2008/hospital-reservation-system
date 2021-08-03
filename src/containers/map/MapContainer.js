@@ -4,13 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { initialWhere } from "../../modules/map";
 import MapComponent from "../../components/map/MapComponent";
 import { changeCoordinate } from "../../modules/roadmap";
-import { recommendPlace } from "../../lib/api/recommend";
-import recommendAxios, {
-  readAxios,
-  getReservation,
-  postReservation,
-  getRecentPage,
-} from "../../lib/axiosTest";
 
 const MapContainer = () => {
   const dispatch = useDispatch();
@@ -28,13 +21,6 @@ const MapContainer = () => {
   const findCallBack = (result, status) => {
     if (status === kakao.maps.services.Status.OK) {
       dispatch(initialWhere({ latitude, longitude, hospitals: result }));
-      dispatch(
-        changeCoordinate({
-          latitude: result[0].y,
-          longitude: result[0].x,
-          name: result[0].place_name,
-        })
-      );
     }
   };
 
@@ -66,7 +52,7 @@ const MapContainer = () => {
       } else {
         //에러처리;
         //to do  에러처리
-        console.log("error");
+        alert("error");
       }
     });
   }, [dispatch]);
