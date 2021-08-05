@@ -10,6 +10,26 @@ import ManagerGraph from "./ManagerGraph";
 
 const ManagerPageBlock = styled.div`
   display: flex;
+  height: 90%;
+`;
+
+const UserProfile = styled.h1`
+  background-color: #363b3e;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  div.icon {
+    font-size: 5rem;
+    text-align: center;
+    border-radius: 50%;
+  }
+  div.name {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+  }
 `;
 
 const ManagerPage = () => {
@@ -61,10 +81,12 @@ const ManagerPage = () => {
 
   return (
     <ManagerPageBlock>
-      <h1>
-        <FontAwesomeIcon icon={faUserTie}></FontAwesomeIcon>
-        {hospital} Manager
-      </h1>
+      <UserProfile>
+        <div className="icon">
+          <FontAwesomeIcon icon={faUserTie}></FontAwesomeIcon>
+        </div>
+        <div className="name">{hospital} Manager</div>
+      </UserProfile>
       <ManagerDoctors
         times={times}
         doctors={doctors}
@@ -74,78 +96,8 @@ const ManagerPage = () => {
       ></ManagerDoctors>
       <ManagerGraph
         graphData={graphData}
-        data={[
-          {
-            id: "japan",
-            color: "hsl(12, 70%, 50%)",
-            data: [
-              {
-                x: "09:00",
-                y: 102,
-              },
-              {
-                x: "09:30",
-                y: 56,
-              },
-              {
-                x: "10:00",
-                y: 217,
-              },
-              {
-                x: "10:30",
-                y: 293,
-              },
-              {
-                x: "11:00",
-                y: 183,
-              },
-              {
-                x: "11:30",
-                y: 238,
-              },
-              {
-                x: "13:00",
-                y: 175,
-              },
-              {
-                x: "13:30",
-                y: 175,
-              },
-              {
-                x: "14:00",
-                y: 5,
-              },
-              {
-                x: "14:30",
-                y: 249,
-              },
-              {
-                x: "15:00",
-                y: 243,
-              },
-              {
-                x: "15:30",
-                y: 10,
-              },
-              {
-                x: "16:00",
-                y: 10,
-              },
-              {
-                x: "16:30",
-                y: 10,
-              },
-              {
-                x: "17:00",
-                y: 50,
-              },
-              {
-                x: "17:30",
-                y: 50,
-              },
-            ],
-          },
-        ]}
+        doctorIndex={doctorIndex}
+        doctors={doctors}
       ></ManagerGraph>
     </ManagerPageBlock>
   );

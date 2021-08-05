@@ -14,7 +14,7 @@ import { useState } from "react";
 import ManagerPage from "./ManagerPage";
 
 const MypageComponentBlock = styled.div`
-  width: 70vw;
+  width: ${(props) => (props.manager ? "100vw" : "70vw")};
   height: 100vh;
   position: relative;
   background-color: #07b495;
@@ -23,6 +23,7 @@ const MypageComponentBlock = styled.div`
     height: 2rem;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     button {
       all: unset;
       margin-right: 2rem;
@@ -56,7 +57,7 @@ const MypageComponent = ({ history, manager }) => {
     if (cognitoUser !== null) {
       cognitoUser.signOut();
       dispatch(logout());
-      history.push("/map");
+      manager ? history.push("/login") : history.push("/map");
     }
   };
   useEffect(() => {
@@ -70,7 +71,7 @@ const MypageComponent = ({ history, manager }) => {
   }, []);
 
   return (
-    <MypageComponentBlock ref={mypage}>
+    <MypageComponentBlock manager={manager} ref={mypage}>
       <div className="logOut">
         <button onClick={onClick}>로그아웃</button>
       </div>

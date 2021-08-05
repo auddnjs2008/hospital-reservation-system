@@ -16,9 +16,11 @@ import { config, managerConfig } from "../src/lib/amplifyconfig";
 import ChatContainer from "./containers/chat/ChatContainer";
 import SocketPage from "./pages/SocketPage";
 import ReviewPage from "./pages/ReviewPage";
+import { useState } from "react";
 
 function App() {
   const dispatch = useDispatch();
+  const [manager, setManager] = useState(false);
 
   const userIconClick = async () => {
     let currentUser;
@@ -43,6 +45,7 @@ function App() {
           dispatch(
             isManager({ hospital: user.attributes["custom:hospital_name"] })
           );
+          setManager(true);
         }
       }
     };
@@ -51,14 +54,24 @@ function App() {
 
   return (
     <>
-      <Route path="/" exact component={AskPage} />
-      <Route path="/login" component={LoginPage} />
-      <Route path="/register" component={RegisterPage} />
-      <Route path="/map" component={MapPage} />
-      <Route path="/user" component={UserPage} />
-      <Route path="/reservation/:id" component={ReservationPage} />
-      <Route path="/review/:id" component={ReviewPage} />
-      <Route path="/socket" component={SocketPage} />
+      {!manager ? (
+        <>
+          <Route path="/" exact component={AskPage} />
+          <Route path="/login" component={LoginPage} />
+          <Route path="/register" component={RegisterPage} />
+          <Route path="/map" component={MapPage} />
+          <Route path="/user" component={UserPage} />
+          <Route path="/reservation/:id" component={ReservationPage} />
+          <Route path="/review/:id" component={ReviewPage} />
+          <Route path="/socket" component={SocketPage} />
+        </>
+      ) : (
+        <>
+          <Route path="/" exact component={UserPage} />
+          <Route path="/login" component={LoginPage} />
+          <Route path="/register" component={RegisterPage} />
+        </>
+      )}
     </>
   );
 }

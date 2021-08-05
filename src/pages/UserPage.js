@@ -2,16 +2,21 @@ import React from "react";
 import styled from "styled-components";
 import PlaceInfoContainer from "../containers/PlaceInfoContainer";
 import MypageContainer from "../containers/mypage/MypageContainer";
+import { useSelector } from "react-redux";
 
 const UserWrapper = styled.div`
   display: flex;
 `;
 
 const UserPage = () => {
+  const { manager } = useSelector(({ auth }) => ({
+    manager: auth.auth.manager,
+  }));
+
   return (
     <UserWrapper>
-      <PlaceInfoContainer />
-      <MypageContainer />
+      {!manager && <PlaceInfoContainer />}
+      <MypageContainer manager={manager} />
     </UserWrapper>
   );
 };

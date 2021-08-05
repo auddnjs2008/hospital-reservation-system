@@ -83,8 +83,14 @@ const AuthForm = ({ onChange, content, text, history }) => {
         ? Amplify.configure(managerConfig)
         : Amplify.configure(config);
       user = await Auth.signIn(id.current.value, password.current.value);
-      if (manager.current.checked) dispatch(isManager());
-      history.push("/user");
+      if (manager.current.checked) {
+        dispatch(
+          isManager({ hospital: user.attributes["custom:hospital_name"] })
+        );
+        window.location.href = "/";
+        return;
+      }
+      window.location.href = "/user";
     } catch (e) {
       alert(`${e}`);
     }

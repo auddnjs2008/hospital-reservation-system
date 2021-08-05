@@ -5,9 +5,9 @@ import styled from "styled-components";
 
 const ManagerDoctorsBlock = styled.div`
   width: 30rem;
-  height: 30rem;
-
-  background-color: white;
+  height: 100%;
+  padding: 12px;
+  background-color: #363b3e;
   display: grid;
   grid-template-columns: 50px 1fr;
 `;
@@ -16,6 +16,7 @@ const DoctorBar = styled.ul`
   height: 100%;
   display: grid;
   align-items: center;
+
   grid-auto-rows: 1fr;
   /* background-color: #363b3e; */
   color: white;
@@ -97,6 +98,14 @@ const ManagerDoctors = ({
       setTimeArray(arr);
     }
   }, [times]);
+
+  useEffect(() => {
+    if (doctorIndex === -1) {
+      setGraph(timeArray);
+    } else {
+      setGraph(times[doctorIndex][doctors[doctorIndex]]);
+    }
+  }, [doctorIndex]);
 
   return (
     <ManagerDoctorsBlock>

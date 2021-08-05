@@ -5,84 +5,86 @@ import { useEffect } from "react";
 
 const ManagerGraphBox = styled.div`
   width: 800px;
-  height: 500px;
+  height: 100%;
   background-color: #363b3e;
 `;
 
-const ManagerGraph = ({ graphData, data }) => {
+const ManagerGraph = ({ graphData, data, doctorIndex, doctors }) => {
   const [graphTimes, setTimes] = useState({});
 
   const makeGraphData = (times, id, color) => {
-    const result = {
-      id,
-      color,
-      data: [
-        {
-          x: "09:00",
-          y: times["09:00"],
-        },
-        {
-          x: "09:30",
-          y: times["09:30"],
-        },
-        {
-          x: "10:00",
-          y: times["10:00"],
-        },
-        {
-          x: "10:30",
-          y: times["10:30"],
-        },
-        {
-          x: "11:00",
-          y: times["11:00"],
-        },
-        {
-          x: "11:30",
-          y: times["11:30"],
-        },
-        {
-          x: "13:00",
-          y: times["13:00"],
-        },
-        {
-          x: "13:30",
-          y: times["13:30"],
-        },
-        {
-          x: "14:00",
-          y: times["14:00"],
-        },
-        {
-          x: "14:30",
-          y: times["14:30"],
-        },
-        {
-          x: "15:00",
-          y: times["15:00"],
-        },
-        {
-          x: "15:30",
-          y: times["15:30"],
-        },
-        {
-          x: "16:00",
-          y: times["16:00"],
-        },
-        {
-          x: "16:30",
-          y: times["16:30"],
-        },
-        {
-          x: "17:00",
-          y: times["17:00"],
-        },
-        {
-          x: "17:30",
-          y: times["17:30"],
-        },
-      ],
-    };
+    const result = [
+      {
+        id,
+        color,
+        data: [
+          {
+            x: "09:00",
+            y: times["09:00"],
+          },
+          {
+            x: "09:30",
+            y: times["09:30"],
+          },
+          {
+            x: "10:00",
+            y: times["10:00"],
+          },
+          {
+            x: "10:30",
+            y: times["10:30"],
+          },
+          {
+            x: "11:00",
+            y: times["11:00"],
+          },
+          {
+            x: "11:30",
+            y: times["11:30"],
+          },
+          {
+            x: "13:00",
+            y: times["13:00"],
+          },
+          {
+            x: "13:30",
+            y: times["13:30"],
+          },
+          {
+            x: "14:00",
+            y: times["14:00"],
+          },
+          {
+            x: "14:30",
+            y: times["14:30"],
+          },
+          {
+            x: "15:00",
+            y: times["15:00"],
+          },
+          {
+            x: "15:30",
+            y: times["15:30"],
+          },
+          {
+            x: "16:00",
+            y: times["16:00"],
+          },
+          {
+            x: "16:30",
+            y: times["16:30"],
+          },
+          {
+            x: "17:00",
+            y: times["17:00"],
+          },
+          {
+            x: "17:30",
+            y: times["17:30"],
+          },
+        ],
+      },
+    ];
     return result;
   };
 
@@ -159,18 +161,38 @@ const ManagerGraph = ({ graphData, data }) => {
           break;
       }
     }
-    setTimes(isRvTimes);
+    return isRvTimes;
   };
 
   useEffect(() => {
-    makeGraphTimes(graphData);
+    if (graphData) {
+      const times = makeGraphTimes(graphData);
+      const result = makeGraphData(
+        times,
+        doctors[doctorIndex] ? doctors[doctorIndex] : "all",
+        "hsl(12, 70%, 50%)"
+      );
+      console.log(result);
+      setTimes(result);
+    }
   }, [graphData]);
 
   return (
     <ManagerGraphBox>
       <ResponsiveLine
-        data={data}
+        data={graphTimes}
         margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+        theme={{
+          textColor: "#eee",
+          fontSize: "12px",
+          crosshair: {
+            line: {
+              stroke: "yellow",
+              //   strokeWidth: 1,
+              //   strokeOpacity: 0.35,
+            },
+          },
+        }}
         xScale={{ type: "point" }}
         yScale={{
           type: "linear",
@@ -179,7 +201,7 @@ const ManagerGraph = ({ graphData, data }) => {
           stacked: true,
           reverse: false,
         }}
-        yFormat=" >-.2f"
+        yFormat=" >-.1f"
         axisTop={null}
         axisRight={null}
         axisBottom={{

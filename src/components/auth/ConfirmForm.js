@@ -21,9 +21,11 @@ const ConfirmForm = ({ history }) => {
 
     try {
       await Auth.confirmSignUp(id, confirm.current.value);
-      await Auth.signIn(id, password);
+      const user = await Auth.signIn(id, password);
       dispatch(login({ id }));
-      history.push("/user");
+      user.attributes["custom:hospital_name"]
+        ? history.push("/")
+        : history.push("/user");
     } catch (error) {
       alert(`${error}`);
     }
