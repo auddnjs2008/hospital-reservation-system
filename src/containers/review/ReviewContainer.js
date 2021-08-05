@@ -8,6 +8,7 @@ const ReviewContainer = () => {
   const [reviews, setReviews] = useState("");
   const [hospital, setHospital] = useState("");
   const [rate, setRate] = useState();
+  const [reload, setReload] = useState(false);
 
   const getRate = (data) => {
     let sum = 0;
@@ -31,7 +32,7 @@ const ReviewContainer = () => {
       }
     };
     if (hospital) getApi();
-  }, [hospital]);
+  }, [hospital, reload]);
 
   useEffect(() => {
     setHospital(decodeURI(window.location.href).split("review/")[1]);
@@ -42,6 +43,7 @@ const ReviewContainer = () => {
       hospital={hospital}
       reviews={reviews}
       rate={rate}
+      setReload={setReload}
     ></ReviewComponent>
   );
 };

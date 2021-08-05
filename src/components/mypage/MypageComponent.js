@@ -9,9 +9,9 @@ import { useEffect } from "react";
 import { userPage } from "../../modules/menupage";
 import { Auth } from "aws-amplify";
 import UserMypage from "./UserMypage";
-import pallet from "../../lib/styles/pallet";
 import ReviewWrite from "./ReviewWrite";
 import { useState } from "react";
+import ManagerPage from "./ManagerPage";
 
 const MypageComponentBlock = styled.div`
   width: 70vw;
@@ -41,11 +41,12 @@ const MypageComponentBlock = styled.div`
   }
 `;
 
-const MypageComponent = ({ history }) => {
+const MypageComponent = ({ history, manager }) => {
   const dispatch = useDispatch();
   const mypage = useRef();
   const [hospital, setHospital] = useState("");
   const [review, setReview] = useState(false);
+  const [scroll, setScroll] = useState(window.scrollY);
 
   const onClick = async () => {
     let cognitoUser = null;
@@ -62,13 +63,29 @@ const MypageComponent = ({ history }) => {
     dispatch(userPage(mypage));
   }, [dispatch]);
 
+  useEffect(() => {
+    window.addEventListener("scroll", () => setScroll(window.scrollY));
+    return () =>
+      window.removeEventListener("scroll", () => setScroll(window.scrollY));
+  }, []);
+
   return (
     <MypageComponentBlock ref={mypage}>
       <div className="logOut">
         <button onClick={onClick}>로그아웃</button>
       </div>
-      <UserMypage setReview={setReview} setHospital={setHospital} />
-      {review && <ReviewWrite hospital={hospital} setReview={setReview} />}
+      {!manager ? (
+        <UserMypage setReview={setReview} setHospital={setHospital} />
+      ) : (
+        <ManagerPage></ManagerPage>
+      )}
+      {review && (
+        <ReviewWrite
+          scroll={scroll}
+          hospital={hospital}
+          setReview={setReview}
+        />
+      )}
     </MypageComponentBlock>
   );
 };

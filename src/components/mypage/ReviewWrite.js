@@ -1,35 +1,48 @@
 import { faStar, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { postReviews } from "../../lib/api/review";
+import pallet from "../../lib/styles/pallet";
 
 const ReviewWriteBlock = styled.div`
-  width: 500px;
-  height: 20rem;
-  padding: 0.4rem;
+  width: ${(props) => (props.rvPage ? "90%" : "500px")};
+  height: 18rem;
+  padding-top: 1rem;
   border: 1px solid black;
-  position: absolute;
+  position: ${(props) => (props.rvPage ? "" : "absolute")};
   display: flex;
   flex-direction: column;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: ${(props) =>
+    props.scroll ? `${props.scroll + window.innerHeight / 2}px` : "50%"};
+  left: ${(props) => (props.rvPage ? "" : "50%")};
+  transform: ${(props) => (props.rvPage ? "" : "translate(-50%, -50%)")};
+  background-color: ${(props) => (props.rvPage ? "white" : "#f2f3f1")};
   h1 {
     font-size: 2rem;
+    margin-bottom: 1rem;
+    text-align: center;
   }
+
   form {
-    border: 1px solid red;
     display: flex;
     width: 100%;
     height: 100%;
     flex-direction: column;
+    margin-top: 1rem;
     .rate {
       display: flex;
-      border: 1px solid black;
       align-items: center;
+      .starNum {
+        font-size: 1.3rem;
+      }
     }
     .starBox {
       display: flex;
+      margin-right: 1rem;
+      margin-left: 1rem;
+      margin-bottom: 1rem;
     }
   }
   textarea {
@@ -37,11 +50,27 @@ const ReviewWriteBlock = styled.div`
     height: 100%;
     resize: none;
     padding: 0;
+    font-size: 1rem;
+    background-color: #f2f3f1;
+    padding: 0.2rem;
+  }
+  input[type="submit"] {
+    all: unset;
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: ${pallet.green[1]};
+    border: 1px solid black;
   }
   span.close {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 0.3rem;
+    right: 0.3rem;
+    font-size: 1.5rem;
+    &:active {
+      transform: scale(0.98);
+    }
   }
 `;
 
@@ -50,8 +79,16 @@ const StyledStar = styled.div`
   font-size: 2rem;
 `;
 
-const ReviewWrite = ({ hospital, setReview }) => {
+const ReviewWrite = ({
+  scroll,
+  hospital,
+  setReview,
+  rvPage = false,
+  setReload,
+}) => {
+  const { id } = useSelector(({ auth }) => ({ id: auth.auth.id }));
   const [starNum, setStarNum] = useState(0);
+  const [text, setText] = useState("");
 
   const onClick = (e) => {
     if (Number(e.currentTarget.id) <= starNum) {
@@ -61,11 +98,30 @@ const ReviewWrite = ({ hospital, setReview }) => {
     setStarNum(e.currentTarget.id);
   };
 
+  const onChange = (e) => {
+    const cText = e.currentTarget.value;
+    setText(cText);
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (!text) return;
+    try {
+      await postReviews(hospital, text, id, starNum);
+      alert("후기가 등록되었습니다.");
+      setText("");
+      setStarNum(0);
+      if (!rvPage) setReview(false);
+      if (rvPage) setReload((item) => !item);
+    } catch (e) {
+      alert("에러");
+    }
+  };
+
   return (
-    <ReviewWriteBlock>
-      <h1>{hospital}</h1>
-      <p>후기를 남겨주세요</p>
-      <form>
+    <ReviewWriteBlock rvPage={rvPage} scroll={scroll}>
+      {!rvPage && <h1>{hospital}</h1>}
+      <form onSubmit={onSubmit}>
         <div className="rate">
           <div className="starBox">
             <StyledStar color={1 <= starNum} id={1} onClick={onClick}>
@@ -87,13 +143,16 @@ const ReviewWrite = ({ hospital, setReview }) => {
               <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
             </StyledStar>
           </div>
-          <span>{starNum}/5</span>
+          <span className="starNum">{starNum}/5</span>
         </div>
-        <textarea></textarea>
+        <textarea onChange={onChange} value={text}></textarea>
+        <input type="submit" value="등록"></input>
       </form>
-      <span className="close" onClick={() => setReview(false)}>
-        <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
-      </span>
+      {!rvPage && (
+        <span className="close" onClick={() => setReview(false)}>
+          <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
+        </span>
+      )}
     </ReviewWriteBlock>
   );
 };

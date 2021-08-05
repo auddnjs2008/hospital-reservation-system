@@ -37,9 +37,13 @@ function App() {
       let user = await userIconClick();
       if (!user) {
         Amplify.configure(managerConfig);
-        user = userIconClick();
+        user = await userIconClick();
         if (!user) Amplify.configure(config);
-        else dispatch(isManager());
+        else {
+          dispatch(
+            isManager({ hospital: user.attributes["custom:hospital_name"] })
+          );
+        }
       }
     };
     asyncFunc();
@@ -47,7 +51,6 @@ function App() {
 
   return (
     <>
-      {<ChatContainer />}
       <Route path="/" exact component={AskPage} />
       <Route path="/login" component={LoginPage} />
       <Route path="/register" component={RegisterPage} />

@@ -6,7 +6,7 @@ const MypageContainer = () => {
     manager: auth.auth.manager,
   }));
 
-  return <MypageComponent />;
+  return <MypageComponent manager={manager} />;
 };
 
 export default MypageContainer;

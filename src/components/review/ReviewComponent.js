@@ -1,4 +1,5 @@
-import { faStarHalf, faUser } from "@fortawesome/free-regular-svg-icons";
+import { faUser } from "@fortawesome/free-regular-svg-icons";
+import { faStarHalf } from "@fortawesome/free-solid-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faEmptyStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,6 +7,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { reviewPage } from "../../modules/menupage";
+import ReviewWrite from "../mypage/ReviewWrite";
 
 const ReviewComponentBlock = styled.div`
   padding: 1rem;
@@ -53,18 +55,18 @@ const ReviewList = styled.ul`
   }
 `;
 
-const ReviewComponent = ({ hospital, reviews, rate }) => {
+const ReviewComponent = ({ hospital, reviews, rate, setReload }) => {
   const [star, setStar] = useState([]);
   const reviewpage = useRef();
   const dispatch = useDispatch();
 
   const setArrStar = () => {
     const arr = [];
-    for (let i = 0; i < rate; i++) {
+    for (let i = 0; i < Math.floor(rate); i++) {
       arr.push(1);
     }
     if (Math.floor(rate) !== rate) arr.push(0.5);
-    for (let i = 5 - rate + 1; i < 5; i++) {
+    for (let i = Math.ceil(rate); i < 5; i++) {
       arr.push(0);
     }
     setStar(arr);
@@ -72,7 +74,6 @@ const ReviewComponent = ({ hospital, reviews, rate }) => {
   useEffect(() => {
     if (rate) {
       setArrStar();
-      console.log(reviews);
     }
   }, [reviews, rate]);
 
@@ -117,6 +118,11 @@ const ReviewComponent = ({ hospital, reviews, rate }) => {
       ) : (
         <p className="noReview">등록된 후기가 없습니다</p>
       )}
+      <ReviewWrite
+        hospital={hospital}
+        rvPage={true}
+        setReload={setReload}
+      ></ReviewWrite>
     </ReviewComponentBlock>
   );
 };

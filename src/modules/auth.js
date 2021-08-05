@@ -19,6 +19,7 @@ const initialState = {
     InputPassword: "",
     email: "",
     manager: false,
+    hospital: "",
   },
 };
 
@@ -46,9 +47,9 @@ const auth = handleActions(
         manager: false,
       },
     }),
-    [IS_MANAGER]: (state) => ({
+    [IS_MANAGER]: (state, { payload: { hospital } }) => ({
       ...state,
-      auth: { ...state.auth, manager: !state.auth.manager },
+      auth: { ...state.auth, manager: !state.auth.manager, hospital },
     }),
   },
   initialState
