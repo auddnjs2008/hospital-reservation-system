@@ -14,7 +14,9 @@ const SocketPage = () => {
   const onConnect = () => {
     Socket.current = new WebSocket(URL);
     Socket.current.addEventListener("open", () => alert("오픈되었어 친구들~"));
-
+    Socket.current.addEventListener("message", (message) =>
+      console.log(message)
+    );
     Socket.current.addEventListener("close", () => alert("닫혔어 친구들~"));
   };
 
@@ -22,6 +24,10 @@ const SocketPage = () => {
     e.preventDefault();
     //{action:"setName", name : "bob"}  => 이름 지정
     //{action:"sendPrivate",message:"HEelo" ,to:"elice" }
+
+    if (Input.current.value === "bob") {
+      Socket.current.send(JSON.stringify({ action: "setName", name: "bob" }));
+    }
 
     Socket.current.send(
       // JSON.stringify({
@@ -36,7 +42,8 @@ const SocketPage = () => {
       //     },
       //   },
       // })
-      // JSON.stringify({ action: "setName", name: id })
+      //JSON.stringify({ action: "setName", name: id })
+
       JSON.stringify({
         action: "sendPrivate",
         message: Input.current.value,
@@ -48,7 +55,6 @@ const SocketPage = () => {
 
   useEffect(() => {
     onConnect();
-    console.log(id);
   }, []);
 
   return (

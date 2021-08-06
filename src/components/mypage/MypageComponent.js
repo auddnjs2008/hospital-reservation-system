@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { userPage } from "../../modules/menupage";
 import { Auth } from "aws-amplify";
 import UserMypage from "./UserMypage";
-import ReviewWrite from "./ReviewWrite";
+import ReviewWrite from "../review/ReviewWrite";
 import { useState } from "react";
 import ManagerPage from "./ManagerPage";
 
@@ -62,6 +62,7 @@ const MypageComponent = ({ history, manager }) => {
   };
   useEffect(() => {
     dispatch(userPage(mypage));
+    console.log("실행되었다.");
   }, [dispatch]);
 
   useEffect(() => {

@@ -54,6 +54,7 @@ function App() {
 
   return (
     <>
+      <ChatContainer />
       {!manager ? (
         <>
           <Route path="/" exact component={AskPage} />

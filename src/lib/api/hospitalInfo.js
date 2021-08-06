@@ -37,3 +37,19 @@ export const getDoctorTimes = (name, doctor) =>
       },
     },
   });
+
+export const getHospitalId = (name) =>
+  client.post(process.env.REACT_APP_HOSPIAL_INFO_URL, {
+    method: "GET",
+    body: {
+      TableName: "hospital_ID",
+      ScanFilter: {
+        hospitalName: {
+          AttributeValueList: {
+            S: "숭실의원",
+          },
+          ComparisonOperator: "EQ",
+        },
+      },
+    },
+  });

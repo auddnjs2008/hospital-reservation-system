@@ -10,7 +10,7 @@ const ReviewWriteBlock = styled.div`
   width: ${(props) => (props.rvPage ? "90%" : "500px")};
   height: 18rem;
   padding-top: 1rem;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   position: ${(props) => (props.rvPage ? "" : "absolute")};
   display: flex;
   flex-direction: column;

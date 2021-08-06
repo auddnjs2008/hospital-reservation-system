@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { reviewPage } from "../../modules/menupage";
-import ReviewWrite from "../mypage/ReviewWrite";
+import ReviewWrite from "./ReviewWrite";
 
 const ReviewComponentBlock = styled.div`
   padding: 1rem;

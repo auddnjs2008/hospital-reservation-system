@@ -37,7 +37,7 @@ const InfoToggleBtn = ({ placeInfoWrapper, mapContainer }) => {
     page: menupage.userpage || menupage.rvpage || menupage.reviewpage,
   }));
   const onSlideClick = (e) => {
-    const mapWidth = mapBox.current?.style.width;
+    const mapWidth = mapBox?.current?.style.width;
     const roadMapWidth = roadMapBox?.a.style.width;
 
     if (!slider) {

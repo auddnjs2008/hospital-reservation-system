@@ -172,7 +172,6 @@ const ManagerGraph = ({ graphData, data, doctorIndex, doctors }) => {
         doctors[doctorIndex] ? doctors[doctorIndex] : "all",
         "hsl(12, 70%, 50%)"
       );
-      console.log(result);
       setTimes(result);
     }
   }, [graphData]);

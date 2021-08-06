@@ -75,7 +75,7 @@ const MapComponent = () => {
     const newMap = new kakao.maps.Map(mapContainer.current, options);
     setMap(newMap);
     dispatch(initialMap({ map: newMap, mapBox: mapContainer }));
-  }, [lat, long]);
+  }, [lat, long]); // lat,long 을 써준이유?
 
   useEffect(() => {
     if (hospitals) markerDraw();

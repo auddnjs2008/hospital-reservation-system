@@ -17,6 +17,7 @@ export default function createRequestSaga(type, request) {
       if (type === "map/INITIAL_WHERE") {
         response = yield call(request, { info: action.payload.hospitals });
         const firstPlace = JSON.parse(response.data.body)[0];
+
         yield put({
           type: "roadmap/CHANGE_COORDINATE",
           payload: {
@@ -27,6 +28,7 @@ export default function createRequestSaga(type, request) {
           meta: response,
         });
       }
+      localStorage.setItem("hospitals", response.data.body);
       yield put({
         type: SUCCESS,
         payload: JSON.parse(response.data.body),

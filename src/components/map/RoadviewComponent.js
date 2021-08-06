@@ -27,18 +27,21 @@ const RoadviewComponentBlock = styled.div`
 
 const RoadviewComponent = () => {
   const dispatch = useDispatch();
-  const { map, hospitals, roadLat, roadLong, name } = useSelector(
-    ({ map, roadmap }) => ({
+  const { map, hospitals, roadLat, roadLong, name, storeRoadmap } = useSelector(
+    ({ map, roadmap, menupage }) => ({
       map: map.map,
       hospitals: map.hospitals,
       roadLat: roadmap.latitude,
       roadLong: roadmap.longitude,
       name: roadmap.name,
+      storeRoadmap: roadmap.roadmap,
     })
   );
   const roadViewBox = useRef();
   const [roadview, setRoadView] = useState();
   const [mapPrevWalker, setPrevMapWalker] = useState(null);
+  const [walkerSetting, setWalkerSetting] = useState(false);
+
   const roadviewClient = new window.kakao.maps.RoadviewClient();
 
   let startOverlayPoint = null;
@@ -131,6 +134,10 @@ const RoadviewComponent = () => {
   };
 
   useEffect(() => {
+    setWalkerSetting(true);
+  }, [roadview]);
+
+  useEffect(() => {
     setRoadView(new window.kakao.maps.Roadview(roadViewBox.current));
     if (roadview) {
       dispatch(initialzeRoadmap(roadview));
@@ -162,12 +169,17 @@ const RoadviewComponent = () => {
         alert(`${e}`);
       }
     }
-  }, [roadLat, roadLong]);
+  }, [roadLat, roadLong, walkerSetting]);
 
   useEffect(() => {
     if (mapPrevWalker) {
       mapPrevWalker.content.addEventListener("mousedown", onMouseDown);
       mapPrevWalker.content.addEventListener("mouseup", onMouseUp);
+
+      return () => {
+        mapPrevWalker.content.removeEventListener("mousedown", onMouseDown);
+        mapPrevWalker.content.removeEventListener("mouseup", onMouseUp);
+      };
     }
   }, [mapPrevWalker]);
 
