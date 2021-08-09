@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { postReviews } from "../../lib/api/review";
+import { postReviews, setRates } from "../../lib/api/review";
 import pallet from "../../lib/styles/pallet";
 
 const ReviewWriteBlock = styled.div`
@@ -109,6 +109,8 @@ const ReviewWrite = ({
     try {
       await postReviews(hospital, text, id, starNum);
       alert("후기가 등록되었습니다.");
+      await setRates();
+
       setText("");
       setStarNum(0);
       if (!rvPage) setReview(false);

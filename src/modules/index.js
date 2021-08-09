@@ -6,6 +6,7 @@ import map, { mapSaga } from "./map";
 import loading from "./loading";
 import menupage from "./menupage";
 import roadmap from "./roadmap";
+import chat, { chatSaga } from "./chat";
 const rootReducer = combineReducers({
   auth,
   hospital,
@@ -13,9 +14,10 @@ const rootReducer = combineReducers({
   loading,
   menupage,
   roadmap,
+  chat,
 });
 
 export function* rootSaga() {
-  yield all([mapSaga()]);
+  yield all([mapSaga(), chatSaga()]);
 }
 export default rootReducer;

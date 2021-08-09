@@ -30,3 +30,5 @@ export const postReviews = (hospital, text, name, rate) =>
       },
     },
   });
+
+export const setRates = () => client.post(process.env.REACT_APP_RATE, {});

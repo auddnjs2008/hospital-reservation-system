@@ -34,7 +34,9 @@ const AuthCheckBoxes = ({ manager, user, setHospital, value, content }) => {
     }
     manager.current.checked ? setBoxView(true) : setBoxView(false);
   };
-  useEffect(() => (user.current.checked = true), []);
+  useEffect(() => {
+    user.current.checked = true;
+  }, [user]);
 
   const onChange = (e) => {
     const value = e.target.value;

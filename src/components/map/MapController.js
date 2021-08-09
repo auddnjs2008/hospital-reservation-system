@@ -8,10 +8,9 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import pallet from "../../lib/styles/pallet";
-import { viewBothMode } from "../../modules/roadmap";
 
 const MapControllerBlock = styled.ul`
   display: flex;
@@ -19,17 +18,19 @@ const MapControllerBlock = styled.ul`
   position: absolute;
   top: 10px;
   right: 50px;
-
+  box-shadow: 0px 3px 5px ${pallet.black[5]};
   z-index: 50;
+  background-color: #ecf0f1;
+  padding: 5px;
+  border-radius: 5px;
 
   li {
     padding: 3px;
     cursor: pointer;
-    font-size: 40px;
+    font-size: 2rem;
     display: flex;
     align-items: center;
     color: ${pallet.green[3]};
-    background-color: #ecf0f1;
     div {
       background-color: #ecf0f1;
     }

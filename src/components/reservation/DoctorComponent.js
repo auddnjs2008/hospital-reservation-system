@@ -40,7 +40,13 @@ const StyledLi = styled.li`
   }
 `;
 
-const DoctorComponent = ({ doctor, hospitalName, setDoctor, phone }) => {
+const DoctorComponent = ({
+  doctor,
+  hospitalName,
+  setDoctor,
+  phone,
+  setChat,
+}) => {
   const [doctors, setDoctors] = useState([]);
   const [clickIndex, setClick] = useState(-1);
 
@@ -49,6 +55,7 @@ const DoctorComponent = ({ doctor, hospitalName, setDoctor, phone }) => {
       try {
         const result = await getDoctors(hospitalName);
         setDoctors(JSON.parse(result.data.body).Items);
+        if (JSON.parse(result.data.body).Items.length) setChat(true);
       } catch (e) {
         alert(`${e}`);
       }
