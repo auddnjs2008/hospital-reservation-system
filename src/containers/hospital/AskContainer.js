@@ -2,9 +2,9 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { clickHospital, initialHospital } from "../../modules/hospital";
 import AskComponent from "../../components/asks/AskComponent";
-import { useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { initialMapHospitals } from "../../modules/map";
+import { useCallback } from "react";
 
 const AskContainer = ({ history }) => {
   const dispatch = useDispatch();
@@ -14,13 +14,13 @@ const AskContainer = ({ history }) => {
     dispatch(initialMapHospitals());
     dispatch(clickHospital({ kind: `${kind}` }));
   };
-  const onItemClick = (e) => {
+  const onItemClick = useCallback((e) => {
     const {
       target: { id: kind },
     } = e;
     itemClick(kind);
     history.push("/map");
-  };
+  }, []);
 
   return <AskComponent onItemClick={onItemClick}></AskComponent>;
 };

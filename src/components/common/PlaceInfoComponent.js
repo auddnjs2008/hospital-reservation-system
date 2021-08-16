@@ -1,6 +1,6 @@
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useRef } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -102,7 +102,7 @@ const ToggleBtn = styled.button`
   }
 `;
 
-const PlaceInfoComponent = ({ hospitals, history }) => {
+const PlaceInfoComponent = ({ hospitals }) => {
   const { map } = useSelector(({ map }) => ({ map: map.map }));
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(0);
@@ -111,7 +111,8 @@ const PlaceInfoComponent = ({ hospitals, history }) => {
   const placeInfoWrapper = useRef();
   const hospitalList = useRef();
   const main = useRef();
-  const onInfoToggleClick = (e) => {
+
+  const onInfoToggleClick = useCallback((e) => {
     if (
       hospitalList.current.style.opacity === "0" ||
       hospitalList.current.style.opacity === ""
@@ -126,7 +127,7 @@ const PlaceInfoComponent = ({ hospitals, history }) => {
       main.current.position = "fixed";
       setToggle(0);
     }
-  };
+  }, []);
 
   const createBigMarker = (index) => {
     const kakao = window.kakao;
@@ -153,22 +154,22 @@ const PlaceInfoComponent = ({ hospitals, history }) => {
     }
   };
 
-  const onMouseOut = () => {
+  const onMouseOut = useCallback(() => {
     if (markerControl !== null) markerControl.setMap(null);
     infoWindow?.close();
-  };
+  }, []);
 
-  const onMouseOver = (e) => {
+  const onMouseOver = useCallback((e) => {
     createBigMarker(e.currentTarget.id);
-  };
-  const onListMouseOver = (e) => {
+  }, []);
+
+  const onListMouseOver = useCallback((e) => {
     if (hospitalList.current.style.opacity !== "0") {
       createBigMarker(e.currentTarget.id);
     }
-  };
+  }, []);
 
-  const onBoxClick = (e) => {
-    // if (e.target.id !== "detail") history.push(`/reservation/${id}`);
+  const onBoxClick = useCallback((e) => {
     const hospital = hospitals[e.currentTarget.id];
     dispatch(
       changeCoordinate({
@@ -178,7 +179,8 @@ const PlaceInfoComponent = ({ hospitals, history }) => {
       })
     );
     onMouseOut();
-  };
+  }, []);
+
   return (
     <PlaceInfoComponentBlock ref={placeInfoWrapper}>
       <header>
@@ -264,4 +266,4 @@ const PlaceInfoComponent = ({ hospitals, history }) => {
   );
 };
 
-export default withRouter(PlaceInfoComponent);
+export default React.memo(PlaceInfoComponent);

@@ -56,8 +56,7 @@ const ReservationComponent = ({ hospitalName }) => {
     const index = hospitals.findIndex(
       (item) => item.place_name === hospitalName
     );
-
-    setPhone(hospitals[index].phone);
+    setPhone(hospitals[index]?.phone);
   };
 
   useEffect(() => {

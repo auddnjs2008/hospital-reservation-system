@@ -128,4 +128,4 @@ const AskComponent = ({ onItemClick }) => {
   );
 };
 
-export default AskComponent;
+export default React.memo(AskComponent);

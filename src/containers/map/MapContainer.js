@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { initialWhere } from "../../modules/map";
 import MapComponent from "../../components/map/MapComponent";
-import { changeCoordinate } from "../../modules/roadmap";
 
 const MapContainer = () => {
   const dispatch = useDispatch();

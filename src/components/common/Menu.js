@@ -4,12 +4,8 @@ import pallet from "../../lib/styles/pallet";
 import { faUser, faHospital } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, withRouter } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { faMapMarked } from "@fortawesome/free-solid-svg-icons";
-import { Auth } from "aws-amplify";
-import { useEffect } from "react";
-import { loaded } from "../../modules/auth";
-import { changeCoordinate } from "../../modules/roadmap";
 
 const MenuBlock = styled.ul`
   width: 100%;

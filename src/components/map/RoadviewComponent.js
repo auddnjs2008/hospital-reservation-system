@@ -13,8 +13,8 @@ import roadmap, {
 
 const RoadviewComponentBlock = styled.div`
   position: absolute;
-  right: 5px;
-  bottom: 5px;
+  right: 0px;
+  bottom: 0px;
   z-index: 15;
   width: 70vw;
   height: 100vh;

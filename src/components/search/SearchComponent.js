@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useRef } from "react";
 import { changeCoordinate } from "../../modules/roadmap";
 import { withRouter } from "react-router-dom";
+import { useCallback } from "react";
 
 const SearchComponentBlock = styled.form`
   margin: auto;
@@ -53,10 +54,13 @@ const SearchComponent = ({ history }) => {
     markers: map.markers,
   }));
   const checkBox = useRef();
-  const onChange = (e) => {
-    const text = e.target.value;
-    SetText(text);
-  };
+  const onChange = useCallback(
+    (e) => {
+      const text = e.target.value;
+      SetText(text);
+    },
+    [text]
+  );
 
   const findCallBack = (result, status) => {
     if (status === window.kakao.maps.services.Status.OK) {
@@ -110,15 +114,18 @@ const SearchComponent = ({ history }) => {
     }
   };
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    if (text) {
-      findNearHospitals();
-      SetText("");
-    } else {
-      window.alert("검색어를 입력해주세요");
-    }
-  };
+  const onSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (text) {
+        findNearHospitals();
+        SetText("");
+      } else {
+        window.alert("검색어를 입력해주세요");
+      }
+    },
+    [text]
+  );
 
   return (
     <SearchComponentBlock onSubmit={onSubmit}>
