@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { isCompositeComponentWithType } from "react-dom/test-utils";
 import styled from "styled-components";
 
 const ManagerDoctorsBlock = styled.div`
@@ -34,7 +33,7 @@ const RvBox = styled.ul`
   background-color: #363b3e;
   height: 100%;
   table-layout: fixed;
-
+  overflow: auto;
   header,
   li {
     height: 30px;
@@ -97,7 +96,7 @@ const ManagerDoctors = ({
       setGraph(arr);
       setTimeArray(arr);
     }
-  }, [times]);
+  }, [times, setGraph]);
 
   useEffect(() => {
     if (doctorIndex === -1) {
@@ -105,7 +104,7 @@ const ManagerDoctors = ({
     } else {
       setGraph(times[doctorIndex][doctors[doctorIndex]]);
     }
-  }, [doctorIndex]);
+  }, [doctorIndex, setGraph, times, doctors, timeArray]);
 
   return (
     <ManagerDoctorsBlock>

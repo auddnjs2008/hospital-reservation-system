@@ -1,7 +1,6 @@
 import { faComments } from "@fortawesome/free-regular-svg-icons";
 import {
   faArrowLeft,
-  faLongArrowAltLeft,
   faTimes,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -9,14 +8,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { getListPeople } from "../../lib/api/chat";
 import pallet from "../../lib/styles/pallet";
 import { allchatbtn, backchatbtn } from "../../modules/chat";
 import ChatForm from "./ChatForm";
 
 const ChatComponentBlock = styled.div`
-  position: absolute;
+  position: fixed;
   bottom: 50%;
   right: 1.3rem;
   z-index: 100;
@@ -116,7 +115,7 @@ const ChatComponent = ({ dispatch, chatRvName, chatShow, id }) => {
   const [chatPersons, setPersons] = useState([]);
   const [oneChater, setChater] = useState("");
   const [inChat, setInChat] = useState(false);
-  const { chaterId, hospital } = useSelector(({ chat }) => ({
+  const { chaterId } = useSelector(({ chat }) => ({
     chaterId: chat.id,
     hospital: chat.name,
   }));

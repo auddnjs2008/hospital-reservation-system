@@ -7,7 +7,7 @@ import pallet from "../../lib/styles/pallet";
 import { useRef } from "react";
 import ConfirmForm from "./ConfirmForm";
 import { useDispatch } from "react-redux";
-import { emptyField, isManager, login } from "../../modules/auth";
+import { isManager, login } from "../../modules/auth";
 
 import Amplify, { Auth } from "aws-amplify";
 import AuthCheckBoxes from "./AuthCheckBoxes";

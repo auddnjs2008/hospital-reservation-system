@@ -8,7 +8,9 @@ const DateBlock = styled.ul`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(6, 2rem);
-
+  border: 1px solid black;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
   li.lastMonth,
   li.nextMonth {
     color: #dcdde1;

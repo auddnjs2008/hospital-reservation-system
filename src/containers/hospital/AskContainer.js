@@ -8,19 +8,25 @@ import { useCallback } from "react";
 
 const AskContainer = ({ history }) => {
   const dispatch = useDispatch();
-  const itemClick = (kind) => {
-    localStorage.setItem("hospital_kind", kind);
-    dispatch(initialHospital());
-    dispatch(initialMapHospitals());
-    dispatch(clickHospital({ kind: `${kind}` }));
-  };
-  const onItemClick = useCallback((e) => {
-    const {
-      target: { id: kind },
-    } = e;
-    itemClick(kind);
-    history.push("/map");
-  }, []);
+  const itemClick = useCallback(
+    (kind) => {
+      localStorage.setItem("hospital_kind", kind);
+      dispatch(initialHospital());
+      dispatch(initialMapHospitals());
+      dispatch(clickHospital({ kind: `${kind}` }));
+    },
+    [dispatch]
+  );
+  const onItemClick = useCallback(
+    (e) => {
+      const {
+        target: { id: kind },
+      } = e;
+      itemClick(kind);
+      history.push("/map");
+    },
+    [history, itemClick]
+  );
 
   return <AskComponent onItemClick={onItemClick}></AskComponent>;
 };

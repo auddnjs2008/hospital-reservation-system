@@ -9,7 +9,7 @@ import pallet from "../../lib/styles/pallet";
 import InfoToggleBtn from "./InfoToggleBtn";
 import Menu from "./Menu";
 import SearchComponent from "../search/SearchComponent";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { changeCoordinate } from "../../modules/roadmap";
 
 const PlaceInfoComponentBlock = styled.div`
@@ -65,6 +65,13 @@ const Hospital = styled.div`
     font-weight: 600;
   }
   .detailInfo {
+    width: 100%;
+
+    div {
+      display: flex;
+      justify-content: center;
+      margin-top: 5px;
+    }
     span {
       margin-right: 10px;
     }
@@ -154,32 +161,35 @@ const PlaceInfoComponent = ({ hospitals }) => {
     }
   };
 
-  const onMouseOut = useCallback(() => {
+  const onMouseOut = () => {
     if (markerControl !== null) markerControl.setMap(null);
     infoWindow?.close();
-  }, []);
+  };
 
-  const onMouseOver = useCallback((e) => {
+  const onMouseOver = (e) => {
     createBigMarker(e.currentTarget.id);
-  }, []);
+  };
 
-  const onListMouseOver = useCallback((e) => {
+  const onListMouseOver = (e) => {
     if (hospitalList.current.style.opacity !== "0") {
       createBigMarker(e.currentTarget.id);
     }
-  }, []);
+  };
 
-  const onBoxClick = useCallback((e) => {
-    const hospital = hospitals[e.currentTarget.id];
-    dispatch(
-      changeCoordinate({
-        latitude: hospital.y,
-        longitude: hospital.x,
-        name: hospital.place_name,
-      })
-    );
-    onMouseOut();
-  }, []);
+  const onBoxClick = useCallback(
+    (e) => {
+      const hospital = hospitals[e.currentTarget.id];
+      dispatch(
+        changeCoordinate({
+          latitude: hospital.y,
+          longitude: hospital.x,
+          name: hospital.place_name,
+        })
+      );
+      onMouseOut();
+    },
+    [dispatch, hospitals]
+  );
 
   return (
     <PlaceInfoComponentBlock ref={placeInfoWrapper}>
@@ -206,14 +216,30 @@ const PlaceInfoComponent = ({ hospitals }) => {
                 )}
               </div>
               <div className="detailInfo">
-                <span>{hospitals[0]?.phone}</span>
-                <a id="detail" href={hospitals[0]?.place_url} target="_blank">
-                  상세보기
-                </a>
-                <Link to={`/reservation/${hospitals[0]?.place_name}`}>
-                  예약
-                </Link>
-                <Link to={`/review/${hospitals[0]?.place_name}`}>후기</Link>
+                <div>
+                  <span>{hospitals[0]?.phone}</span>
+                  <a
+                    id="detail"
+                    href={hospitals[0]?.place_url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    상세보기
+                  </a>
+                </div>
+                <div>
+                  <Link to={`/reservation/${hospitals[0]?.place_name}`}>
+                    예약
+                  </Link>
+                  <Link to={`/review/${hospitals[0]?.place_name}`}>후기</Link>
+                  <a
+                    href={`https://map.kakao.com/link/to/${hospitals[0]?.id}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    길찾기
+                  </a>
+                </div>
               </div>
             </Hospital>
           </div>
@@ -237,7 +263,8 @@ const PlaceInfoComponent = ({ hospitals }) => {
                     onMouseOut={onMouseOut}
                     onClick={onBoxClick}
                   >
-                    <h2>{item.place_name}</h2>
+                    <h2>{item.place_name.split(" ")[0]}</h2>
+                    <h2>{item.place_name.split(" ")[1]}</h2>
                     <div>
                       {item.address_name}
                       {item.distance && (
@@ -245,12 +272,28 @@ const PlaceInfoComponent = ({ hospitals }) => {
                       )}
                     </div>
                     <div className="detailInfo">
-                      <span>{item.phone}</span>
-                      <a id="detail" href={item.place_url} target="_blank">
-                        상세보기
-                      </a>
-                      <Link to={`/reservation/${item.place_name}`}>예약</Link>
-                      <Link to={`/review/${item.place_name}`}>후기</Link>
+                      <div>
+                        <span>{item.phone}</span>
+                        <a
+                          id="detail"
+                          href={item.place_url}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          상세보기
+                        </a>
+                      </div>
+                      <div>
+                        <Link to={`/reservation/${item.place_name}`}>예약</Link>
+                        <Link to={`/review/${item.place_name}`}>후기</Link>
+                        <a
+                          href={`https://map.kakao.com/link/to/${item.id}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          길찾기
+                        </a>
+                      </div>
                     </div>
                   </Hospital>
                 </div>

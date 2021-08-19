@@ -7,6 +7,7 @@ import styled from "styled-components";
 import MapController from "./MapController";
 import RoadviewComponent from "./RoadviewComponent";
 import "../../lib/styles/mapwalker.css";
+import { useCallback } from "react";
 
 const MapComponentBlock = styled.div`
   position: realtive;
@@ -34,7 +35,7 @@ const MapComponent = () => {
   const mapContainer = useRef();
 
   //지도를 찾으면 마커를 생성해 준다.
-  const markerDraw = () => {
+  const markerDraw = useCallback(() => {
     const imageSrc =
       "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png";
     const imageSize = new kakao.maps.Size(24, 35);
@@ -62,10 +63,10 @@ const MapComponent = () => {
         });
         markers.push(marker);
       });
-      dispatch(drawMarker({ markers }));
+      if (markers.length) dispatch(drawMarker({ markers }));
     }
     if (map) map.setBounds(bounds);
-  };
+  }, [dispatch, hospitals, kakao.maps, map]);
 
   useEffect(() => {
     const options = {
@@ -75,11 +76,11 @@ const MapComponent = () => {
     const newMap = new kakao.maps.Map(mapContainer.current, options);
     setMap(newMap);
     dispatch(initialMap({ map: newMap, mapBox: mapContainer }));
-  }, [lat, long]); // lat,long 을 써준이유?
+  }, [lat, long, dispatch, kakao.maps]); // lat,long 을 써준이유?
 
   useEffect(() => {
     if (hospitals) markerDraw();
-  }, [hospitals, map]);
+  }, [hospitals, map, markerDraw]);
 
   return (
     <MapComponentBlock>

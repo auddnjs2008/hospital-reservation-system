@@ -3,7 +3,7 @@ import { faStarHalf } from "@fortawesome/free-solid-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faEmptyStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { reviewPage } from "../../modules/menupage";
@@ -14,16 +14,21 @@ const ReviewComponentBlock = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: #07b495;
   width: 100%;
   h1 {
     font-size: 2.5rem;
     font-weight: 600;
     text-align: center;
     margin-bottom: 1rem;
+    color: white;
   }
   p.noReview {
     font-size: 2rem;
     margin-top: 5rem;
+    margin-bottom: 3rem;
+    color: white;
+    font-weight: 600;
   }
 `;
 const RateStar = styled.div`
@@ -33,24 +38,26 @@ const RateStar = styled.div`
   justify-content: center;
 `;
 const ReviewList = styled.ul`
+  border: 1px solid black;
+  background-color: rgba(45, 52, 54, 0.9);
   width: 90%;
   li {
-    padding: 10px;
-    margin-bottom: 1rem;
+    padding: 12px;
+    margin-bottom: 0.8rem;
     .profile {
       span {
         margin-left: 0.5rem;
-        color: black;
+        color: white;
       }
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       margin-bottom: 1rem;
       padding: 0.3rem;
       color: white;
       font-weight: 600;
-      background: linear-gradient(to left, white, #07b495);
     }
     p {
       line-height: 1.5;
+      color: rgba(255, 234, 167, 1);
     }
   }
 `;
@@ -60,7 +67,7 @@ const ReviewComponent = ({ hospital, reviews, rate, setReload }) => {
   const reviewpage = useRef();
   const dispatch = useDispatch();
 
-  const setArrStar = () => {
+  const setArrStar = useCallback(() => {
     const arr = [];
     for (let i = 0; i < Math.floor(rate); i++) {
       arr.push(1);
@@ -70,16 +77,16 @@ const ReviewComponent = ({ hospital, reviews, rate, setReload }) => {
       arr.push(0);
     }
     setStar(arr);
-  };
+  }, [rate]);
   useEffect(() => {
     if (rate) {
       setArrStar();
     }
-  }, [reviews, rate]);
+  }, [reviews, rate, setArrStar]);
 
   useEffect(() => {
     dispatch(reviewPage(reviewpage));
-  }, []);
+  }, [dispatch]);
 
   return (
     <ReviewComponentBlock ref={reviewpage}>

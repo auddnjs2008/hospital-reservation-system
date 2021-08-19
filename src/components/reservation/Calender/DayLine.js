@@ -10,6 +10,8 @@ const DayLineBlock = styled.ul`
   align-items: center;
   column-gap: 1px;
   font-size: 18px;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
   /* background-color: ${pallet.black[5]}; */
   li {
     width: 100%;

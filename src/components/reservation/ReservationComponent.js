@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
@@ -16,6 +16,9 @@ const ReservationComponentBlock = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  h1 {
+    margin-bottom: 2rem;
+  }
   .rvHead {
     font-size: 2.5rem;
     font-weight: 600;
@@ -52,20 +55,20 @@ const ReservationComponent = ({ hospitalName }) => {
     dispatch(rvchatbtn(hospitalName));
   };
 
-  const findPhoneNumber = () => {
+  const findPhoneNumber = useCallback(() => {
     const index = hospitals.findIndex(
       (item) => item.place_name === hospitalName
     );
     setPhone(hospitals[index]?.phone);
-  };
+  }, [hospitalName, hospitals]);
 
   useEffect(() => {
     dispatch(reservationPage(rvPage));
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (hospitalName) findPhoneNumber();
-  }, [hospitalName]);
+  }, [hospitalName, findPhoneNumber]);
 
   return (
     <ReservationComponentBlock ref={rvPage}>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
@@ -6,10 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import pallet from "../../lib/styles/pallet";
 import MapWalker from "../../lib/createmapwalker";
-import roadmap, {
-  changeCoordinate,
-  initialzeRoadmap,
-} from "../../modules/roadmap";
+import { changeCoordinate, initialzeRoadmap } from "../../modules/roadmap";
 
 const RoadviewComponentBlock = styled.div`
   position: absolute;
@@ -34,14 +31,13 @@ const RoadviewComponentBlock = styled.div`
 
 const RoadviewComponent = () => {
   const dispatch = useDispatch();
-  const { map, hospitals, roadLat, roadLong, name, storeRoadmap } = useSelector(
+  const { map, roadLat, roadLong, name } = useSelector(
     ({ map, roadmap, menupage }) => ({
       map: map.map,
       hospitals: map.hospitals,
       roadLat: roadmap.latitude,
       roadLong: roadmap.longitude,
       name: roadmap.name,
-      storeRoadmap: roadmap.roadmap,
     })
   );
   const roadViewBox = useRef();
@@ -54,7 +50,34 @@ const RoadviewComponent = () => {
   let startOverlayPoint = null;
   let start = [];
 
+  const walkerViewChange = useCallback(
+    (mapWalker) => {
+      window.kakao.maps.event.addListener(
+        roadview,
+        "viewpoint_changed",
+        function () {
+          // 이벤트가 발생할 때마다 로드뷰의 viewpoint값을 읽어, map walker에 반영
+          const viewpoint = roadview.getViewpoint();
+          mapWalker.setAngle(viewpoint.pan);
+        }
+      );
+
+      window.kakao.maps.event.addListener(
+        roadview,
+        "position_changed",
+        function () {
+          // 이벤트가 발생할 때마다 로드뷰의 position값을 읽어, map walker에 반영
+          const position = roadview.getPosition();
+          mapWalker.setPosition(position);
+          map.setCenter(position);
+        }
+      );
+    },
+    [map, roadview]
+  );
+
   const rvCustomOverlay = (position, content) => {
+    console.log(mapPrevWalker, "나는 워커다");
     if (mapPrevWalker) mapPrevWalker.setMap(null);
     const result = new window.kakao.maps.CustomOverlay({
       position: position,
@@ -79,29 +102,6 @@ const RoadviewComponent = () => {
     walkerViewChange(newWalker);
   };
 
-  const walkerViewChange = (mapWalker) => {
-    window.kakao.maps.event.addListener(
-      roadview,
-      "viewpoint_changed",
-      function () {
-        // 이벤트가 발생할 때마다 로드뷰의 viewpoint값을 읽어, map walker에 반영
-        const viewpoint = roadview.getViewpoint();
-        mapWalker.setAngle(viewpoint.pan);
-      }
-    );
-
-    window.kakao.maps.event.addListener(
-      roadview,
-      "position_changed",
-      function () {
-        // 이벤트가 발생할 때마다 로드뷰의 position값을 읽어, map walker에 반영
-        const position = roadview.getPosition();
-        mapWalker.setPosition(position);
-        map.setCenter(position);
-      }
-    );
-  };
-
   const onMouseDown = (e) => {
     const proj = map.getProjection();
     const overlayPos = mapPrevWalker.walker.getPosition();
@@ -113,32 +113,38 @@ const RoadviewComponent = () => {
     map.a.addEventListener("mousemove", onMouseMove);
   };
 
-  const onMouseMove = (e) => {
-    const proj = map.getProjection();
-    const deltaX = start[1] - e.clientX;
-    const deltaY = start[0] - e.clientY;
-    const newPoint = new window.kakao.maps.Point(
-      startOverlayPoint.x - deltaX,
-      startOverlayPoint.y - deltaY
-    );
-    const newPos = proj.coordsFromContainerPoint(newPoint);
+  const onMouseMove = useCallback(
+    (e) => {
+      const proj = map.getProjection();
+      const deltaX = start[1] - e.clientX;
+      const deltaY = start[0] - e.clientY;
+      const newPoint = new window.kakao.maps.Point(
+        startOverlayPoint.x - deltaX,
+        startOverlayPoint.y - deltaY
+      );
+      const newPos = proj.coordsFromContainerPoint(newPoint);
 
-    mapPrevWalker.walker.setPosition(newPos);
-  };
+      mapPrevWalker.walker.setPosition(newPos);
+    },
+    [startOverlayPoint, map, mapPrevWalker, start]
+  );
 
-  const onMouseUp = (e) => {
-    const position = mapPrevWalker.walker.getPosition();
-    map.setCenter(position);
+  const onMouseUp = useCallback(
+    (e) => {
+      const position = mapPrevWalker.walker.getPosition();
+      map.setCenter(position);
 
-    dispatch(
-      changeCoordinate({
-        latitude: position.Ma,
-        longitude: position.La,
-        name: "여행중",
-      })
-    );
-    map.a.removeEventListener("mousemove", onMouseMove);
-  };
+      dispatch(
+        changeCoordinate({
+          latitude: position.Ma,
+          longitude: position.La,
+          name: "여행중",
+        })
+      );
+      map.a.removeEventListener("mousemove", onMouseMove);
+    },
+    [dispatch, map, mapPrevWalker, onMouseMove]
+  );
 
   useEffect(() => {
     setWalkerSetting(true);
@@ -150,7 +156,6 @@ const RoadviewComponent = () => {
       dispatch(initialzeRoadmap(roadview));
       try {
         const position = new window.kakao.maps.LatLng(roadLat, roadLong);
-        // : new window.kakao.maps.LatLng(hospitals[0].y, hospitals[0].x);
         roadviewClient.getNearestPanoId(position, 300, function (panoId) {
           roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
         });
@@ -176,7 +181,7 @@ const RoadviewComponent = () => {
         alert(`${e}`);
       }
     }
-  }, [roadLat, roadLong, walkerSetting]);
+  }, [roadLat, roadLong]);
 
   useEffect(() => {
     if (mapPrevWalker) {
@@ -188,7 +193,7 @@ const RoadviewComponent = () => {
         mapPrevWalker.content.removeEventListener("mouseup", onMouseUp);
       };
     }
-  }, [mapPrevWalker]);
+  }, [mapPrevWalker, onMouseUp]);
 
   return <RoadviewComponentBlock ref={roadViewBox}></RoadviewComponentBlock>;
 };

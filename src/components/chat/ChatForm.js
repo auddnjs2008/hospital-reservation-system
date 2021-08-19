@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import { getPrevChats } from "../../lib/api/chat";
@@ -192,18 +192,21 @@ const ChatForm = ({ id, oneChater, setChater, webSocket, setInChat }) => {
     }
   };
 
-  const socketReceive = (message) => {
-    if (Object.keys(JSON.parse(message.data))[0] === "privateMessage") {
-      ChatWrite(
-        JSON.parse(message.data).privateMessage.split(":")[1],
-        "opponent",
-        oneChater
-      );
-    } else if (Object.keys(JSON.parse(message.data))[0] === "members") {
-      setInChat(JSON.parse(message.data).members.includes(oneChater));
-    }
-    chatBox.current.scrollTop = chatBox.current.scrollHeight;
-  };
+  const socketReceive = useCallback(
+    (message) => {
+      if (Object.keys(JSON.parse(message.data))[0] === "privateMessage") {
+        ChatWrite(
+          JSON.parse(message.data).privateMessage.split(":")[1],
+          "opponent",
+          oneChater
+        );
+      } else if (Object.keys(JSON.parse(message.data))[0] === "members") {
+        setInChat(JSON.parse(message.data).members.includes(oneChater));
+      }
+      chatBox.current.scrollTop = chatBox.current.scrollHeight;
+    },
+    [oneChater, setInChat]
+  );
 
   useEffect(() => {
     const prevMessages = async () => {
@@ -216,7 +219,7 @@ const ChatForm = ({ id, oneChater, setChater, webSocket, setInChat }) => {
       }
     };
     prevMessages();
-  }, []);
+  }, [id, oneChater]);
 
   useEffect(() => {
     webSocket.current = new WebSocket(process.env.REACT_APP_SOCKET);
@@ -226,7 +229,7 @@ const ChatForm = ({ id, oneChater, setChater, webSocket, setInChat }) => {
     webSocket.current.addEventListener("open", () => {
       webSocket.current.send(JSON.stringify({ action: "setName", name: id }));
     });
-  }, []);
+  }, [id, webSocket, socketReceive]);
 
   useEffect(() => {
     chatBox.current.scrollTop = chatBox.current.scrollHeight;

@@ -6,7 +6,7 @@ import MapPage from "./pages/MapPage";
 import UserPage from "./pages/UserPage";
 
 import ReservationPage from "./pages/ReservationPage";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Auth } from "aws-amplify";
 import { useDispatch } from "react-redux";
 import { isManager, login } from "./modules/auth";
@@ -21,7 +21,7 @@ function App() {
   const dispatch = useDispatch();
   const [manager, setManager] = useState(false);
 
-  const userIconClick = async () => {
+  const userIconClick = useCallback(async () => {
     let currentUser;
     await Auth.currentAuthenticatedUser()
       .then((user) => {
@@ -31,7 +31,7 @@ function App() {
     if (currentUser) dispatch(login({ id: currentUser.username }));
 
     return currentUser;
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     const asyncFunc = async () => {
@@ -49,7 +49,7 @@ function App() {
       }
     };
     asyncFunc();
-  }, []);
+  }, [dispatch, userIconClick]);
 
   return (
     <>

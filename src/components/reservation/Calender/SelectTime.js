@@ -1,6 +1,6 @@
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useCallback } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -147,7 +147,7 @@ const SelectTime = ({
     "18:00": false,
   });
   const [time, setTime] = useState();
-  const trimDates = () => {
+  const trimDates = useCallback(() => {
     const buttonData = {
       "09:00": false,
       "09:30": false,
@@ -180,7 +180,7 @@ const SelectTime = ({
 
     trimPlans?.forEach((item) => (buttonData[item] = true));
     setBtnShow(buttonData);
-  };
+  }, [mDate, plans]);
 
   const onTimeClick = (e) => {
     if (e.target === e.currentTarget) return;
@@ -208,7 +208,7 @@ const SelectTime = ({
 
   useEffect(() => {
     trimDates();
-  }, [mDate]);
+  }, [mDate, trimDates]);
 
   return (
     <SelectTimeBlock>

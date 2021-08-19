@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { eraseMarker, searchMap } from "../../modules/map";
 import styled from "styled-components";
-import { useEffect } from "react";
 import { useRef } from "react";
 import { changeCoordinate } from "../../modules/roadmap";
 import { withRouter } from "react-router-dom";
@@ -54,39 +53,47 @@ const SearchComponent = ({ history }) => {
     markers: map.markers,
   }));
   const checkBox = useRef();
-  const onChange = useCallback(
-    (e) => {
-      const text = e.target.value;
-      SetText(text);
-    },
-    [text]
-  );
+  const onChange = useCallback((e) => {
+    const text = e.target.value;
+    SetText(text);
+  }, []);
 
-  const findCallBack = (result, status) => {
-    if (status === window.kakao.maps.services.Status.OK) {
-      const filterResult = result.filter(
-        (item) => item.category_group_code === "HP8"
-      );
-
-      if (filterResult.length !== 0) {
-        eraseMarkers();
-        dispatch(eraseMarker());
-        dispatch(searchMap({ hospitals: filterResult }));
-        history.push("/map");
-        dispatch(
-          changeCoordinate({
-            latitude: filterResult[0].y,
-            longitude: filterResult[0].x,
-            name: filterResult[0].place_name,
-          })
-        );
-      } else {
-        window.alert("검색어에 일치하는 병원이 없습니다");
+  const eraseMarkers = useCallback(() => {
+    if (markers) {
+      for (let i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
       }
     }
-  };
+  }, [markers]);
 
-  const findNearHospitals = () => {
+  const findCallBack = useCallback(
+    (result, status) => {
+      if (status === window.kakao.maps.services.Status.OK) {
+        const filterResult = result.filter(
+          (item) => item.category_group_code === "HP8"
+        );
+
+        if (filterResult.length !== 0) {
+          eraseMarkers();
+          dispatch(eraseMarker());
+          dispatch(searchMap({ hospitals: filterResult }));
+          history.push("/map");
+          dispatch(
+            changeCoordinate({
+              latitude: filterResult[0].y,
+              longitude: filterResult[0].x,
+              name: filterResult[0].place_name,
+            })
+          );
+        } else {
+          window.alert("검색어에 일치하는 병원이 없습니다");
+        }
+      }
+    },
+    [dispatch, eraseMarkers, history]
+  );
+
+  const findNearHospitals = useCallback(() => {
     const places = new window.kakao.maps.services.Places();
     if (checkBox.current.checked) {
       const Lat = new window.kakao.maps.LatLng(latitude, longitude);
@@ -104,15 +111,7 @@ const SearchComponent = ({ history }) => {
         findCallBack
       );
     }
-  };
-
-  const eraseMarkers = () => {
-    if (markers) {
-      for (let i = 0; i < markers.length; i++) {
-        markers[i].setMap(null);
-      }
-    }
-  };
+  }, [latitude, longitude, text, findCallBack]);
 
   const onSubmit = useCallback(
     (e) => {
@@ -124,7 +123,7 @@ const SearchComponent = ({ history }) => {
         window.alert("검색어를 입력해주세요");
       }
     },
-    [text]
+    [text, findNearHospitals]
   );
 
   return (

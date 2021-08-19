@@ -1,6 +1,6 @@
 import { faUserMd } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useEffect } from "react";
 import styled from "styled-components";
 import { getDoctors } from "../../lib/api/hospitalInfo";
@@ -21,7 +21,6 @@ const DoctorComponentBlock = styled.ul`
     font-size: 2rem;
     margin-top: 5rem;
     width: 100%;
-    border: 1px solid black;
   }
 `;
 
@@ -61,7 +60,7 @@ const DoctorComponent = ({
       }
     };
     if (hospitalName) getAxios();
-  }, [hospitalName]);
+  }, [hospitalName, setChat]);
 
   const onDoctorClick = (e) => {
     setDoctor(e.currentTarget.innerText);
@@ -70,7 +69,7 @@ const DoctorComponent = ({
     if (doctors) {
       setClick(doctors.findIndex((item) => item.doctorName === doctor));
     }
-  }, [doctor]);
+  }, [doctor, doctors]);
 
   return (
     <DoctorComponentBlock>

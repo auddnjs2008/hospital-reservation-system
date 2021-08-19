@@ -1,6 +1,6 @@
 import { faUserTie } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
@@ -40,7 +40,8 @@ const ManagerPage = () => {
   const [times, setTimes] = useState(null);
   const [graphData, setGraph] = useState(null);
   const [doctorIndex, setIndex] = useState(-1);
-  const getApiDoctors = async () => {
+
+  const getApiDoctors = useCallback(async () => {
     try {
       const result = await getDoctors(hospital);
       setDoctors(
@@ -49,18 +50,21 @@ const ManagerPage = () => {
     } catch (e) {
       alert(`${e}`);
     }
-  };
+  }, [hospital]);
 
-  const getApiTime = async (name) => {
-    try {
-      const result = await getDoctorTimes(hospital, name);
-      return { [name]: JSON.parse(result.data.body).Items };
-    } catch (e) {
-      alert(`${e}`);
-    }
-  };
+  const getApiTime = useCallback(
+    async (name) => {
+      try {
+        const result = await getDoctorTimes(hospital, name);
+        return { [name]: JSON.parse(result.data.body).Items };
+      } catch (e) {
+        alert(`${e}`);
+      }
+    },
+    [hospital]
+  );
 
-  const getTimes = async () => {
+  const getTimes = useCallback(async () => {
     let times = [];
     if (doctors.length) {
       for (let i = 0; i < doctors.length; i++) {
@@ -69,15 +73,15 @@ const ManagerPage = () => {
       }
       setTimes(times);
     }
-  };
+  }, [doctors, getApiTime]);
 
   useEffect(() => {
     getApiDoctors();
-  }, []);
+  }, [getApiDoctors]);
 
   useEffect(() => {
     if (doctors) getTimes();
-  }, [doctors]);
+  }, [doctors, getTimes]);
 
   return (
     <ManagerPageBlock>

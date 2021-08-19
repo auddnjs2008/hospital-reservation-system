@@ -174,7 +174,7 @@ const ManagerGraph = ({ graphData, data, doctorIndex, doctors }) => {
       );
       setTimes(result);
     }
-  }, [graphData]);
+  }, [graphData, doctorIndex, doctors]);
 
   return (
     <ManagerGraphBox>

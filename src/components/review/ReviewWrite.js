@@ -1,6 +1,6 @@
 import { faStar, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { postReviews, setRates } from "../../lib/api/review";
@@ -10,7 +10,7 @@ const ReviewWriteBlock = styled.div`
   width: ${(props) => (props.rvPage ? "90%" : "500px")};
   height: 18rem;
   padding-top: 1rem;
-  /* border: 1px solid black; */
+
   position: ${(props) => (props.rvPage ? "" : "absolute")};
   display: flex;
   flex-direction: column;
@@ -18,11 +18,13 @@ const ReviewWriteBlock = styled.div`
     props.scroll ? `${props.scroll + window.innerHeight / 2}px` : "50%"};
   left: ${(props) => (props.rvPage ? "" : "50%")};
   transform: ${(props) => (props.rvPage ? "" : "translate(-50%, -50%)")};
-  background-color: ${(props) => (props.rvPage ? "white" : "#f2f3f1")};
+  /* background-color: ${(props) => (props.rvPage ? "white" : "#f2f3f1")}; */
+  background-color: rgba(45, 52, 54, 1);
   h1 {
     font-size: 2rem;
     margin-bottom: 1rem;
     text-align: center;
+    color: white;
   }
 
   form {
@@ -36,6 +38,7 @@ const ReviewWriteBlock = styled.div`
       align-items: center;
       .starNum {
         font-size: 1.3rem;
+        color: white;
       }
     }
     .starBox {
@@ -51,7 +54,9 @@ const ReviewWriteBlock = styled.div`
     resize: none;
     padding: 0;
     font-size: 1rem;
-    background-color: #f2f3f1;
+    /* background-color: #f2f3f1; */
+    color: white;
+    background-color: rgba(45, 52, 54, 0.9);
     padding: 0.2rem;
   }
   input[type="submit"] {
@@ -67,6 +72,7 @@ const ReviewWriteBlock = styled.div`
     position: absolute;
     top: 0.3rem;
     right: 0.3rem;
+    color: white;
     font-size: 1.5rem;
     &:active {
       transform: scale(0.98);

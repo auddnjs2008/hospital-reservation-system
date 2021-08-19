@@ -72,7 +72,7 @@ const InfoToggleBtn = ({ placeInfoWrapper, mapContainer }) => {
       setSlider(!slider);
       dispatch(infoToggleClick());
     },
-    [page, mapBox, roadMapBox, placeInfoWrapper, mapContainer, slider]
+    [page, mapBox, roadMapBox, placeInfoWrapper, mapContainer, slider, dispatch]
   );
 
   return (

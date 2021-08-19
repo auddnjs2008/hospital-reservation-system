@@ -34,7 +34,7 @@ const Calender = ({ doctor, hospitalName }) => {
       }
     };
     getTimesApi();
-  }, [doctor]);
+  }, [doctor, hospitalName]);
 
   useEffect(() => {
     console.log(plans);
