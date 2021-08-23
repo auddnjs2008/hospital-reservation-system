@@ -5,6 +5,7 @@ import ReservationContainer from "../containers/reservation/ReservationContainer
 
 const ReservationWrapper = styled.div`
   display: flex;
+  height: 100vh;
 `;
 
 const ReservationPage = () => {

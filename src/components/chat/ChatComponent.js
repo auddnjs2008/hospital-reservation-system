@@ -1,6 +1,7 @@
 import { faComments } from "@fortawesome/free-regular-svg-icons";
 import {
   faArrowLeft,
+  faEnvelope,
   faTimes,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -95,14 +96,26 @@ const ChatterList = styled.ul`
   overflow: auto;
   padding: 3px;
   li {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr;
+    justify-items: center;
     margin-bottom: 10px;
     padding: 5px;
     cursor: pointer;
     &:hover {
       background-color: white;
+      span.isRead {
+        color: black;
+      }
+    }
+    span.isRead {
+      color: #dff9fb;
+    }
+    span.avatar {
+      justify-self: start;
+    }
+    span.id {
+      justify-self: end;
     }
   }
   span {
@@ -145,6 +158,9 @@ const ChatComponent = ({ dispatch, chatRvName, chatShow, id }) => {
     dispatch(allchatbtn());
   };
 
+  useEffect(() => {
+    console.log(chatPersons);
+  }, [chatPersons]);
   return (
     <ChatComponentBlock>
       <ChatButton onClick={onOpenBtn}>
@@ -184,9 +200,18 @@ const ChatComponent = ({ dispatch, chatRvName, chatShow, id }) => {
               <ChatterList>
                 {chatPersons.length &&
                   chatPersons.map((item, index) => (
-                    <li key={index} onClick={() => setChater(item)}>
-                      <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
-                      <span>{item}</span>
+                    <li key={index} onClick={() => setChater(item[0])}>
+                      <span className="avatar">
+                        <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
+                      </span>
+                      <span className="isRead">
+                        {item[1] !== "YES" && item[1] !== "1" ? (
+                          ""
+                        ) : (
+                          <FontAwesomeIcon icon={faEnvelope}></FontAwesomeIcon>
+                        )}
+                      </span>
+                      <span className="id">{item[0]}</span>
                     </li>
                   ))}
               </ChatterList>

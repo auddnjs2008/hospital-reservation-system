@@ -5,7 +5,7 @@ import ReviewComponent from "../../components/review/ReviewComponent";
 import { getReviews } from "../../lib/api/review";
 
 const ReviewContainer = () => {
-  const [reviews, setReviews] = useState("");
+  const [reviews, setReviews] = useState(null);
   const [hospital, setHospital] = useState("");
   const [rate, setRate] = useState();
   const [reload, setReload] = useState(false);

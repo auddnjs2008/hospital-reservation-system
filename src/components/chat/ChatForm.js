@@ -143,6 +143,7 @@ const ChatForm = ({ id, oneChater, setChater, webSocket, setInChat }) => {
         action: "sendPrivate",
         message: e.currentTarget.firstChild.value,
         to: oneChater,
+        from: id,
       })
     );
     e.currentTarget.firstChild.value = "";

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import styled from "styled-components";
 import { getDoctors } from "../../lib/api/hospitalInfo";
+import Loading from "../common/Loading";
 
 const DoctorComponentBlock = styled.ul`
   list-style: none;
@@ -13,6 +14,7 @@ const DoctorComponentBlock = styled.ul`
   grid-auto-columns: 1fr;
   justify-items: center;
   padding: 5px;
+
   .icon {
     font-size: 50px;
     color: gray;
@@ -46,7 +48,7 @@ const DoctorComponent = ({
   phone,
   setChat,
 }) => {
-  const [doctors, setDoctors] = useState([]);
+  const [doctors, setDoctors] = useState(null);
   const [clickIndex, setClick] = useState(-1);
 
   useEffect(() => {
@@ -73,7 +75,9 @@ const DoctorComponent = ({
 
   return (
     <DoctorComponentBlock>
-      {doctors.length ? (
+      {doctors === null ? (
+        <Loading></Loading>
+      ) : doctors.length ? (
         doctors.map((item, index) => (
           <StyledLi
             key={index}

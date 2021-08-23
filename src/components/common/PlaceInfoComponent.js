@@ -176,20 +176,17 @@ const PlaceInfoComponent = ({ hospitals }) => {
     }
   };
 
-  const onBoxClick = useCallback(
-    (e) => {
-      const hospital = hospitals[e.currentTarget.id];
-      dispatch(
-        changeCoordinate({
-          latitude: hospital.y,
-          longitude: hospital.x,
-          name: hospital.place_name,
-        })
-      );
-      onMouseOut();
-    },
-    [dispatch, hospitals]
-  );
+  const onBoxClick = (e) => {
+    const hospital = hospitals[e.currentTarget.id];
+    dispatch(
+      changeCoordinate({
+        latitude: hospital.y,
+        longitude: hospital.x,
+        name: hospital.place_name,
+      })
+    );
+    onMouseOut();
+  };
 
   return (
     <PlaceInfoComponentBlock ref={placeInfoWrapper}>

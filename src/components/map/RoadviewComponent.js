@@ -43,7 +43,7 @@ const RoadviewComponent = () => {
   const roadViewBox = useRef();
   const [roadview, setRoadView] = useState();
   const [mapPrevWalker, setPrevMapWalker] = useState(null);
-  const [walkerSetting, setWalkerSetting] = useState(false);
+  // const [walkerSetting, setWalkerSetting] = useState(false);
 
   const roadviewClient = new window.kakao.maps.RoadviewClient();
 
@@ -77,7 +77,6 @@ const RoadviewComponent = () => {
   );
 
   const rvCustomOverlay = (position, content) => {
-    console.log(mapPrevWalker, "나는 워커다");
     if (mapPrevWalker) mapPrevWalker.setMap(null);
     const result = new window.kakao.maps.CustomOverlay({
       position: position,
@@ -146,12 +145,49 @@ const RoadviewComponent = () => {
     [dispatch, map, mapPrevWalker, onMouseMove]
   );
 
-  useEffect(() => {
-    setWalkerSetting(true);
-  }, [roadview]);
+  // useEffect(() => {
+  //   setWalkerSetting(true);
+  // }, [roadview]);
+
+  // useEffect(() => {
+  //   console.log("로드뷰처음셋팅");
+  //   setRoadView(new window.kakao.maps.Roadview(roadViewBox.current));
+  // }, []);
 
   useEffect(() => {
     setRoadView(new window.kakao.maps.Roadview(roadViewBox.current));
+    // if (roadview) {
+    //   dispatch(initialzeRoadmap(roadview));
+    //   try {
+    //     const position = new window.kakao.maps.LatLng(roadLat, roadLong);
+    //     roadviewClient.getNearestPanoId(position, 300, function (panoId) {
+    //       roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
+    //     });
+
+    //     window.kakao.maps.event.addListener(roadview, "init", () =>
+    //       rvCustomOverlay(
+    //         position,
+    //         `<div class="overlay_info"><span>${
+    //           name ? name : "나의 위치"
+    //         }</span></div>`
+    //       )
+    //     );
+    //     return () =>
+    //       window.kakao.maps.event.addListener(roadview, "init", () =>
+    //         rvCustomOverlay(
+    //           position,
+    //           `<div class="overlay_info"><span>${
+    //             name ? name : "나의 위치"
+    //           }</span></div>`
+    //         )
+    //       );
+    //   } catch (e) {
+    //     alert(`${e}`);
+    //   }
+    // }
+  }, [roadLat, roadLong]);
+
+  useEffect(() => {
     if (roadview) {
       dispatch(initialzeRoadmap(roadview));
       try {
@@ -181,7 +217,7 @@ const RoadviewComponent = () => {
         alert(`${e}`);
       }
     }
-  }, [roadLat, roadLong]);
+  }, [roadview]);
 
   useEffect(() => {
     if (mapPrevWalker) {

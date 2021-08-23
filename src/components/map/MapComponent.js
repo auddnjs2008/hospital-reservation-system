@@ -8,6 +8,7 @@ import MapController from "./MapController";
 import RoadviewComponent from "./RoadviewComponent";
 import "../../lib/styles/mapwalker.css";
 import { useCallback } from "react";
+import Loading from "../common/Loading";
 
 const MapComponentBlock = styled.div`
   position: realtive;
@@ -25,7 +26,7 @@ const MapContainer = styled.div`
 const MapComponent = () => {
   const kakao = window.kakao;
   const dispatch = useDispatch();
-
+  const [loader, setLoader] = useState(true);
   const [map, setMap] = useState();
   const { lat, long, hospitals } = useSelector(({ map }) => ({
     lat: map.latitude,
@@ -82,8 +83,15 @@ const MapComponent = () => {
     if (hospitals) markerDraw();
   }, [hospitals, map, markerDraw]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setLoader(false);
+    }, 2000);
+  }, []);
+
   return (
     <MapComponentBlock>
+      {loader && <Loading></Loading>}
       <MapContainer ref={mapContainer}></MapContainer>
       <MapController map={map} />
       <RoadviewComponent />

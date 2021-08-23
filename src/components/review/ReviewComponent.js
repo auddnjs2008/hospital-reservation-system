@@ -8,14 +8,17 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { reviewPage } from "../../modules/menupage";
 import ReviewWrite from "./ReviewWrite";
+import Loading from "../common/Loading";
 
 const ReviewComponentBlock = styled.div`
   padding: 1rem;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: #07b495;
   width: 100%;
+
   h1 {
     font-size: 2.5rem;
     font-weight: 600;
@@ -110,7 +113,9 @@ const ReviewComponent = ({ hospital, reviews, rate, setReload }) => {
           )}
         </RateStar>
       )}
-      {reviews.length ? (
+      {reviews === null ? (
+        <Loading></Loading>
+      ) : reviews.length ? (
         <ReviewList>
           {reviews.map((item) => (
             <li>
