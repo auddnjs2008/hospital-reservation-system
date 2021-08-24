@@ -29,13 +29,19 @@ const MapContainer = ({ history }) => {
 
   const findNearHospitals = useCallback(
     (latitude, longitude) => {
-      const Lat = new kakao.maps.LatLng(latitude, longitude);
+      const Lat = new kakao.maps.LatLng(37.49643356499065, 126.95346108170166); // latitude,longitude
       const places = new kakao.maps.services.Places();
       places.keywordSearch(
         kind || localStorage.getItem("hospital_kind"),
         (result, status) => {
           if (status === kakao.maps.services.Status.OK) {
-            dispatch(initialWhere({ latitude, longitude, hospitals: result }));
+            dispatch(
+              initialWhere({
+                latitude: 37.49643356499065,
+                longitude: 126.95346108170166,
+                hospitals: result,
+              })
+            ); // latitude,longitude
           } else {
             alert("일치하는 정보가 없습니다.");
             history.push("/");

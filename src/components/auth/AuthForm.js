@@ -116,7 +116,7 @@ const AuthForm = ({ onChange, content, text, history }) => {
             "custom:hospital_name": hospitalName,
           },
         });
-        dispatch(isManager());
+        dispatch(isManager({ hospital: hospitalName }));
       } else {
         Amplify.configure(config);
         await Auth.signUp({

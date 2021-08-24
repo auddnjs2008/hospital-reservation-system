@@ -200,12 +200,12 @@ const ChatComponent = ({ dispatch, chatRvName, chatShow, id }) => {
               <ChatterList>
                 {chatPersons.length &&
                   chatPersons.map((item, index) => (
-                    <li key={index} onClick={() => setChater(item[0])}>
+                    <li key={index} onClick={() => setChater(item[1][1])}>
                       <span className="avatar">
                         <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
                       </span>
                       <span className="isRead">
-                        {item[1] !== "YES" && item[1] !== "1" ? (
+                        {item[1][0] === "YES" || item[1][0] === "1" ? (
                           ""
                         ) : (
                           <FontAwesomeIcon icon={faEnvelope}></FontAwesomeIcon>

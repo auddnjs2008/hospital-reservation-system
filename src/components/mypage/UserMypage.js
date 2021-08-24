@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { getReservations } from "../../lib/api/reservation";
+import { getReservations, postRecentPage } from "../../lib/api/reservation";
 import pallet from "../../lib/styles/pallet";
 
 const UserMypageBlock = styled.div`
@@ -89,7 +89,8 @@ const UserMypage = ({ setHospital, setReview }) => {
   const { user } = useSelector(({ auth }) => ({ user: auth.auth.id }));
   const [pastPlanner, setPastPlanner] = useState(null);
   const [nowPlanner, setNowPlanner] = useState(null);
-  const [nowSwitch, setNow] = useState(true);
+  const [recentPage, setRecent] = useState(null);
+  const [nowSwitch, setNow] = useState(0);
 
   const onPostReviewClick = (e, name) => {
     setReview(true);
@@ -100,6 +101,7 @@ const UserMypage = ({ setHospital, setReview }) => {
     const getAxios = async () => {
       try {
         const result = await getReservations(user);
+        // const recent = await postRecentPage(user);
         const data = JSON.parse(result.data.body).Items;
         const Time = new Date();
         let presentRv = [];
@@ -118,6 +120,8 @@ const UserMypage = ({ setHospital, setReview }) => {
         });
         setPastPlanner(pastRv);
         setNowPlanner(presentRv);
+        // setRecent(recent);
+        // console.log(recent);
       } catch (e) {
         alert(`${e}`);
       }
@@ -128,15 +132,18 @@ const UserMypage = ({ setHospital, setReview }) => {
   return (
     <UserMypageBlock>
       <UserMenu>
-        <MenuList color={nowSwitch} onClick={() => setNow(true)}>
+        <MenuList color={nowSwitch === 0} onClick={() => setNow(0)}>
           현재예약
         </MenuList>
-        <MenuList color={!nowSwitch} onClick={() => setNow(false)}>
+        <MenuList color={nowSwitch === 1} onClick={() => setNow(1)}>
           방문
+        </MenuList>
+        <MenuList color={nowSwitch === 2} onClick={() => setNow(2)}>
+          최근본 병원
         </MenuList>
       </UserMenu>
       <ReservationBox>
-        {nowSwitch &&
+        {nowSwitch === 0 &&
           nowPlanner?.map((item) => (
             <li>
               <div className="planTitle">
@@ -148,7 +155,7 @@ const UserMypage = ({ setHospital, setReview }) => {
               </div>
             </li>
           ))}
-        {!nowSwitch &&
+        {nowSwitch === 1 &&
           pastPlanner?.map((item) => (
             <li>
               <div className="planTitle">
@@ -163,6 +170,7 @@ const UserMypage = ({ setHospital, setReview }) => {
               </div>
             </li>
           ))}
+        {/* {nowSwitch === 2 && } */}
       </ReservationBox>
     </UserMypageBlock>
   );

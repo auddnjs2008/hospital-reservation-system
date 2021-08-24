@@ -29,3 +29,26 @@ export const getReservations = (username) =>
       },
     },
   });
+
+export const getRecentPage = (userName) =>
+  client.post(process.env.REACT_APP_RECENT_PAGE, {
+    type: "GET",
+    body: {
+      TableName: "contentsView",
+      Key: {
+        userName,
+      },
+    },
+  });
+
+export const postRecentPage = (userName, hospitalName) =>
+  client.post(process.env.REACT_APP_RECENT_PAGE, {
+    type: "POST",
+    body: {
+      TableName: "contentsView",
+      Key: {
+        userName,
+      },
+      hospitalName,
+    },
+  });

@@ -11,6 +11,7 @@ import Menu from "./Menu";
 import SearchComponent from "../search/SearchComponent";
 import { Link } from "react-router-dom";
 import { changeCoordinate } from "../../modules/roadmap";
+import { postRecentPage } from "../../lib/api/reservation";
 
 const PlaceInfoComponentBlock = styled.div`
   position: relative;
@@ -109,7 +110,7 @@ const ToggleBtn = styled.button`
   }
 `;
 
-const PlaceInfoComponent = ({ hospitals }) => {
+const PlaceInfoComponent = ({ hospitals, id }) => {
   const { map } = useSelector(({ map }) => ({ map: map.map }));
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(0);
@@ -118,6 +119,14 @@ const PlaceInfoComponent = ({ hospitals }) => {
   const placeInfoWrapper = useRef();
   const hospitalList = useRef();
   const main = useRef();
+
+  const axiosFun = async (hospital) => {
+    try {
+      await postRecentPage(id, hospital);
+    } catch (e) {
+      alert(`${e}`);
+    }
+  };
 
   const onInfoToggleClick = useCallback((e) => {
     if (
@@ -178,6 +187,9 @@ const PlaceInfoComponent = ({ hospitals }) => {
 
   const onBoxClick = (e) => {
     const hospital = hospitals[e.currentTarget.id];
+    if (e.target.tagName === "A") {
+      axiosFun(hospital.place_name);
+    }
     dispatch(
       changeCoordinate({
         latitude: hospital.y,
