@@ -23,8 +23,8 @@ const MapContainer = styled.div`
   z-index: 18;
 `;
 
+const kakao = window.kakao;
 const MapComponent = () => {
-  const kakao = window.kakao;
   const dispatch = useDispatch();
   const [loader, setLoader] = useState(true);
   const [map, setMap] = useState();
