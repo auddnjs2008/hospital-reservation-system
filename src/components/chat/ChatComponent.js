@@ -116,6 +116,7 @@ const ChatterList = styled.ul`
     }
     span.id {
       justify-self: end;
+      font-size: 1.1rem;
     }
   }
   span {

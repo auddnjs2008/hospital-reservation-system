@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { getReservations, postRecentPage } from "../../lib/api/reservation";
+import { getRecentPage, getReservations } from "../../lib/api/reservation";
 import pallet from "../../lib/styles/pallet";
 
 const UserMypageBlock = styled.div`
@@ -101,12 +101,13 @@ const UserMypage = ({ setHospital, setReview }) => {
     const getAxios = async () => {
       try {
         const result = await getReservations(user);
-        // const recent = await postRecentPage(user);
-        const data = JSON.parse(result.data.body).Items;
+        const recent = await getRecentPage(user);
+        const reservedata = JSON.parse(result.data.body).Items;
+        const recentdata = JSON.parse(recent.data.body).Items;
         const Time = new Date();
         let presentRv = [];
         let pastRv = [];
-        data.forEach((item) => {
+        reservedata.forEach((item) => {
           const month = Number(item.time.split(" ")[0].split("/")[0]);
           const day = Number(item.time.split(" ")[0].split("/")[1]);
           if (month < Time.getMonth() + 1) {
@@ -120,8 +121,8 @@ const UserMypage = ({ setHospital, setReview }) => {
         });
         setPastPlanner(pastRv);
         setNowPlanner(presentRv);
-        // setRecent(recent);
-        // console.log(recent);
+        setRecent(recentdata);
+        console.log(Object.values(recentdata[0]));
       } catch (e) {
         alert(`${e}`);
       }
@@ -170,7 +171,12 @@ const UserMypage = ({ setHospital, setReview }) => {
               </div>
             </li>
           ))}
-        {/* {nowSwitch === 2 && } */}
+        {nowSwitch === 2 &&
+          Object.values(recentPage[0]).map((item) => (
+            <li>
+              <div>{item}</div>
+            </li>
+          ))}
       </ReservationBox>
     </UserMypageBlock>
   );

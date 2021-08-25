@@ -31,24 +31,19 @@ export const getReservations = (username) =>
   });
 
 export const getRecentPage = (userName) =>
-  client.post(process.env.REACT_APP_RECENT_PAGE, {
+  client.post(process.env.REACT_APP_CHAT_URL, {
     type: "GET",
     body: {
       TableName: "contentsView",
-      Key: {
-        userName,
-      },
+      userName,
     },
   });
 
 export const postRecentPage = (userName, hospitalName) =>
-  client.post(process.env.REACT_APP_RECENT_PAGE, {
+  client.post(process.env.REACT_APP_CHAT_URL, {
     type: "POST",
     body: {
-      TableName: "contentsView",
-      Key: {
-        userName,
-      },
+      userName,
       hospitalName,
     },
   });

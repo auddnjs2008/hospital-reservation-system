@@ -37,8 +37,8 @@ const ChatFormBlock = styled.div`
       }
       div.profile {
         all: unset;
-        width: 33px;
-        height: 33px;
+        width: 50px;
+        height: 50px;
         font-size: 0.8rem;
         border-radius: 50%;
         background-color: ${pallet.black[5]};
