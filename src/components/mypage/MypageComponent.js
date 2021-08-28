@@ -62,7 +62,6 @@ const MypageComponent = ({ history, manager }) => {
   };
   useEffect(() => {
     dispatch(userPage(mypage));
-    console.log("실행되었다.");
   }, [dispatch]);
 
   useEffect(() => {

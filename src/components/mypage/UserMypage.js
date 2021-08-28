@@ -122,7 +122,6 @@ const UserMypage = ({ setHospital, setReview }) => {
         setPastPlanner(pastRv);
         setNowPlanner(presentRv);
         setRecent(recentdata);
-        console.log(Object.values(recentdata[0]));
       } catch (e) {
         alert(`${e}`);
       }

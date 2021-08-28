@@ -88,9 +88,11 @@ const AuthForm = ({ onChange, content, text, history }) => {
           isManager({ hospital: user.attributes["custom:hospital_name"] })
         );
         window.location.href = "/";
+        // history.push("/");
         return;
       }
       window.location.href = "/user";
+      // history.push("/user");
     } catch (e) {
       alert(`${e}`);
     }
