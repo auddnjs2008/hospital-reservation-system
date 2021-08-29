@@ -12,12 +12,13 @@ import Loading from "../common/Loading";
 
 const ReviewComponentBlock = styled.div`
   padding: 1rem;
-  position: relative;
+  position: absolute;
+  right: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: #07b495;
-  width: 100%;
+  width: 70%;
 
   h1 {
     font-size: 2.5rem;

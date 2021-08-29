@@ -17,7 +17,8 @@ const MapContainer = styled.div`
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 70vw;
+  width: 70%;
+
   height: 100vh;
   transition: transform 0.2s ease-in-out;
   z-index: 18;

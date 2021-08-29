@@ -11,11 +11,12 @@ import DoctorComponent from "./DoctorComponent";
 
 const ReservationComponentBlock = styled.div`
   padding: 1rem;
-  position: relative;
+  position: absolute;
+  right: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+  width: 70%;
   height: 100%;
   h1 {
     margin-bottom: 2rem;

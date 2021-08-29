@@ -16,7 +16,8 @@ import ManagerPage from "./ManagerPage";
 const MypageComponentBlock = styled.div`
   width: ${(props) => (props.manager ? "100vw" : "70vw")};
   height: 100vh;
-  position: relative;
+  position: absolute;
+  right: 0;
   background-color: #07b495;
   .logOut {
     width: 100%;

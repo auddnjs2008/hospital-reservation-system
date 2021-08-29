@@ -26,9 +26,12 @@ const DateItem = styled.li`
   border: 1px solid white;
   color: ${(props) => props.color || "black"};
   cursor: pointer;
+  &.pastDay {
+    color: #dcdde1;
+  }
 `;
 
-const Dates = ({ mYear, mMonth, setDay, setTimeWindow }) => {
+const Dates = ({ mYear, mMonth, mDay, setDay, setTimeWindow }) => {
   const [datesArray, setArray] = useState([]);
 
   const [lastDate, setLastDate] = useState(
@@ -43,7 +46,10 @@ const Dates = ({ mYear, mMonth, setDay, setTimeWindow }) => {
 
   const onClick = (e) => {
     if (e.target === e.currentTarget) return;
-    if (e.target.className.includes("nowMonth")) {
+    if (
+      e.target.className.includes("nowMonth") &&
+      !e.target.className.includes("pastDay")
+    ) {
       setDay(e.target.innerText);
       setTimeWindow(true);
     }
@@ -51,12 +57,28 @@ const Dates = ({ mYear, mMonth, setDay, setTimeWindow }) => {
 
   useEffect(() => {
     let testArray = [];
+    const nowdate = Number(new Date().getDate());
+    const nowMonth = Number(new Date().getMonth() + 1);
+    const nowYear = Number(new Date().getFullYear());
 
     for (let i = startDay - 1; i >= 0; i--) {
-      testArray.push({ name: "lastMonth", value: lastMonthDate - i });
+      testArray.push({ name: "lastMonth pastDay", value: lastMonthDate - i });
     }
     for (let i = 0; i < lastDate; i++) {
       testArray.push({ name: "nowMonth", value: i + 1 });
+      if (mYear < nowYear) {
+        testArray[testArray.length - 1].name = "nowMonth pastDay";
+        continue;
+      } else if (mYear > nowYear) {
+        continue;
+      }
+
+      if (mMonth <= nowMonth) {
+        testArray[testArray.length - 1].name = "nowMonth pastDay";
+        if (mMonth === nowMonth && i + 1 >= nowdate) {
+          testArray[testArray.length - 1].name = "nowMonth";
+        }
+      }
     }
 
     for (let i = 0; i < 42 - lastDate; i++) {

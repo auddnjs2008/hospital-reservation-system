@@ -36,10 +36,6 @@ const Calender = ({ doctor, hospitalName }) => {
     getTimesApi();
   }, [doctor, hospitalName]);
 
-  useEffect(() => {
-    console.log(plans);
-  }, [plans]);
-
   return (
     <CalenderBlock>
       <Header>
@@ -55,6 +51,7 @@ const Calender = ({ doctor, hospitalName }) => {
       <Dates
         mYear={mYear}
         mMonth={mMonth}
+        mDay={mDay}
         setDay={setDay}
         setTimeWindow={setTimeWindow}
       ></Dates>

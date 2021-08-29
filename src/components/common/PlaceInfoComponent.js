@@ -14,9 +14,11 @@ import { changeCoordinate } from "../../modules/roadmap";
 import { postRecentPage } from "../../lib/api/reservation";
 
 const PlaceInfoComponentBlock = styled.div`
-  position: relative;
+  /* position: relative; */
+  position: fixed;
   z-index: 20;
-  min-width: 24rem;
+  /* min-width: 24rem; */
+  min-width: 30%;
   height: 100vh;
   transition: transform 0.2s ease-in-out;
   background-color: white;
@@ -50,8 +52,7 @@ const Hospital = styled.div`
   height: 10rem;
   border-radius: 5px;
   background-color: ${pallet.black[1]};
-  /* box-shadow: 0px 3px 5px ${pallet.green[3]},
-    inset 0px 0px 5px ${pallet.green[3]}; */
+
   display: flex;
   flex-direction: column;
   align-items: center;
