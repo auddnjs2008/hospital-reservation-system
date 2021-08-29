@@ -97,6 +97,14 @@ const UserMypage = ({ setHospital, setReview }) => {
     setHospital(e.currentTarget.id);
   };
 
+  const makeObjectToArray = (obj) => {
+    const Arr = Array(10).fill(0);
+    for (let i = 1; i <= 10; i++) {
+      Arr[i - 1] = obj[`view${i}`];
+    }
+    setRecent(Arr);
+  };
+
   useEffect(() => {
     const getAxios = async () => {
       try {
@@ -121,7 +129,7 @@ const UserMypage = ({ setHospital, setReview }) => {
         });
         setPastPlanner(pastRv);
         setNowPlanner(presentRv);
-        setRecent(recentdata);
+        makeObjectToArray(recentdata[0]);
       } catch (e) {
         alert(`${e}`);
       }
@@ -171,11 +179,15 @@ const UserMypage = ({ setHospital, setReview }) => {
             </li>
           ))}
         {nowSwitch === 2 &&
-          Object.values(recentPage[0]).map((item) => (
-            <li>
-              <div>{item}</div>
-            </li>
-          ))}
+          recentPage.map((item) =>
+            item !== "Null" ? (
+              <li>
+                <div>{item}</div>
+              </li>
+            ) : (
+              ""
+            )
+          )}
       </ReservationBox>
     </UserMypageBlock>
   );
