@@ -10,6 +10,7 @@ MSA란 마이크로 서비스 아키텍처(Micro Service Architecture)의 약자
 <h3> 프론트 </h3>
 <p>
 <img src="https://img.shields.io/badge/HTML-E34F26?style=flat-square&logo=HTML5&logoColor=white"/> <img src="https://img.shields.io/badge/CSS-1572B6?style=flat-square&logo=CSS3&logoColor=white"/> <img src="https://img.shields.io/badge/Javascript-F7DF1E?style=flat-square&logo=JavaScript&logoColor=white"/>
+<img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=React&logoColor=white"/>
 <img src="https://img.shields.io/badge/Redux-764ABC?style=flat-square&logo=Redux&logoColor=white"/>
 <img src="https://img.shields.io/badge/Redux-Saga-999999?style=flat-square&logo=Redux-Saga&logoColor=white"/>
 </p>
@@ -81,6 +82,16 @@ MSA란 마이크로 서비스 아키텍처(Micro Service Architecture)의 약자
 <img src="https://user-images.githubusercontent.com/46766443/131270955-462c6291-ce6c-4d5b-b52c-49a2c47f2fc2.png"/>
 <p>
     사람들이 쓴 리뷰를 볼 수 있고 별점과 리뷰를 작성할 수 있다. 
+</p>
+
+<h2>테스트 케이스</h2>
+<p>
+직접 병원 등록이 필요한 서비스 이기 때문에 테스트케이스를 만들었습니다.
+숭실대 입구역 근처 병원</br> 
+    -연세채움치과의원</br>
+    -연세미소그린치과</br>
+    -자작나무치과의원</br>
+이 3가지 병원으로 케이스를 만들었습니다.
 </p>
 
 <h2>배포 링크 </h2>

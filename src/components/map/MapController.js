@@ -6,7 +6,7 @@ import {
   faPlaneSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useRef } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
@@ -37,10 +37,13 @@ const MapControllerBlock = styled.ul`
   }
 `;
 
+const BothIcon = styled.span``;
+
 const MapController = ({ map }) => {
   const [sky, setSky] = useState(false);
   const [road, setRoad] = useState(false);
   const [both, setBoth] = useState(false);
+  const bothIcon = useRef();
   const { mapBox, roadMapBox, roadLat, roadLong, menuView } = useSelector(
     ({ map, roadmap, menupage }) => ({
       mapBox: map.mapBox,
@@ -66,31 +69,31 @@ const MapController = ({ map }) => {
         // 로드맵만 크게 켜진다
         roadMapBox.a.style.zIndex = "18";
         mapBox.current.style.zIndex = "15";
-        roadMapBox.a.style.width = menuView ? "70vw" : "100vw";
+        roadMapBox.a.style.width = menuView ? "70%" : "100%";
       } else {
         //지도만 크게 켜진다.
         roadMapBox.a.style.zIndex = "15";
         mapBox.current.style.zIndex = "18";
-        mapBox.current.style.width = menuView ? "70vw" : "100vw";
+        mapBox.current.style.width = menuView ? "70%" : "100%";
       }
     } else {
       //두개모드일 떄 => 로드맵 크기 : 15rem ,15rem
       if (!road) {
         // 로드맵크기를 크게 , 맵 크기를 작게   맵 zindex:18 로드맵 zindex15
         // 맵 포지션 바꾸기
-        roadMapBox.a.style.width = menuView ? "" : "100vw";
+        roadMapBox.a.style.width = menuView ? "" : "100%";
         roadMapBox.a.style.height = "";
         roadMapBox.a.style.zIndex = "15";
         mapBox.current.style.zIndex = "18";
-        mapBox.current.style.width = "15rem";
-        mapBox.current.style.height = "15rem";
+        mapBox.current.style.width = "315px";
+        mapBox.current.style.height = "180px";
       } else {
         // 맵크기를 크게 로드맵 크기를 작게 로드맵 zindex:18  맵 zindex 15
-        roadMapBox.a.style.height = "15rem";
-        roadMapBox.a.style.width = "15rem";
+        roadMapBox.a.style.height = "180px";
+        roadMapBox.a.style.width = "315px";
         roadMapBox.a.style.zIndex = "18";
         mapBox.current.style.zIndex = "15";
-        mapBox.current.style.width = menuView ? "" : "100vw";
+        mapBox.current.style.width = menuView ? "" : "100%";
         mapBox.current.style.height = "";
       }
     }
@@ -103,25 +106,25 @@ const MapController = ({ map }) => {
   const onBothToggleClick = (e) => {
     if (!both) {
       // 두개동시 모드 킬때
-      // mapBox.current.style.height = "50vh";
-      e.target.style.color = "blue";
+
+      bothIcon.current.style.color = "blue";
       if (!road) {
         mapBox.current.style.zIndex = "15";
         roadMapBox.a.style.zIndex = "18";
-        roadMapBox.a.style.height = "15rem";
-        roadMapBox.a.style.width = "15rem";
+        roadMapBox.a.style.height = "180px";
+        roadMapBox.a.style.width = "315px";
       } else {
         mapBox.current.style.zIndex = "18";
         roadMapBox.a.style.zIndex = "15";
         roadMapBox.a.style.height = "100vh";
-        roadMapBox.a.style.width = menuView ? "70vw" : "100vw";
-        mapBox.current.style.height = "15rem";
-        mapBox.current.style.width = "15rem";
+        roadMapBox.a.style.width = menuView ? "70%" : "100%";
+        mapBox.current.style.height = "180px";
+        mapBox.current.style.width = "315px";
       }
     } else {
       // 두개동시 모드 끌때
-      // mapBox.current.style.height = "100vh";
-      e.target.style.color = `${pallet.green[3]}`;
+
+      bothIcon.current.style.color = `${pallet.green[3]}`;
       if (!road) {
         roadMapBox.a.style.zIndex = "15";
         mapBox.current.style.zIndex = "18";
@@ -148,7 +151,9 @@ const MapController = ({ map }) => {
         <FontAwesomeIcon icon={!road ? faCar : faMap}></FontAwesomeIcon>
       </li>
       <li onClick={onBothToggleClick}>
-        <FontAwesomeIcon icon={faMapMarkerAlt}></FontAwesomeIcon>
+        <BothIcon ref={bothIcon}>
+          <FontAwesomeIcon icon={faMapMarkerAlt}></FontAwesomeIcon>
+        </BothIcon>
       </li>
     </MapControllerBlock>
   );

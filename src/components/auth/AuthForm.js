@@ -131,7 +131,9 @@ const AuthForm = ({ onChange, content, text, history }) => {
       }
       setConfirmSw(true);
     } catch (error) {
-      alert(`${error}`);
+      if (error.code === "InvalidPasswordException") {
+        alert("최소8글자와 숫자,특수문자,대문자,소문자를 모두 사용해주세요");
+      }
       console.log(error);
     }
 

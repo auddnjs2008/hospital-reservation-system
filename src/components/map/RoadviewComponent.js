@@ -13,7 +13,7 @@ const RoadviewComponentBlock = styled.div`
   right: 0px;
   bottom: 0px;
   z-index: 15;
-  width: 70vw;
+  width: 70%;
   height: 100vh;
   .overlay_info {
     width: 200px;
@@ -145,46 +145,8 @@ const RoadviewComponent = () => {
     [dispatch, map, mapPrevWalker, onMouseMove]
   );
 
-  // useEffect(() => {
-  //   setWalkerSetting(true);
-  // }, [roadview]);
-
-  // useEffect(() => {
-  //   console.log("로드뷰처음셋팅");
-  //   setRoadView(new window.kakao.maps.Roadview(roadViewBox.current));
-  // }, []);
-
   useEffect(() => {
     setRoadView(new window.kakao.maps.Roadview(roadViewBox.current));
-    // if (roadview) {
-    //   dispatch(initialzeRoadmap(roadview));
-    //   try {
-    //     const position = new window.kakao.maps.LatLng(roadLat, roadLong);
-    //     roadviewClient.getNearestPanoId(position, 300, function (panoId) {
-    //       roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
-    //     });
-
-    //     window.kakao.maps.event.addListener(roadview, "init", () =>
-    //       rvCustomOverlay(
-    //         position,
-    //         `<div class="overlay_info"><span>${
-    //           name ? name : "나의 위치"
-    //         }</span></div>`
-    //       )
-    //     );
-    //     return () =>
-    //       window.kakao.maps.event.addListener(roadview, "init", () =>
-    //         rvCustomOverlay(
-    //           position,
-    //           `<div class="overlay_info"><span>${
-    //             name ? name : "나의 위치"
-    //           }</span></div>`
-    //         )
-    //       );
-    //   } catch (e) {
-    //     alert(`${e}`);
-    //   }
-    // }
   }, [roadLat, roadLong]);
 
   useEffect(() => {

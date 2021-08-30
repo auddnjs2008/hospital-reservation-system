@@ -46,25 +46,24 @@ const InfoToggleBtn = ({ placeInfoWrapper, mapContainer }) => {
         // 넓게 보여진다.
         placeInfoWrapper.current.style.transform = "translateX(-100%)";
         if (mapBox?.current) {
-          mapBox.current.style.width = mapWidth === "15rem" ? "15rem" : "100vw";
+          mapBox.current.style.width = mapWidth === "315px" ? "315px" : "100%";
           roadMapBox.a.style.width =
-            roadMapWidth === "15rem" ? "15rem" : "100vw";
+            roadMapWidth === "315px" ? "315px" : "100%";
         } else {
           page.current.style.position = "absolute";
           page.current.style.left = "0";
-          page.current.style.width = "100vw";
+          page.current.style.width = "100%";
         }
       } else {
         // 좁게 보여진다.
         placeInfoWrapper.current.style.transform = "";
         if (mapBox?.current) {
-          mapBox.current.style.width = mapWidth === "15rem" ? "15rem" : "70vw";
-          roadMapBox.a.style.width =
-            roadMapWidth === "15rem" ? "15rem" : "70vw";
+          mapBox.current.style.width = mapWidth === "315px" ? "315px" : "70%";
+          roadMapBox.a.style.width = roadMapWidth === "315px" ? "315px" : "70%";
         } else {
           page.current.style.position = "";
           page.current.style.left = "";
-          page.current.style.width = "70vw";
+          page.current.style.width = "70%";
         }
       }
       mapContainer?.relayout();
