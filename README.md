@@ -5,7 +5,43 @@ MSA란 마이크로 서비스 아키텍처(Micro Service Architecture)의 약자
 <h1> 설계도 </h1>
 <img src="https://user-images.githubusercontent.com/46766443/131269863-341f010e-b618-4631-bb44-dbb55462b9bf.png"/>
 
+<h1>사용 기술 스택</h1>
+<section>
+<h3> 프론트 </h3>
+<p>
+<img src="https://img.shields.io/badge/HTML-E34F26?style=flat-square&logo=HTML5&logoColor=white"/> <img src="https://img.shields.io/badge/CSS-1572B6?style=flat-square&logo=CSS3&logoColor=white"/> <img src="https://img.shields.io/badge/Javascript-F7DF1E?style=flat-square&logo=JavaScript&logoColor=white"/>
+<img src="https://img.shields.io/badge/Redux-764ABC?style=flat-square&logo=Redux&logoColor=white"/>
+<img src="https://img.shields.io/badge/Redux-Saga-999999?style=flat-square&logo=Redux-Saga&logoColor=white"/>
+</p>
+</section>
+<section>
+<h3> 백엔드 </h3>
+<p>
+<img src="https://img.shields.io/badge/AWS-3766AB?style=flat-square&logo=Amazon AWS&logoColor=white"/>
+<img src="https://img.shields.io/badge/AWS Amplify-FF9900?style=flat-square&logo=AWS Amplify&logoColor=white"/>
+<img src="https://img.shields.io/badge/DynamoDB-4053D6?style=flat-square&logo=Amazon DynamoDB&logoColor=white"/>
+<img src="https://img.shields.io/badge/AWS Lambda-4053D6?style=flat-square&logo=AWS Lambda&logoColor=white"/>
+<img src="https://img.shields.io/badge/AWS API GateWay-4053D6?style=flat-square&logo=AWS Lambda&logoColor=white"/>
+</p>
+</section>
+
+<section>
+<h3>배포</h3>
+<img src="https://img.shields.io/badge/Netlify-00C7B7?style=flat-square&logo=Netlify&logoColor=white"/>
+</section>
+
 <h1> 기능 </h1>
+
+<h2> 지도 기능 </h2>
+<img src="https://user-images.githubusercontent.com/46766443/131271577-5e42db48-c279-4fb3-b8bc-e1dab2b08eb6.png"/>
+<img src="https://user-images.githubusercontent.com/46766443/131271611-9a97d14b-e87a-4005-a8b1-4b2442800d63.png"/>
+<img src="https://user-images.githubusercontent.com/46766443/131271646-d48cf17d-9158-4584-bc0c-ddd1639a8e2a.png"/>
+
+<p>
+카카오톡 지도 sdk를 이용하여 구현을 하였다. 병원의 장소를 마커로 표시를 하고
+동동이를 이용하여 로드뷰를 볼 수 있는 시스템이다.
+로드뷰, 항공뷰 기능이 가능하며 로드뷰와 지도를 동시에 볼 수 있는 기능을 제공한다.
+</p>
 
 <h2>추천 알고리즘</h2>
 <img src="https://user-images.githubusercontent.com/46766443/131270746-839a4c96-cbda-459b-a95c-1ac720ccb785.png"/>
@@ -32,6 +68,7 @@ MSA란 마이크로 서비스 아키텍처(Micro Service Architecture)의 약자
     이 서비스는 병원 관리자로 로그인할 수 있고 유저로 로그인 할 수 있다. 
     그리고 유저가 해당 병원에 질문이 있으면  실시간 웹 소켓 통신 채팅으로 
     바로 병원 관리자한테 메시지를 보낼 수 있는 기능이 있다.
+    백앤드 쪽은 AWS WEBSOCKET API를 사용하여 기능을 구현을 하였다.
 </p>
 
 <h2> My page 기능 </h2>
