@@ -129,7 +129,7 @@ const UserMypage = ({ setHospital, setReview }) => {
         });
         setPastPlanner(pastRv);
         setNowPlanner(presentRv);
-        makeObjectToArray(recentdata[0]);
+        if (recentdata[0]) makeObjectToArray(recentdata[0]);
       } catch (e) {
         alert(`${e}`);
       }

@@ -1,70 +1,47 @@
-# Getting Started with Create React App
+# 클라우드 MSA 구조를 활용한 병원예약 웹 서비스 개발 프로젝트
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+MSA란 마이크로 서비스 아키텍처(Micro Service Architecture)의 약자로 단일 프로그램을 각 컴포넌트 별로 나누어 작은 서비스의 조합으로 구축하는 방법입니다. 각 컴포넌트는 서비스 형태로 구현되고 API를 이용하여 타 서비스와 통신하게 됩니다.
 
-## Available Scripts
+<h1> 설계도 </h1>
+![image](https://user-images.githubusercontent.com/46766443/131269863-341f010e-b618-4631-bb44-dbb55462b9bf.png)
 
-In the project directory, you can run:
+<h1> 기능 </h1>
 
-### `npm start`
+<h2>추천 알고리즘</h2>
+![image](https://user-images.githubusercontent.com/46766443/131270746-839a4c96-cbda-459b-a95c-1ac720ccb785.png)
+<p>
+    원하는 병원 진료과를 선택하면 카카오톡 sdk에서 자기 위치에 가까운 장소를 최대 15곳 선택해 제공을 해준다. 그 병원 데이터를 aws api-gateway에 api post 요청을 하면  람다함수로 작성해둔 추천 알고리즘
+    에 의해 병원 목록의 순서를 재배열해서 다시 보내준다. 
+    추천알고리즘은 별점과 거리 그리고 댓글개수를 종합하여 판단한다.
+</p>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<h2>병원 예약 기능</h2>
+![image](https://user-images.githubusercontent.com/46766443/131270829-c4f39f20-7cae-4039-8cb6-cb38dc1572ab.png)
+![image](https://user-images.githubusercontent.com/46766443/131270871-3937ce55-400e-4c72-9db2-f5fad8645bd7.png)
+<p>
+    서비스에 등록된 병원이면 이 기능이 사용 가능하다. 
+    병원리스트에서 예약을 선택하면 의사 목록이 뜬다. 의사를 선택하면 의사별로 달력에서
+    가능한 시간대를 예약 할 수 있다. 
+</p>
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+<h2> 채팅 기능 </h2>
+![image](https://user-images.githubusercontent.com/46766443/131270998-d83344a1-5b74-45ed-af22-4d6573637961.png)
+![image](https://user-images.githubusercontent.com/46766443/131271016-029d4db2-27e3-473e-8a7d-5f3c429bf73e.png)
+![image](https://user-images.githubusercontent.com/46766443/131271145-07f29df6-1447-44d1-8002-ba92f9c8ff9c.png)
+<p>
+    이 서비스는 병원 관리자로 로그인할 수 있고 유저로 로그인 할 수 있다. 
+    그리고 유저가 해당 병원에 질문이 있으면  실시간 웹 소켓 통신 채팅으로 
+    바로 병원 관리자한테 메시지를 보낼 수 있는 기능이 있다.
+</p>
 
-### `npm test`
+<h2> My page 기능 </h2>
+![image](https://user-images.githubusercontent.com/46766443/131270925-f7a33e4a-f9f6-44d9-9797-b146a6b66a9b.png)
+<p>
+    내가 예약했던 병원 목록들을 볼 수 있고 최근 클릭한 병원페이지들의 목록을 볼 수 있다.   
+</p>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<h2> 리뷰 작성 기능</h2>
+![image](https://user-images.githubusercontent.com/46766443/131270955-462c6291-ce6c-4d5b-b52c-49a2c47f2fc2.png)
+<p>
+    사람들이 쓴 리뷰를 볼 수 있고 별점과 리뷰를 작성할 수 있다. 
+</p>
