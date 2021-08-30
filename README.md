@@ -82,3 +82,6 @@ MSA란 마이크로 서비스 아키텍처(Micro Service Architecture)의 약자
 <p>
     사람들이 쓴 리뷰를 볼 수 있고 별점과 리뷰를 작성할 수 있다. 
 </p>
+
+<h2>배포 링크 </h2>
+<a href="https://epic-tesla-248ec5.netlify.app/"> 웹사이트 링크</a>
