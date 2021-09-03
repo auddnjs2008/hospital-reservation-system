@@ -16,6 +16,7 @@ import { managerConfig, config } from "../../lib/amplifyconfig";
 const AuthFormBlock = styled.div`
   width: 400px;
   height: 500px;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   justify-content: space-between;

@@ -2,6 +2,7 @@ import { faStar, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 import { postReviews, setRates } from "../../lib/api/review";
 import pallet from "../../lib/styles/pallet";
@@ -91,16 +92,13 @@ const ReviewWrite = ({
   setReview,
   rvPage = false,
   setReload,
+  history,
 }) => {
   const { id } = useSelector(({ auth }) => ({ id: auth.auth.id }));
   const [starNum, setStarNum] = useState(0);
   const [text, setText] = useState("");
 
   const onClick = (e) => {
-    if (Number(e.currentTarget.id) <= starNum) {
-      setStarNum(0);
-      return;
-    }
     setStarNum(e.currentTarget.id);
   };
 
@@ -112,6 +110,10 @@ const ReviewWrite = ({
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!text) return;
+    if (!id) {
+      history.push("/login");
+      return;
+    }
     try {
       await postReviews(hospital, text, id, starNum);
       alert("후기가 등록되었습니다.");
@@ -165,4 +167,4 @@ const ReviewWrite = ({
   );
 };
 
-export default ReviewWrite;
+export default withRouter(ReviewWrite);
