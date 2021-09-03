@@ -1,12 +1,13 @@
 import { createAction, handleActions } from "redux-actions";
 import { takeLatest } from "redux-saga/effects";
+import { IChat } from "../../types";
 import { getOneManager } from "../lib/api/chat";
 import createRequestSaga, {
   createRequestActionTypes,
 } from "../lib/createRequestSaga";
 
-const ALL_CHAT_BTN = "chat/ALL_CHAT_BTN";
-const BACK_CHAT_BTN = "chat/BACK_CHAT_BTN";
+const ALL_CHAT_BTN = "chat/ALL_CHAT_BTN" as const;
+const BACK_CHAT_BTN = "chat/BACK_CHAT_BTN" as const;
 
 const [RV_CHAT_BTN, RV_CHAT_SUCCESS, RV_CHAT_FAILRUE] =
   createRequestActionTypes("chat/RV_CHAT_BTN");
@@ -22,9 +23,9 @@ export function* chatSaga() {
   yield takeLatest(RV_CHAT_BTN, rvChatBtnSaga);
 }
 
-const initialState = { name: "", window: false, id: "" };
+const initialState: IChat = { name: "", window: false, id: "" };
 
-const chat = handleActions(
+const chat = handleActions<IChat, any>(
   {
     [RV_CHAT_BTN]: (state, { payload }) => ({
       ...state,

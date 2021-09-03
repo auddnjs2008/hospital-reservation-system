@@ -1,7 +1,7 @@
 import client from "./client";
 
-export const getDoctors = (name) =>
-  client.post(process.env.REACT_APP_HOSPIAL_INFO_URL, {
+export const getDoctors = (name: string) =>
+  client.post(process.env.REACT_APP_HOSPIAL_INFO_URL as string, {
     method: "GET",
     body: {
       TableName: "hospital_Info",
@@ -16,8 +16,8 @@ export const getDoctors = (name) =>
     },
   });
 
-export const getDoctorTimes = (name, doctor) =>
-  client.post(process.env.REACT_APP_HOSPIAL_INFO_URL, {
+export const getDoctorTimes = (name: string, doctor: string) =>
+  client.post(process.env.REACT_APP_HOSPIAL_INFO_URL as string, {
     method: "GET",
     body: {
       TableName: "reservation",
@@ -38,15 +38,15 @@ export const getDoctorTimes = (name, doctor) =>
     },
   });
 
-export const getHospitalId = (name) =>
-  client.post(process.env.REACT_APP_HOSPIAL_INFO_URL, {
+export const getHospitalId = (name: string) =>
+  client.post(process.env.REACT_APP_HOSPIAL_INFO_URL as string, {
     method: "GET",
     body: {
       TableName: "hospital_ID",
       ScanFilter: {
         hospitalName: {
           AttributeValueList: {
-            S: "숭실의원",
+            S: name,
           },
           ComparisonOperator: "EQ",
         },

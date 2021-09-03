@@ -1,3 +1,5 @@
+import * as React from "react";
+import { IUser } from "../types";
 import { Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -12,7 +14,7 @@ import { useDispatch } from "react-redux";
 import { isManager, login } from "./modules/auth";
 
 import Amplify from "aws-amplify";
-import { config, managerConfig } from "../src/lib/amplifyconfig";
+import { config, managerConfig } from "./lib/amplifyconfig";
 import ChatContainer from "./containers/chat/ChatContainer";
 import ReviewPage from "./pages/ReviewPage";
 import { useState } from "react";
@@ -22,15 +24,14 @@ function App() {
   const [manager, setManager] = useState(false);
 
   const userIconClick = useCallback(async () => {
-    let currentUser;
+    let currentUser: IUser | "";
     await Auth.currentAuthenticatedUser()
       .then((user) => {
         currentUser = user;
       })
       .catch((e) => (currentUser = ""));
-    if (currentUser) dispatch(login({ id: currentUser.username }));
-
-    return currentUser;
+    if (currentUser!) dispatch(login({ id: currentUser.username }));
+    return currentUser!;
   }, [dispatch]);
 
   useEffect(() => {

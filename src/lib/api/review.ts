@@ -1,7 +1,7 @@
 import client from "./client";
 
-export const getReviews = (name) =>
-  client.post(process.env.REACT_APP_REVIEW_URL, {
+export const getReviews = (name: string) =>
+  client.post(process.env.REACT_APP_REVIEW_URL as string, {
     method: "GET",
     body: {
       TableName: "review",
@@ -16,8 +16,13 @@ export const getReviews = (name) =>
     },
   });
 
-export const postReviews = (hospital, text, name, rate) =>
-  client.post(process.env.REACT_APP_REVIEW_URL, {
+export const postReviews = (
+  hospital: string,
+  text: string,
+  name: string,
+  rate: string
+) =>
+  client.post(process.env.REACT_APP_REVIEW_URL as string, {
     method: "POST",
     body: {
       TableName: "review",
@@ -31,4 +36,5 @@ export const postReviews = (hospital, text, name, rate) =>
     },
   });
 
-export const setRates = () => client.post(process.env.REACT_APP_RATE, {});
+export const setRates = () =>
+  client.post(process.env.REACT_APP_RATE as string, {});

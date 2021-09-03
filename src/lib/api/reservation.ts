@@ -1,7 +1,12 @@
 import client from "./client";
 
-export const postReservation = (hospital, date, name, doctorName) =>
-  client.post(process.env.REACT_APP_HOSPIAL_INFO_URL, {
+export const postReservation = (
+  hospital: string,
+  date: string,
+  name: string,
+  doctorName: string
+) =>
+  client.post(process.env.REACT_APP_HOSPIAL_INFO_URL as string, {
     method: "POST",
     body: {
       TableName: "reservation",
@@ -14,8 +19,8 @@ export const postReservation = (hospital, date, name, doctorName) =>
       },
     },
   });
-export const getReservations = (username) =>
-  client.post(process.env.REACT_APP_HOSPIAL_INFO_URL, {
+export const getReservations = (username: string) =>
+  client.post(process.env.REACT_APP_HOSPIAL_INFO_URL as string, {
     method: "GET",
     body: {
       TableName: "reservation",
@@ -30,8 +35,8 @@ export const getReservations = (username) =>
     },
   });
 
-export const getRecentPage = (userName) =>
-  client.post(process.env.REACT_APP_CHAT_URL, {
+export const getRecentPage = (userName: string) =>
+  client.post(process.env.REACT_APP_CHAT_URL as string, {
     type: "GET",
     body: {
       TableName: "contentsView",
@@ -39,8 +44,8 @@ export const getRecentPage = (userName) =>
     },
   });
 
-export const postRecentPage = (userName, hospitalName) =>
-  client.post(process.env.REACT_APP_CHAT_URL, {
+export const postRecentPage = (userName: string, hospitalName: string) =>
+  client.post(process.env.REACT_APP_CHAT_URL as string, {
     type: "POST",
     body: {
       userName,

@@ -4,14 +4,15 @@ import createRequestSaga, {
   createRequestActionTypes,
 } from "../lib/createRequestSaga";
 import * as recommendApi from "../lib/api/recommend";
+import { IMap } from "../../types";
 
 const [INITIAL_WHERE, WHERE_SUCCESS, WHERE_FAILRUE] =
   createRequestActionTypes("map/INITIAL_WHERE");
-const INITIAL_MAP = "map/INITIAL_MAP";
-const INITIAL_HOSPITALS = "map/INITAL_HOSPITALS";
-const SEARCH_MAP = "map/SEARCH_MAP";
-const DRAW_MARKER = "map/DRAW_MARKER";
-const ERASE_MARKER = "map/ERASE_MARKER";
+const INITIAL_MAP = "map/INITIAL_MAP" as const;
+const INITIAL_HOSPITALS = "map/INITAL_HOSPITALS" as const;
+const SEARCH_MAP = "map/SEARCH_MAP" as const;
+const DRAW_MARKER = "map/DRAW_MARKER" as const;
+const ERASE_MARKER = "map/ERASE_MARKER" as const;
 
 export const initialWhere = createAction(INITIAL_WHERE);
 export const initialMap = createAction(INITIAL_MAP);
@@ -31,17 +32,17 @@ export function* mapSaga() {
   yield takeLatest(INITIAL_WHERE, recommendSaga);
 }
 
-const initialState = {
+const initialState: IMap = {
   map: null,
   mapBox: null,
   markers: [],
-  latitude: 0,
-  longitude: 0,
+  latitude: "",
+  longitude: "",
   hospitals: [],
   recommendError: null,
 };
 
-const map = handleActions(
+const map = handleActions<IMap, any>(
   {
     [INITIAL_WHERE]: (state, { payload: { latitude, longitude } }) => ({
       ...state,

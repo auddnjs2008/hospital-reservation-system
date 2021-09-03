@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
@@ -10,7 +10,7 @@ import rootReducer, { rootSaga } from "./modules";
 import { composeWithDevTools } from "redux-devtools-extension";
 import createSagaMiddleware from "redux-saga";
 import Amplify from "aws-amplify";
-import { config } from "../src/lib/amplifyconfig";
+import { config } from "./lib/amplifyconfig";
 Amplify.configure(config);
 
 const logger = createLogger();

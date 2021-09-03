@@ -29,7 +29,7 @@ const MapContainer = ({ history }) => {
 
   const findNearHospitals = useCallback(
     (latitude, longitude) => {
-      const Lat = new kakao.maps.LatLng(37.49643356499065, 126.95346108170166); // latitude,longitude
+      const Lat = new kakao.maps.LatLng(latitude, longitude); // latitude,longitude
       const places = new kakao.maps.services.Places();
       places.keywordSearch(
         kind || localStorage.getItem("hospital_kind"),
@@ -37,8 +37,8 @@ const MapContainer = ({ history }) => {
           if (status === kakao.maps.services.Status.OK) {
             dispatch(
               initialWhere({
-                latitude: 37.49643356499065,
-                longitude: 126.95346108170166,
+                latitude,
+                longitude,
                 hospitals: result,
               })
             ); // latitude,longitude

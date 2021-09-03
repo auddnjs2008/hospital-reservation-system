@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import AskContainer from "../containers/hospital/AskContainer";
 const AskPage = () => {
   return (

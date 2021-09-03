@@ -1,7 +1,7 @@
 import client from "./client";
 
-export const getOneManager = (hospital) =>
-  client.post(process.env.REACT_APP_HOSPIAL_INFO_URL, {
+export const getOneManager = (hospital: string) =>
+  client.post(process.env.REACT_APP_HOSPIAL_INFO_URL as string, {
     method: "GET",
     body: {
       TableName: "hospital_ID",
@@ -16,15 +16,15 @@ export const getOneManager = (hospital) =>
     },
   });
 
-export const getPrevChats = (from, to) =>
-  client.post(process.env.REACT_APP_CHAT_URL, {
+export const getPrevChats = (from: string, to: string) =>
+  client.post(process.env.REACT_APP_CHAT_URL as string, {
     type: "data",
     from,
     to,
   });
 
-export const getListPeople = (name) =>
-  client.post(process.env.REACT_APP_CHAT_URL, {
+export const getListPeople = (name: string) =>
+  client.post(process.env.REACT_APP_CHAT_URL as string, {
     type: "connect",
     name,
   });

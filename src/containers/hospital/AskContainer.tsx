@@ -5,8 +5,9 @@ import AskComponent from "../../components/asks/AskComponent";
 import { withRouter } from "react-router-dom";
 import { initialMapHospitals } from "../../modules/map";
 import { useCallback } from "react";
+import { Props } from "../../../types";
 
-const AskContainer = ({ history }) => {
+const AskContainer = ({ history }: Props) => {
   const dispatch = useDispatch();
   const itemClick = useCallback(
     (kind) => {
