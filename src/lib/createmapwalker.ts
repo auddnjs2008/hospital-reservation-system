@@ -1,5 +1,3 @@
-import { This } from "../../types";
-
 function MapWalker(this: any, position: object) {
   //커스텀 오버레이에 사용할 map walker 엘리먼트
 

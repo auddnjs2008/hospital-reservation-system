@@ -1,5 +1,5 @@
 import { RefObject } from "react";
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps } from "react-router";
 
 export interface IUser {
   username: string;
@@ -26,13 +26,28 @@ export interface IHospital {
   hospital: { kind: string };
 }
 
+export interface IHospitalItem {
+  address_name: string;
+  category_group_code: string;
+  category_group_name: string;
+  category_name: string;
+  distance: string;
+  id: string;
+  phone: string;
+  place_name: string;
+  place_url: string;
+  road_address_name: string;
+  x: string;
+  y: string;
+}
+
 export interface IMap {
   map: object | null;
   mapBox: RefObject<HTMLElement> | null;
   markers: object[];
   latitude: string;
   longitude: string;
-  hospitals: string[];
+  hospitals: IHospitalItem[];
   recommendError: object | null;
 }
 
@@ -59,10 +74,4 @@ export interface resultType {
   statusText: any;
 }
 
-
-export interface Props extends RouteComponentProps;
-
-export type This{
-  walker:any;
-  content:any;
-}
+export interface Props extends RouteComponentProps {}

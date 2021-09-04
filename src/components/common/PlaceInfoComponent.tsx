@@ -2,16 +2,14 @@ import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useCallback, useState } from "react";
 import { useRef } from "react";
-
-import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import pallet from "../../lib/styles/pallet";
 import InfoToggleBtn from "./InfoToggleBtn";
 import Menu from "./Menu";
 import SearchComponent from "../search/SearchComponent";
 import { Link } from "react-router-dom";
-import { changeCoordinate } from "../../modules/roadmap";
-import { postRecentPage } from "../../lib/api/reservation";
+
+import { IHospitalItem, IMap } from "../../../types";
 
 const PlaceInfoComponentBlock = styled.div`
   /* position: relative; */
@@ -111,103 +109,41 @@ const ToggleBtn = styled.button`
   }
 `;
 
-const PlaceInfoComponent = ({ hospitals, id }) => {
-  const { map } = useSelector(({ map }) => ({ map: map.map }));
-  const dispatch = useDispatch();
-  const [toggle, setToggle] = useState(0);
-  let markerControl = null;
-  let infoWindow = null;
-  const placeInfoWrapper = useRef();
-  const hospitalList = useRef();
-  const main = useRef();
-
-  const axiosFun = async (hospital) => {
-    try {
-      await postRecentPage(id, hospital);
-    } catch (e) {
-      alert(`${e}`);
-    }
+interface IPlaceInfo {
+  hospitals: IHospitalItem[];
+  id: string;
+  map: object | null;
+  onMouseOver: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onListMouseOver: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onBoxClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onMouseOut: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onInfoToggleClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  RefArray: {
+    placeInfoWrapper: React.MutableRefObject<HTMLDivElement | null>;
+    hospitalList: React.MutableRefObject<HTMLUListElement | null>;
+    main: React.MutableRefObject<HTMLElement | null>;
   };
+  toggle: number;
+}
 
-  const onInfoToggleClick = useCallback((e) => {
-    if (
-      hospitalList.current.style.opacity === "0" ||
-      hospitalList.current.style.opacity === ""
-    ) {
-      hospitalList.current.style.opacity = "1";
-      main.current.scrollTop = main.current.scrollWidth;
-      main.current.position = "fixed";
-      setToggle(1);
-    } else {
-      main.current.scrollTop = 0;
-      hospitalList.current.style.opacity = "0";
-      main.current.position = "fixed";
-      setToggle(0);
-    }
-  }, []);
-
-  const createBigMarker = (index) => {
-    const kakao = window.kakao;
-    const target = hospitals[index];
-    if (target) {
-      const imageSrc =
-        "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-      const imageSize = new kakao.maps.Size(24 * 1.5, 35 * 1.5);
-      const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-
-      const eachLang = new kakao.maps.LatLng(target.y, target.x);
-      const marker = new kakao.maps.Marker({
-        map,
-        position: eachLang,
-        title: target.place_name,
-        image: markerImage,
-      });
-      infoWindow = new kakao.maps.InfoWindow({
-        position: eachLang,
-        content: `<div style="padding:2px;  border:none;">${target.place_name}</div>`,
-      });
-      infoWindow.open(map, marker);
-      markerControl = marker;
-    }
-  };
-
-  const onMouseOut = () => {
-    if (markerControl !== null) markerControl.setMap(null);
-    infoWindow?.close();
-  };
-
-  const onMouseOver = (e) => {
-    createBigMarker(e.currentTarget.id);
-  };
-
-  const onListMouseOver = (e) => {
-    if (hospitalList.current.style.opacity !== "0") {
-      createBigMarker(e.currentTarget.id);
-    }
-  };
-
-  const onBoxClick = (e) => {
-    const hospital = hospitals[e.currentTarget.id];
-    if (e.target.tagName === "A") {
-      axiosFun(hospital.place_name);
-    }
-    dispatch(
-      changeCoordinate({
-        latitude: hospital.y,
-        longitude: hospital.x,
-        name: hospital.place_name,
-      })
-    );
-    onMouseOut();
-  };
-
+const PlaceInfoComponent: React.FC<IPlaceInfo> = ({
+  hospitals,
+  map,
+  onMouseOver,
+  onListMouseOver,
+  onBoxClick,
+  onMouseOut,
+  onInfoToggleClick,
+  RefArray,
+  toggle,
+}) => {
   return (
-    <PlaceInfoComponentBlock ref={placeInfoWrapper}>
+    <PlaceInfoComponentBlock ref={RefArray.placeInfoWrapper}>
       <header>
         <SearchComponent />
         <Menu></Menu>
       </header>
-      <main ref={main}>
+      <main ref={RefArray.main}>
         <h1>Best Place</h1>
         {hospitals && (
           <div key={hospitals[0]?.id}>
@@ -262,7 +198,7 @@ const PlaceInfoComponent = ({ hospitals, id }) => {
           )}
         </ToggleBtn>
         {hospitals && (
-          <HospitalList ref={hospitalList}>
+          <HospitalList ref={RefArray.hospitalList}>
             {hospitals.map((item, index) =>
               index !== 0 ? (
                 <div key={item.id}>
@@ -314,7 +250,10 @@ const PlaceInfoComponent = ({ hospitals, id }) => {
           </HospitalList>
         )}
       </main>
-      <InfoToggleBtn placeInfoWrapper={placeInfoWrapper} mapContainer={map} />
+      <InfoToggleBtn
+        placeInfoWrapper={RefArray.placeInfoWrapper}
+        mapContainer={map}
+      />
     </PlaceInfoComponentBlock>
   );
 };
