@@ -4,6 +4,7 @@ import React, { useCallback, useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { IStore } from "../../../types";
 import { getDoctors, getDoctorTimes } from "../../lib/api/hospitalInfo";
 import ManagerDoctors from "./ManagerDoctors";
 import ManagerGraph from "./ManagerGraph";
@@ -33,11 +34,11 @@ const UserProfile = styled.h1`
 `;
 
 const ManagerPage = () => {
-  const { hospital } = useSelector(({ auth }) => ({
+  const { hospital } = useSelector(({ auth }: IStore) => ({
     hospital: auth.auth.hospital,
   }));
   const [doctors, setDoctors] = useState([]);
-  const [times, setTimes] = useState(null);
+  const [times, setTimes] = useState<object[]>([]);
   const [graphData, setGraph] = useState(null);
   const [doctorIndex, setIndex] = useState(-1);
 
@@ -45,7 +46,7 @@ const ManagerPage = () => {
     try {
       const result = await getDoctors(hospital);
       setDoctors(
-        JSON.parse(result.data.body).Items.map((item) => item.doctorName)
+        JSON.parse(result.data.body).Items.map((item: any) => item.doctorName)
       );
     } catch (e) {
       alert(`${e}`);
@@ -65,11 +66,11 @@ const ManagerPage = () => {
   );
 
   const getTimes = useCallback(async () => {
-    let times = [];
+    let times: object[] = [];
     if (doctors.length) {
       for (let i = 0; i < doctors.length; i++) {
         const result = await getApiTime(doctors[i]);
-        times.push(result);
+        if (result) times.push(result);
       }
       setTimes(times);
     }

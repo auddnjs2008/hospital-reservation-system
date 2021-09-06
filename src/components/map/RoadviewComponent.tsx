@@ -5,8 +5,9 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import pallet from "../../lib/styles/pallet";
-import MapWalker from "../../lib/createmapwalker";
 import { changeCoordinate, initialzeRoadmap } from "../../modules/roadmap";
+import { IStore } from "../../../types";
+import CMapWalker from "../../lib/createmapwalker";
 
 const RoadviewComponentBlock = styled.div`
   position: absolute;
@@ -32,7 +33,7 @@ const RoadviewComponentBlock = styled.div`
 const RoadviewComponent = () => {
   const dispatch = useDispatch();
   const { map, roadLat, roadLong, name } = useSelector(
-    ({ map, roadmap, menupage }) => ({
+    ({ map, roadmap, menupage }: IStore) => ({
       map: map.map,
       hospitals: map.hospitals,
       roadLat: roadmap.latitude,
@@ -40,19 +41,19 @@ const RoadviewComponent = () => {
       name: roadmap.name,
     })
   );
-  const roadViewBox = useRef();
-  const [roadview, setRoadView] = useState();
-  const [mapPrevWalker, setPrevMapWalker] = useState(null);
+  const roadViewBox = useRef(null);
+  const [roadview, setRoadView] = useState<any>();
+  const [mapPrevWalker, setPrevMapWalker] = useState<any>(null);
   // const [walkerSetting, setWalkerSetting] = useState(false);
 
-  const roadviewClient = new window.kakao.maps.RoadviewClient();
+  const roadviewClient = new (window as any).kakao.maps.RoadviewClient();
 
-  let startOverlayPoint = null;
-  let start = [];
+  let startOverlayPoint: any = null;
+  let start: number[] = [];
 
   const walkerViewChange = useCallback(
     (mapWalker) => {
-      window.kakao.maps.event.addListener(
+      (window as any).kakao.maps.event.addListener(
         roadview,
         "viewpoint_changed",
         function () {
@@ -62,7 +63,7 @@ const RoadviewComponent = () => {
         }
       );
 
-      window.kakao.maps.event.addListener(
+      (window as any).kakao.maps.event.addListener(
         roadview,
         "position_changed",
         function () {
@@ -76,9 +77,9 @@ const RoadviewComponent = () => {
     [map, roadview]
   );
 
-  const rvCustomOverlay = (position, content) => {
+  const rvCustomOverlay = (position: any, content: string) => {
     if (mapPrevWalker) mapPrevWalker.setMap(null);
-    const result = new window.kakao.maps.CustomOverlay({
+    const result = new (window as any).kakao.maps.CustomOverlay({
       position: position,
       content,
       xAnchor: 0.5,
@@ -95,17 +96,17 @@ const RoadviewComponent = () => {
       );
       roadview.setViewpoint(viewPoint);
     }, 850);
-    const newWalker = new MapWalker(position);
+    const newWalker = new CMapWalker(position);
     setPrevMapWalker(newWalker);
     newWalker.setMap(map);
     walkerViewChange(newWalker);
   };
 
-  const onMouseDown = (e) => {
+  const onMouseDown = (e: React.MouseEvent<HTMLElement>) => {
     const proj = map.getProjection();
     const overlayPos = mapPrevWalker.walker.getPosition();
 
-    window.kakao.maps.event.preventMap();
+    (window as any).kakao.maps.event.preventMap();
     start = [e.clientY, e.clientX];
 
     startOverlayPoint = proj.containerPointFromCoords(overlayPos);
@@ -117,7 +118,7 @@ const RoadviewComponent = () => {
       const proj = map.getProjection();
       const deltaX = start[1] - e.clientX;
       const deltaY = start[0] - e.clientY;
-      const newPoint = new window.kakao.maps.Point(
+      const newPoint = new (window as any).kakao.maps.Point(
         startOverlayPoint.x - deltaX,
         startOverlayPoint.y - deltaY
       );
@@ -146,19 +147,26 @@ const RoadviewComponent = () => {
   );
 
   useEffect(() => {
-    setRoadView(new window.kakao.maps.Roadview(roadViewBox.current));
+    setRoadView(new (window as any).kakao.maps.Roadview(roadViewBox.current));
   }, [roadLat, roadLong]);
 
   useEffect(() => {
     if (roadview) {
       dispatch(initialzeRoadmap(roadview));
       try {
-        const position = new window.kakao.maps.LatLng(roadLat, roadLong);
-        roadviewClient.getNearestPanoId(position, 300, function (panoId) {
-          roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
-        });
+        const position = new (window as any).kakao.maps.LatLng(
+          roadLat,
+          roadLong
+        );
+        roadviewClient.getNearestPanoId(
+          position,
+          300,
+          function (panoId: string) {
+            roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
+          }
+        );
 
-        window.kakao.maps.event.addListener(roadview, "init", () =>
+        (window as any).kakao.maps.event.addListener(roadview, "init", () =>
           rvCustomOverlay(
             position,
             `<div class="overlay_info"><span>${
@@ -167,7 +175,7 @@ const RoadviewComponent = () => {
           )
         );
         return () =>
-          window.kakao.maps.event.addListener(roadview, "init", () =>
+          (window as any).kakao.maps.event.addListener(roadview, "init", () =>
             rvCustomOverlay(
               position,
               `<div class="overlay_info"><span>${

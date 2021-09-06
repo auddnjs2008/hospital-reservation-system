@@ -12,8 +12,9 @@ import UserMypage from "./UserMypage";
 import ReviewWrite from "../review/ReviewWrite";
 import { useState } from "react";
 import ManagerPage from "./ManagerPage";
+import { Props } from "../../../types";
 
-const MypageComponentBlock = styled.div`
+const MypageComponentBlock = styled.div<{ manager: boolean }>`
   width: ${(props) => (props.manager ? "100vw" : "70vw")};
   height: 100vh;
   position: absolute;
@@ -43,9 +44,16 @@ const MypageComponentBlock = styled.div`
   }
 `;
 
-const MypageComponent = ({ history, manager }) => {
+interface IMypageComponent {
+  manager: boolean;
+}
+
+const MypageComponent: React.FC<IMypageComponent & Props> = ({
+  history,
+  manager,
+}) => {
   const dispatch = useDispatch();
-  const mypage = useRef();
+  const mypage = useRef<HTMLDivElement>(null);
   const [hospital, setHospital] = useState("");
   const [review, setReview] = useState(false);
   const [scroll, setScroll] = useState(window.scrollY);
@@ -56,7 +64,7 @@ const MypageComponent = ({ history, manager }) => {
       .then((user) => (cognitoUser = user))
       .catch((err) => alert(`${err}`));
     if (cognitoUser !== null) {
-      cognitoUser.signOut();
+      (cognitoUser as any).signOut();
       dispatch(logout());
       manager ? history.push("/login") : history.push("/map");
     }
@@ -86,6 +94,8 @@ const MypageComponent = ({ history, manager }) => {
           scroll={scroll}
           hospital={hospital}
           setReview={setReview}
+          rvPage={null}
+          setReload={null}
         />
       )}
     </MypageComponentBlock>

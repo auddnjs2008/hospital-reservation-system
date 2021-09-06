@@ -64,7 +64,14 @@ const RvBox = styled.ul`
   }
 `;
 
-const ManagerDoctors = ({
+interface IManagerDoctors {
+  times: object[];
+  doctors: string[];
+  doctorIndex: number;
+  setIndex: React.Dispatch<React.SetStateAction<number>>;
+  setGraph: React.Dispatch<React.SetStateAction<null>>;
+}
+const ManagerDoctors: React.FC<IManagerDoctors> = ({
   times,
   doctors,
   doctorIndex,

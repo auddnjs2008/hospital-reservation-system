@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { IReserveData, IStore } from "../../../types";
 import { getRecentPage, getReservations } from "../../lib/api/reservation";
 import pallet from "../../lib/styles/pallet";
 
@@ -18,13 +19,13 @@ const UserMenu = styled.ul`
   margin-bottom: 3rem;
 `;
 
-const MenuList = styled.li`
+const MenuList = styled.li<{ now: boolean }>`
   border: 1px solid black;
   border-radius: 1rem;
   padding: 10px;
   cursor: pointer;
   font-size: 16px;
-  background-color: ${(props) => (props.color ? pallet.green[1] : "white")};
+  background-color: ${(props) => (props.now ? pallet.green[1] : "white")};
   &:not(:last-child) {
     margin-right: 1rem;
   }
@@ -85,20 +86,27 @@ const ReservationBox = styled.ul`
   }
 `;
 
-const UserMypage = ({ setHospital, setReview }) => {
-  const { user } = useSelector(({ auth }) => ({ user: auth.auth.id }));
-  const [pastPlanner, setPastPlanner] = useState(null);
-  const [nowPlanner, setNowPlanner] = useState(null);
-  const [recentPage, setRecent] = useState(null);
+interface IUserMypage {
+  setHospital: React.Dispatch<React.SetStateAction<string>>;
+  setReview: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const UserMypage: React.FC<IUserMypage> = ({ setHospital, setReview }) => {
+  const { user } = useSelector(({ auth }: IStore) => ({ user: auth.auth.id }));
+  const [pastPlanner, setPastPlanner] = useState<IReserveData[]>([]);
+  const [nowPlanner, setNowPlanner] = useState<IReserveData[]>([]);
+  const [recentPage, setRecent] = useState<string[]>([]);
   const [nowSwitch, setNow] = useState(0);
 
-  const onPostReviewClick = (e, name) => {
+  const settingNow = (number: number) => () => setNow(number);
+
+  const onPostReviewClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setReview(true);
     setHospital(e.currentTarget.id);
   };
 
-  const makeObjectToArray = (obj) => {
-    const Arr = Array(10).fill(0);
+  const makeObjectToArray = (obj: { [index: string]: string }) => {
+    const Arr: string[] = Array(10).fill(0);
     for (let i = 1; i <= 10; i++) {
       Arr[i - 1] = obj[`view${i}`];
     }
@@ -113,9 +121,9 @@ const UserMypage = ({ setHospital, setReview }) => {
         const reservedata = JSON.parse(result.data.body).Items;
         const recentdata = JSON.parse(recent.data.body).Items;
         const Time = new Date();
-        let presentRv = [];
-        let pastRv = [];
-        reservedata.forEach((item) => {
+        let presentRv: IReserveData[] = [];
+        let pastRv: IReserveData[] = [];
+        reservedata.forEach((item: IReserveData) => {
           const month = Number(item.time.split(" ")[0].split("/")[0]);
           const day = Number(item.time.split(" ")[0].split("/")[1]);
           if (month < Time.getMonth() + 1) {
@@ -140,13 +148,13 @@ const UserMypage = ({ setHospital, setReview }) => {
   return (
     <UserMypageBlock>
       <UserMenu>
-        <MenuList color={nowSwitch === 0} onClick={() => setNow(0)}>
+        <MenuList now={nowSwitch === 0} onClick={settingNow(0)}>
           현재예약
         </MenuList>
-        <MenuList color={nowSwitch === 1} onClick={() => setNow(1)}>
+        <MenuList now={nowSwitch === 1} onClick={settingNow(1)}>
           방문
         </MenuList>
-        <MenuList color={nowSwitch === 2} onClick={() => setNow(2)}>
+        <MenuList now={nowSwitch === 2} onClick={settingNow(2)}>
           최근본 병원
         </MenuList>
       </UserMenu>

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { IStore } from "../../../types";
 import { postReviews, setRates } from "../../lib/api/review";
 import pallet from "../../lib/styles/pallet";
 
@@ -85,14 +86,22 @@ const StyledStar = styled.div`
   font-size: 2rem;
 `;
 
-const ReviewWrite = ({
+interface IReviewWrite {
+  scroll: number;
+  hospital: string;
+  setReview: React.Dispatch<React.SetStateAction<boolean>>;
+  rvPage: boolean | null;
+  setReload: React.Dispatch<React.SetStateAction<null>> | null;
+}
+
+const ReviewWrite: React.FC<IReviewWrite> = ({
   scroll,
   hospital,
   setReview,
   rvPage = false,
   setReload,
 }) => {
-  const { id } = useSelector(({ auth }) => ({ id: auth.auth.id }));
+  const { id } = useSelector(({ auth }: IStore) => ({ id: auth.auth.id }));
   const [starNum, setStarNum] = useState(0);
   const [text, setText] = useState("");
 

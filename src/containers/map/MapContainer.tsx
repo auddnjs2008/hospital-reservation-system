@@ -25,21 +25,12 @@ const MapContainer = ({ history }: Props) => {
 
   const kakao = (window as any).kakao;
 
-  // const findCallBack = useCallback(
-  //   (result, status) => {
-  //     if (status === kakao.maps.services.Status.OK) {
-  //       dispatch(initialWhere({ latitude, longitude, hospitals: result }));
-  //     }
-  //   },
-  //   [dispatch, kakao.maps, latitude, longitude]
-  // );
-
   const markerDraw = useCallback(() => {
     const imageSrc =
       "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png";
     const imageSize = new kakao.maps.Size(24, 35);
     const bounds = new kakao.maps.LatLngBounds();
-    const markers = [];
+    const markers: Object[] = [];
     if (hospitals) {
       hospitals.forEach((item, index) => {
         const imgOptions = {
@@ -64,7 +55,7 @@ const MapContainer = ({ history }: Props) => {
       });
       if (markers.length) dispatch(drawMarker({ markers }));
     }
-    if (map) map.setBounds(bounds);
+    if (map) (map as any).setBounds(bounds);
   }, [dispatch, hospitals, kakao.maps, map]);
 
   const findNearHospitals = useCallback(
@@ -117,7 +108,13 @@ const MapContainer = ({ history }: Props) => {
   }, [latitude, longitude, hospitals, findNearHospitals]);
 
   return (
-    <MapComponent mapInfo={{ latitude, longitude, hospitals }}></MapComponent>
+    <MapComponent
+      mapInfo={{ latitude, longitude, hospitals }}
+      map={map}
+      setMap={setMap}
+      dispatch={dispatch}
+      markerDraw={markerDraw}
+    ></MapComponent>
   );
 };
 

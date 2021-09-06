@@ -1,8 +1,8 @@
-import React, { useRef } from "react";
+import React, { Dispatch, useRef } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { drawMarker, initialMap } from "../../modules/map";
+
+import { initialMap } from "../../modules/map";
 import styled from "styled-components";
 import MapController from "./MapController";
 import RoadviewComponent from "./RoadviewComponent";
@@ -29,18 +29,22 @@ const kakao = (window as any).kakao;
 
 interface IMapComponent {
   mapInfo: { latitude: string; longitude: string; hospitals: IHospitalItem[] };
+  map: any;
+  dispatch: Dispatch<any>;
+  setMap: React.Dispatch<React.SetStateAction<undefined>>;
+  markerDraw: () => void;
 }
 
-const MapComponent: React.FC<IMapComponent> = ({ mapInfo }) => {
+const MapComponent: React.FC<IMapComponent> = ({
+  mapInfo,
+  map,
+  dispatch,
+  setMap,
+  markerDraw,
+}) => {
   const { latitude, longitude, hospitals } = mapInfo;
   const [loader, setLoader] = useState(true);
-
-  // const { lat, long, hospitals } = useSelector(({ map }: IWrapper) => ({
-  //   lat: map.latitude,
-  //   long: map.longitude,
-  //   hospitals: map.hospitals,
-  // }));
-  const mapContainer = useRef();
+  const mapContainer = useRef(null);
 
   //지도를 찾으면 마커를 생성해 준다.
 

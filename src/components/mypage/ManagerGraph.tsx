@@ -9,7 +9,17 @@ const ManagerGraphBox = styled.div`
   background-color: #363b3e;
 `;
 
-const ManagerGraph = ({ graphData, data, doctorIndex, doctors }) => {
+interface IManagerGraph {
+  graphData: any;
+  doctorIndex: number;
+  doctors: object[];
+}
+
+const ManagerGraph: React.FC<IManagerGraph> = ({
+  graphData,
+  doctorIndex,
+  doctors,
+}) => {
   const [graphTimes, setTimes] = useState({});
 
   const makeGraphData = (times, id, color) => {

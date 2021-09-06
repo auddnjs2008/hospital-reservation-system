@@ -1,6 +1,10 @@
 import MypageComponent from "../../components/mypage/MypageComponent";
 
-const MypageContainer = ({ manager }) => {
+interface IMypageContainer {
+  manager: boolean;
+}
+
+const MypageContainer: React.FC<IMypageContainer> = ({ manager }) => {
   return <MypageComponent manager={manager} />;
 };
 

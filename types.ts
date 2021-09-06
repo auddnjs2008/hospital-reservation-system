@@ -42,7 +42,7 @@ export interface IHospitalItem {
 }
 
 export interface IMap {
-  map: object | null;
+  map: any;
   mapBox: RefObject<HTMLElement> | null;
   markers: object[];
   latitude: string;
@@ -62,7 +62,7 @@ export interface IRoadMap {
   latitude: string;
   longitude: string;
   name: string;
-  roadmap: RefObject<HTMLElement> | null;
+  roadmap: any;
 }
 
 export interface resultType {
@@ -72,6 +72,21 @@ export interface resultType {
   request: any;
   status: any;
   statusText: any;
+}
+
+export interface IStore {
+  auth: IAuth;
+  hospital: IHospital;
+  map: IMap;
+  menupage: IPage;
+  roadmap: IRoadMap;
+  chat: IChat;
+}
+
+export interface IReserveData {
+  hospitalName: string;
+  time: string;
+  doctorName: string;
 }
 
 export interface Props extends RouteComponentProps {}
