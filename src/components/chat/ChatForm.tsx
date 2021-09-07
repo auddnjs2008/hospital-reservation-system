@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { useState } from "react";
 import styled from "styled-components";
+import { IChatForm, IChatItems } from "../../../types";
 import { getPrevChats } from "../../lib/api/chat";
 import pallet from "../../lib/styles/pallet";
 
@@ -96,18 +97,24 @@ const ChatFormBlock = styled.div`
   }
 `;
 
-const ChatForm = ({ id, oneChater, setChater, webSocket, setInChat }) => {
+const ChatForm: React.FC<IChatForm> = ({
+  id,
+  oneChater,
+  setChater,
+  webSocket,
+  setInChat,
+}) => {
   const [prevChats, setPrevChats] = useState([]);
-  const chatBox = useRef();
+  const chatBox = useRef<HTMLUListElement>(null);
 
-  const ChatWrite = (text, who, name) => {
+  const ChatWrite = (text: string, who: string, name: string | null) => {
     const li = document.createElement("li");
     const infoDiv = document.createElement("div");
     const nameDiv = document.createElement("div");
     const textDiv = document.createElement("div");
     const timeSpan = document.createElement("span");
     const date = new Date();
-    nameDiv.innerText = name;
+    if (name) nameDiv.innerText = name;
     textDiv.innerText = text;
     timeSpan.innerText = `${date.getHours()}:${
       date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()
@@ -129,35 +136,40 @@ const ChatForm = ({ id, oneChater, setChater, webSocket, setInChat }) => {
       li.appendChild(infoDiv);
       li.appendChild(textDiv);
     }
-    chatBox.current.appendChild(li);
+    chatBox.current?.appendChild(li);
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // 내가 채팅칠때
-    ChatWrite(e.currentTarget.firstChild.value, "me");
-    chatBox.current.scrollTop = chatBox.current.scrollHeight;
+    ChatWrite(
+      (e.currentTarget.firstChild! as HTMLInputElement).value,
+      "me",
+      ""
+    );
+    if (chatBox.current)
+      chatBox.current.scrollTop = chatBox.current.scrollHeight;
 
-    webSocket.current.send(
+    (webSocket.current as any).send(
       JSON.stringify({
         action: "sendPrivate",
-        message: e.currentTarget.firstChild.value,
+        message: (e.currentTarget.firstChild! as HTMLInputElement).value,
         to: oneChater,
         from: id,
       })
     );
-    e.currentTarget.firstChild.value = "";
+    (e.currentTarget.firstChild! as HTMLInputElement).value = "";
   };
 
-  const sortFunc = (a, b) => {
+  const sortFunc = (a: any, b: any) => {
     let aDate = a.time.split(" ")[0].split("/");
     let bDate = b.time.split(" ")[0].split("/");
 
     aDate = aDate
-      .map((item) => (Number(item) < 10 ? "0" + item : item))
+      .map((item: any) => (Number(item) < 10 ? "0" + item : item))
       .join("");
     bDate = bDate
-      .map((item) => (Number(item) < 10 ? "0" + item : item))
+      .map((item: any) => (Number(item) < 10 ? "0" + item : item))
       .join("");
 
     if (Number(aDate) > Number(bDate)) return 1;
@@ -166,7 +178,7 @@ const ChatForm = ({ id, oneChater, setChater, webSocket, setInChat }) => {
       let aTime = a.time.split(" ")[1].split(":");
       let bTime = b.time.split(" ")[1].split(":");
       aTime = aTime
-        .map((item, index) => {
+        .map((item: any, index: number) => {
           if (index !== 3) {
             return Number(item) < 10 ? "0" + item : item;
           } else {
@@ -177,7 +189,7 @@ const ChatForm = ({ id, oneChater, setChater, webSocket, setInChat }) => {
         })
         .join("");
       bTime = bTime
-        .map((item, index) => {
+        .map((item: any, index: number) => {
           if (index !== 3) {
             return Number(item) < 10 ? "0" + item : item;
           } else {
@@ -204,7 +216,8 @@ const ChatForm = ({ id, oneChater, setChater, webSocket, setInChat }) => {
       } else if (Object.keys(JSON.parse(message.data))[0] === "members") {
         setInChat(JSON.parse(message.data).members.includes(oneChater));
       }
-      chatBox.current.scrollTop = chatBox.current.scrollHeight;
+      if (chatBox.current)
+        chatBox.current.scrollTop = chatBox.current.scrollHeight;
     },
     [oneChater, setInChat]
   );
@@ -213,7 +226,7 @@ const ChatForm = ({ id, oneChater, setChater, webSocket, setInChat }) => {
     const prevMessages = async () => {
       try {
         const result = await getPrevChats(id, oneChater);
-        result.data.sort((a, b) => sortFunc(a, b)); // 추가 테스트 필요
+        result.data.sort((a: any, b: any) => sortFunc(a, b)); // 추가 테스트 필요
         setPrevChats(result.data);
       } catch (e) {
         alert(`${e}`);
@@ -223,24 +236,29 @@ const ChatForm = ({ id, oneChater, setChater, webSocket, setInChat }) => {
   }, [id, oneChater]);
 
   useEffect(() => {
-    webSocket.current = new WebSocket(process.env.REACT_APP_SOCKET);
-    webSocket.current.addEventListener("message", (message) =>
-      socketReceive(message)
-    );
-    webSocket.current.addEventListener("open", () => {
-      webSocket.current.send(JSON.stringify({ action: "setName", name: id }));
-    });
+    if (webSocket.current) {
+      webSocket.current = new WebSocket(process.env.REACT_APP_SOCKET as string);
+      webSocket.current.addEventListener("message", (message: MessageEvent) =>
+        socketReceive(message)
+      );
+      webSocket.current.addEventListener("open", () => {
+        webSocket.current!.send(
+          JSON.stringify({ action: "setName", name: id })
+        );
+      });
+    }
   }, [id, webSocket, socketReceive]);
 
   useEffect(() => {
-    chatBox.current.scrollTop = chatBox.current.scrollHeight;
+    if (chatBox.current)
+      chatBox.current.scrollTop = chatBox.current.scrollHeight;
   }, [prevChats]);
 
   return (
     <ChatFormBlock>
       <ul ref={chatBox}>
         {prevChats.length
-          ? prevChats.map((item, index) => (
+          ? prevChats.map((item: IChatItems, index) => (
               <li key={index} className={item.from === id ? "me" : "opponent"}>
                 <div className="infoBox">
                   {item.from !== id ? (

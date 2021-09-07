@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { changeCoordinate } from "../../modules/roadmap";
 import { withRouter } from "react-router-dom";
 import { useCallback } from "react";
+import { IHospitalItem, IStore, Props } from "../../../types";
 
 const SearchComponentBlock = styled.form`
   margin: auto;
@@ -44,15 +45,15 @@ const SearchComponentBlock = styled.form`
   }
 `;
 
-const SearchComponent = ({ history }) => {
+const SearchComponent = ({ history }: Props) => {
   const [text, SetText] = useState("");
   const dispatch = useDispatch();
-  const { latitude, longitude, markers } = useSelector(({ map }) => ({
+  const { latitude, longitude, markers } = useSelector(({ map }: IStore) => ({
     latitude: map.latitude,
     longitude: map.longitude,
     markers: map.markers,
   }));
-  const checkBox = useRef();
+  const checkBox = useRef<HTMLInputElement>(null);
   const onChange = useCallback((e) => {
     const text = e.target.value;
     SetText(text);
@@ -61,16 +62,16 @@ const SearchComponent = ({ history }) => {
   const eraseMarkers = useCallback(() => {
     if (markers) {
       for (let i = 0; i < markers.length; i++) {
-        markers[i].setMap(null);
+        (markers[i] as any).setMap(null);
       }
     }
   }, [markers]);
 
   const findCallBack = useCallback(
     (result, status) => {
-      if (status === window.kakao.maps.services.Status.OK) {
+      if (status === (window as any).kakao.maps.services.Status.OK) {
         const filterResult = result.filter(
-          (item) => item.category_group_code === "HP8"
+          (item: IHospitalItem) => item.category_group_code === "HP8"
         );
 
         if (filterResult.length !== 0) {
@@ -94,9 +95,9 @@ const SearchComponent = ({ history }) => {
   );
 
   const findNearHospitals = useCallback(() => {
-    const places = new window.kakao.maps.services.Places();
-    if (checkBox.current.checked) {
-      const Lat = new window.kakao.maps.LatLng(latitude, longitude);
+    const places = new (window as any).kakao.maps.services.Places();
+    if (checkBox.current?.checked) {
+      const Lat = new (window as any).kakao.maps.LatLng(latitude, longitude);
       places.keywordSearch(
         `${text.includes("병원") ? text : text + "병원"}`,
         findCallBack,

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import styled from "styled-components";
+import { IDoctorComponent } from "../../../types";
 import { getDoctors } from "../../lib/api/hospitalInfo";
 import Loading from "../common/Loading";
 
@@ -26,7 +27,7 @@ const DoctorComponentBlock = styled.ul`
   }
 `;
 
-const StyledLi = styled.li`
+const StyledLi = styled.li<{ isColor: boolean }>`
   display: flex;
   align-items: center;
   box-shadow: 1px 1px 1px rgba(15, 15, 15, 0.3);
@@ -41,14 +42,14 @@ const StyledLi = styled.li`
   }
 `;
 
-const DoctorComponent = ({
+const DoctorComponent: React.FC<IDoctorComponent> = ({
   doctor,
   hospitalName,
   setDoctor,
   phone,
   setChat,
 }) => {
-  const [doctors, setDoctors] = useState(null);
+  const [doctors, setDoctors] = useState([]);
   const [clickIndex, setClick] = useState(-1);
 
   useEffect(() => {
@@ -64,12 +65,12 @@ const DoctorComponent = ({
     if (hospitalName) getAxios();
   }, [hospitalName, setChat]);
 
-  const onDoctorClick = (e) => {
+  const onDoctorClick = (e: React.MouseEvent<HTMLLIElement>) => {
     setDoctor(e.currentTarget.innerText);
   };
   useEffect(() => {
     if (doctors) {
-      setClick(doctors.findIndex((item) => item.doctorName === doctor));
+      setClick(doctors.findIndex((item: any) => item.doctorName === doctor));
     }
   }, [doctor, doctors]);
 
@@ -78,7 +79,7 @@ const DoctorComponent = ({
       {doctors === null ? (
         <Loading></Loading>
       ) : doctors.length ? (
-        doctors.map((item, index) => (
+        doctors.map((item: any, index: number) => (
           <StyledLi
             key={index}
             onClick={onDoctorClick}

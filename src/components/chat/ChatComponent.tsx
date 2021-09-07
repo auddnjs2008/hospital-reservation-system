@@ -10,6 +10,7 @@ import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { IChatComponent, IStore } from "../../../types";
 import { getListPeople } from "../../lib/api/chat";
 import pallet from "../../lib/styles/pallet";
 import { allchatbtn, backchatbtn } from "../../modules/chat";
@@ -82,7 +83,7 @@ const Controller = styled.div`
   width: 20%;
 `;
 
-const OnLineRight = styled.div`
+const OnLineRight = styled.div<{ online: boolean }>`
   width: 16px;
   height: 16px;
   border-radius: 50%;
@@ -124,16 +125,21 @@ const ChatterList = styled.ul`
   }
 `;
 
-const ChatComponent = ({ dispatch, chatRvName, chatShow, id }) => {
+const ChatComponent: React.FC<IChatComponent> = ({
+  dispatch,
+  chatRvName,
+  chatShow,
+  id,
+}) => {
   const [chatBox, setChat] = useState(false);
   const [chatPersons, setPersons] = useState([]);
   const [oneChater, setChater] = useState("");
   const [inChat, setInChat] = useState(false);
-  const { chaterId } = useSelector(({ chat }) => ({
+  const { chaterId } = useSelector(({ chat }: IStore) => ({
     chaterId: chat.id,
     hospital: chat.name,
   }));
-  const webSocket = useRef();
+  const webSocket = useRef<WebSocket>(null);
 
   useEffect(() => {
     setChat(chatShow);
@@ -155,7 +161,7 @@ const ChatComponent = ({ dispatch, chatRvName, chatShow, id }) => {
   const onCloseBtn = () => {
     setChat(false);
     setChater("");
-    if (webSocket.current) webSocket.current.close();
+    if (webSocket.current) (webSocket.current as any).close();
     dispatch(allchatbtn());
   };
 
@@ -179,7 +185,7 @@ const ChatComponent = ({ dispatch, chatRvName, chatShow, id }) => {
                     setChat(true);
                     getChatUsers();
                     if (chaterId) dispatch(backchatbtn());
-                    webSocket.current.close();
+                    (webSocket.current as any).close();
                   }}
                 ></FontAwesomeIcon>
                 <OnLineRight online={inChat}></OnLineRight>

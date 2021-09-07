@@ -12,7 +12,7 @@ const ManagerGraphBox = styled.div`
 interface IManagerGraph {
   graphData: any;
   doctorIndex: number;
-  doctors: object[];
+  doctors: string[];
 }
 
 const ManagerGraph: React.FC<IManagerGraph> = ({
@@ -20,9 +20,9 @@ const ManagerGraph: React.FC<IManagerGraph> = ({
   doctorIndex,
   doctors,
 }) => {
-  const [graphTimes, setTimes] = useState({});
+  const [graphTimes, setTimes] = useState<any>({});
 
-  const makeGraphData = (times, id, color) => {
+  const makeGraphData = (times: any, id: string, color: string) => {
     const result = [
       {
         id,
@@ -98,7 +98,7 @@ const ManagerGraph: React.FC<IManagerGraph> = ({
     return result;
   };
 
-  const makeGraphTimes = (obj) => {
+  const makeGraphTimes = (obj: any) => {
     const isRvTimes = {
       "09:00": 0,
       "09:30": 0,
@@ -193,7 +193,7 @@ const ManagerGraph: React.FC<IManagerGraph> = ({
         margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
         theme={{
           textColor: "#eee",
-          fontSize: "12px",
+          fontSize: 12,
           crosshair: {
             line: {
               stroke: "yellow",
@@ -214,7 +214,7 @@ const ManagerGraph: React.FC<IManagerGraph> = ({
         axisTop={null}
         axisRight={null}
         axisBottom={{
-          orient: "bottom",
+          // orient: "bottom",
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
@@ -223,7 +223,7 @@ const ManagerGraph: React.FC<IManagerGraph> = ({
           legendPosition: "middle",
         }}
         axisLeft={{
-          orient: "left",
+          // orient: "left",
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,

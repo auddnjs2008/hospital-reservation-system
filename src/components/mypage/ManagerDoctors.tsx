@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import styled from "styled-components";
+import { IIndex, ITimes } from "../../../types";
 
 const ManagerDoctorsBlock = styled.div`
   width: 30rem;
@@ -21,12 +22,12 @@ const DoctorBar = styled.ul`
   color: white;
 `;
 
-const BarLI = styled.li`
+const BarLI = styled.li<{ now: boolean }>`
   height: 100%;
   display: flex;
   align-items: center;
   cursor: pointer;
-  background-color: ${(props) => (props.color ? "#005666" : "#363b3e")};
+  background-color: ${(props) => (props.now ? "#005666" : "#363b3e")};
 `;
 
 const RvBox = styled.ul`
@@ -65,11 +66,11 @@ const RvBox = styled.ul`
 `;
 
 interface IManagerDoctors {
-  times: object[];
+  times: IIndex[];
   doctors: string[];
   doctorIndex: number;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
-  setGraph: React.Dispatch<React.SetStateAction<null>>;
+  setGraph: React.Dispatch<React.SetStateAction<any>>;
 }
 const ManagerDoctors: React.FC<IManagerDoctors> = ({
   times,
@@ -78,8 +79,9 @@ const ManagerDoctors: React.FC<IManagerDoctors> = ({
   setIndex,
   setGraph,
 }) => {
-  const [timeArray, setTimeArray] = useState([]);
-  const createNumber = (time) => {
+  const [timeArray, setTimeArray] = useState<any>([]);
+
+  const createNumber = (time: any) => {
     let aTime = time.time.split("");
     aTime.splice(2, 1);
     aTime.splice(4, 1);
@@ -88,13 +90,13 @@ const ManagerDoctors: React.FC<IManagerDoctors> = ({
     return aTime;
   };
 
-  const onDoctorClick = (e) => {
+  const onDoctorClick = (e: React.MouseEvent<HTMLLIElement>) => {
     setIndex(Number(e.currentTarget.id));
   };
 
   useEffect(() => {
     if (times) {
-      let arr = [];
+      let arr: any[] = [];
       times.forEach((item) => {
         let middle = Object.values(item)[0];
         arr = [...arr, ...middle];
@@ -116,13 +118,13 @@ const ManagerDoctors: React.FC<IManagerDoctors> = ({
   return (
     <ManagerDoctorsBlock>
       <DoctorBar>
-        <BarLI key={0} color={-1 === doctorIndex} onClick={() => setIndex(-1)}>
+        <BarLI key={0} now={-1 === doctorIndex} onClick={() => setIndex(-1)}>
           시간별
         </BarLI>
         {times?.map((item, index) => (
           <BarLI
-            id={index}
-            color={index === doctorIndex}
+            id={JSON.stringify(index)}
+            now={index === doctorIndex}
             key={index + 1}
             onClick={onDoctorClick}
           >
@@ -137,14 +139,14 @@ const ManagerDoctors: React.FC<IManagerDoctors> = ({
           <div>예약시간</div>
         </header>
         {doctorIndex === -1
-          ? timeArray.map((item) => (
+          ? timeArray.map((item: ITimes) => (
               <li>
                 <div>{item.name}</div>
                 <div>{item.doctorName}</div>
                 <div>{item.time}</div>
               </li>
             ))
-          : times[doctorIndex][doctors[doctorIndex]].map((item) => (
+          : times[doctorIndex][doctors[doctorIndex]].map((item: ITimes) => (
               <li>
                 <div>{item.name}</div>
 

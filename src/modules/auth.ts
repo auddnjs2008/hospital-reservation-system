@@ -16,6 +16,7 @@ export const isManager = createAction(IS_MANAGER);
 const initialState: IAuth = {
   auth: {
     id: "",
+    password: "",
     Inputid: "",
     InputPassword: "",
     email: "",

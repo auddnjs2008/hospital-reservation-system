@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, withRouter } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { faMapMarked } from "@fortawesome/free-solid-svg-icons";
+import { IStore, Props } from "../../../types";
 
 const MenuBlock = styled.ul`
   width: 100%;
@@ -21,12 +22,12 @@ const MenuBlock = styled.ul`
   }
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(Link)<{ current: boolean }>`
   color: ${(props) => (props.current ? pallet.green[3] : "")};
 `;
 
-const Menu = ({ location }) => {
-  const { auth } = useSelector(({ auth }) => ({
+const Menu = ({ location }: Props) => {
+  const { auth } = useSelector(({ auth }: IStore) => ({
     auth: auth.auth,
   }));
 
@@ -46,7 +47,7 @@ const Menu = ({ location }) => {
         </StyledLink>
       </li>
       <li>
-        <StyledLink to="/">
+        <StyledLink current={location.pathname === "/"} to="/">
           <FontAwesomeIcon icon={faHospital}></FontAwesomeIcon>
         </StyledLink>
       </li>

@@ -1,16 +1,17 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { IStore } from "../../../types";
 import AuthForm from "../../components/auth/AuthForm";
 import { changeField } from "../../modules/auth";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const { id, password } = useSelector(({ auth }) => ({
+  const { id, password } = useSelector(({ auth: { auth } }: IStore) => ({
     id: auth.id,
     password: auth.password,
   }));
 
-  const onChange = (e) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value: text, name: key } = e.target;
     dispatch(changeField({ key, text }));
   };
@@ -19,7 +20,7 @@ const LoginForm = () => {
     <AuthForm
       onChange={onChange}
       content="Login"
-      text={{ id, password }}
+      text={{ id, password, email: "" }}
     ></AuthForm>
   );
 };

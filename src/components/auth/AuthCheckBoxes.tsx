@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import styled from "styled-components";
+import { IAuthCheckBoxes } from "../../../types";
 
 const AuthCheckBoxesBlock = styled.div`
   display: flex;
@@ -19,26 +20,38 @@ const AuthCheckBoxesBlock = styled.div`
   }
 `;
 
-const AuthCheckBoxes = ({ manager, user, setHospital, value, content }) => {
+const AuthCheckBoxes: React.FC<IAuthCheckBoxes> = ({
+  manager,
+  user,
+  setHospital,
+  value,
+  content,
+}) => {
   const [boxView, setBoxView] = useState(false);
 
-  const onCheckBoxClick = (e) => {
-    if (e.target.checked) {
-      e.target === manager.current
-        ? (user.current.checked = false)
-        : (manager.current.checked = false);
+  const onCheckBoxClick = (e: React.MouseEvent<HTMLInputElement>) => {
+    if ((e.target as HTMLInputElement).checked) {
+      if (user.current && manager.current) {
+        e.target === manager.current
+          ? (user.current.checked = false)
+          : (manager.current.checked = false);
+      }
     } else {
-      e.target === manager.current
-        ? (user.current.checked = true)
-        : (manager.current.checked = true);
+      if (user.current && manager.current) {
+        e.target === manager.current
+          ? (user.current.checked = true)
+          : (manager.current.checked = true);
+      }
     }
-    manager.current.checked ? setBoxView(true) : setBoxView(false);
+    manager.current && manager.current.checked
+      ? setBoxView(true)
+      : setBoxView(false);
   };
   useEffect(() => {
-    user.current.checked = true;
+    if (user.current) user.current.checked = true;
   }, [user]);
 
-  const onChange = (e) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setHospital(value);
   };

@@ -2,6 +2,7 @@ import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import styled from "styled-components";
+import { ICalenderHeader } from "../../../../types";
 import pallet from "../../../lib/styles/pallet";
 
 const CalenderHeaderBlock = styled.ul`
@@ -38,7 +39,13 @@ const CalenderHeaderBlock = styled.ul`
   }
 `;
 
-const CalenderHeader = ({ today, setYear, setMonth, mYear, mMonth }) => {
+const CalenderHeader: React.FC<ICalenderHeader> = ({
+  today,
+  setYear,
+  setMonth,
+  mYear,
+  mMonth,
+}) => {
   let date = {
     year: today.getFullYear(),
     month: Number(today.getMonth()) + 1,

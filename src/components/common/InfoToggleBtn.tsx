@@ -8,6 +8,7 @@ import { useCallback } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { IInfoToggleBtn, IStore } from "../../../types";
 import { infoToggleClick } from "../../modules/menupage";
 
 const InfoToggleBtnBlock = styled.button`
@@ -27,16 +28,20 @@ const InfoToggleBtnBlock = styled.button`
   }
 `;
 
-const InfoToggleBtn = ({ placeInfoWrapper, mapContainer }) => {
+const InfoToggleBtn: React.FC<IInfoToggleBtn> = ({
+  placeInfoWrapper,
+  mapContainer,
+}) => {
   const dispatch = useDispatch();
   const [slider, setSlider] = useState(false);
-  const { mapBox, roadMapBox } = useSelector(({ map, roadmap }) => ({
-    mapBox: map.mapBox,
-    roadMapBox: roadmap.roadmap,
-  }));
-  const { page } = useSelector(({ menupage }) => ({
-    page: menupage.userpage || menupage.rvpage || menupage.reviewpage,
-  }));
+  const { mapBox, roadMapBox, page } = useSelector(
+    ({ map, roadmap, menupage }: IStore) => ({
+      mapBox: map.mapBox,
+      roadMapBox: roadmap.roadmap,
+      page: menupage.userpage || menupage.rvpage || menupage.reviewpage,
+    })
+  );
+
   const onSlideClick = useCallback(
     (e) => {
       const mapWidth = mapBox?.current?.style.width;
@@ -44,29 +49,35 @@ const InfoToggleBtn = ({ placeInfoWrapper, mapContainer }) => {
 
       if (!slider) {
         // 넓게 보여진다.
-        placeInfoWrapper.current.style.transform = "translateX(-100%)";
+        if (placeInfoWrapper.current)
+          placeInfoWrapper.current.style.transform = "translateX(-100%)";
         if (mapBox?.current) {
           mapBox.current.style.width = mapWidth === "315px" ? "315px" : "100%";
           roadMapBox.a.style.width =
             roadMapWidth === "315px" ? "315px" : "100%";
         } else {
-          page.current.style.position = "absolute";
-          page.current.style.left = "0";
-          page.current.style.width = "100%";
+          if (page && page.current) {
+            page.current.style.position = "absolute";
+            page.current.style.left = "0";
+            page.current.style.width = "100%";
+          }
         }
       } else {
         // 좁게 보여진다.
-        placeInfoWrapper.current.style.transform = "";
+        if (placeInfoWrapper.current)
+          placeInfoWrapper.current.style.transform = "";
         if (mapBox?.current) {
           mapBox.current.style.width = mapWidth === "315px" ? "315px" : "70%";
           roadMapBox.a.style.width = roadMapWidth === "315px" ? "315px" : "70%";
         } else {
-          page.current.style.position = "";
-          page.current.style.left = "";
-          page.current.style.width = "70%";
+          if (page && page.current) {
+            page.current.style.position = "";
+            page.current.style.left = "";
+            page.current.style.width = "70%";
+          }
         }
       }
-      mapContainer?.relayout();
+      (mapContainer as any).relayout();
       roadMapBox?.relayout();
       setSlider(!slider);
       dispatch(infoToggleClick());

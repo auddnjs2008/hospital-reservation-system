@@ -3,11 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { IStore } from "../../../types";
+import { IReviewWrite, IStore } from "../../../types";
 import { postReviews, setRates } from "../../lib/api/review";
 import pallet from "../../lib/styles/pallet";
 
-const ReviewWriteBlock = styled.div`
+const ReviewWriteBlock = styled.div<{ rvPage: boolean; scroll: number }>`
   width: ${(props) => (props.rvPage ? "90%" : "500px")};
   height: 18rem;
   padding-top: 1rem;
@@ -81,18 +81,10 @@ const ReviewWriteBlock = styled.div`
   }
 `;
 
-const StyledStar = styled.div`
-  color: ${(props) => (props.color ? "#ffc048" : "")};
+const StyledStar = styled.div<{ light: boolean }>`
+  color: ${(props) => (props.light ? "#ffc048" : "")};
   font-size: 2rem;
 `;
-
-interface IReviewWrite {
-  scroll: number;
-  hospital: string;
-  setReview: React.Dispatch<React.SetStateAction<boolean>>;
-  rvPage: boolean | null;
-  setReload: React.Dispatch<React.SetStateAction<null>> | null;
-}
 
 const ReviewWrite: React.FC<IReviewWrite> = ({
   scroll,
@@ -105,58 +97,58 @@ const ReviewWrite: React.FC<IReviewWrite> = ({
   const [starNum, setStarNum] = useState(0);
   const [text, setText] = useState("");
 
-  const onClick = (e) => {
+  const onClick = (e: React.MouseEvent<SVGSVGElement | HTMLDivElement>) => {
     if (Number(e.currentTarget.id) <= starNum) {
       setStarNum(0);
       return;
     }
-    setStarNum(e.currentTarget.id);
+    setStarNum(Number(e.currentTarget.id));
   };
 
-  const onChange = (e) => {
+  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const cText = e.currentTarget.value;
     setText(cText);
   };
 
-  const onSubmit = async (e) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!text) return;
     try {
-      await postReviews(hospital, text, id, starNum);
+      await postReviews(hospital, text, id, String(starNum));
       alert("후기가 등록되었습니다.");
       await setRates();
 
       setText("");
       setStarNum(0);
-      if (!rvPage) setReview(false);
-      if (rvPage) setReload((item) => !item);
+      if (!rvPage && setReview) setReview(false);
+      if (rvPage) setReload!((item: boolean) => !item);
     } catch (e) {
       alert("에러");
     }
   };
 
   return (
-    <ReviewWriteBlock rvPage={rvPage} scroll={scroll}>
+    <ReviewWriteBlock rvPage={rvPage!} scroll={scroll}>
       {!rvPage && <h1>{hospital}</h1>}
       <form onSubmit={onSubmit}>
         <div className="rate">
           <div className="starBox">
-            <StyledStar color={1 <= starNum} id={1} onClick={onClick}>
+            <StyledStar light={1 <= starNum} id={String(1)} onClick={onClick}>
               <FontAwesomeIcon
                 icon={faStar}
                 onClick={onClick}
               ></FontAwesomeIcon>
             </StyledStar>
-            <StyledStar color={2 <= starNum} id={2} onClick={onClick}>
+            <StyledStar light={2 <= starNum} id={String(2)} onClick={onClick}>
               <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
             </StyledStar>
-            <StyledStar color={3 <= starNum} id={3} onClick={onClick}>
+            <StyledStar light={3 <= starNum} id={String(3)} onClick={onClick}>
               <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
             </StyledStar>
-            <StyledStar color={4 <= starNum} id={4} onClick={onClick}>
+            <StyledStar light={4 <= starNum} id={String(4)} onClick={onClick}>
               <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
             </StyledStar>
-            <StyledStar color={5 <= starNum} id={5} onClick={onClick}>
+            <StyledStar light={5 <= starNum} id={String(5)} onClick={onClick}>
               <FontAwesomeIcon icon={faStar}></FontAwesomeIcon>
             </StyledStar>
           </div>
@@ -166,7 +158,12 @@ const ReviewWrite: React.FC<IReviewWrite> = ({
         <input type="submit" value="등록"></input>
       </form>
       {!rvPage && (
-        <span className="close" onClick={() => setReview(false)}>
+        <span
+          className="close"
+          onClick={() => {
+            if (setReview) setReview(false);
+          }}
+        >
           <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
         </span>
       )}

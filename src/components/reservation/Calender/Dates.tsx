@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 
 import styled from "styled-components";
+import { IDates } from "../../../../types";
 
 const DateBlock = styled.ul`
   flex-grow: 1;
@@ -31,8 +32,8 @@ const DateItem = styled.li`
   }
 `;
 
-const Dates = ({ mYear, mMonth, mDay, setDay, setTimeWindow }) => {
-  const [datesArray, setArray] = useState([]);
+const Dates: React.FC<IDates> = ({ mYear, mMonth, setDay, setTimeWindow }) => {
+  const [datesArray, setArray] = useState<any>([]);
 
   const [lastDate, setLastDate] = useState(
     new Date(mYear, mMonth, 0).getDate()
@@ -44,13 +45,13 @@ const Dates = ({ mYear, mMonth, mDay, setDay, setTimeWindow }) => {
     new Date(mYear, mMonth - 1, 1).getDay()
   );
 
-  const onClick = (e) => {
+  const onClick = (e: React.MouseEvent<HTMLUListElement>) => {
     if (e.target === e.currentTarget) return;
     if (
-      e.target.className.includes("nowMonth") &&
-      !e.target.className.includes("pastDay")
+      (e.target as Element).className.includes("nowMonth") &&
+      !(e.target as Element).className.includes("pastDay")
     ) {
-      setDay(e.target.innerText);
+      setDay(Number((e.target as HTMLElement).innerText));
       setTimeWindow(true);
     }
   };
@@ -96,7 +97,7 @@ const Dates = ({ mYear, mMonth, mDay, setDay, setTimeWindow }) => {
 
   return (
     <DateBlock onClick={onClick}>
-      {datesArray.map((item, index) => (
+      {datesArray.map((item: any, index: number) => (
         <DateItem
           key={index}
           className={item.name}

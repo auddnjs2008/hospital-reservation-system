@@ -5,14 +5,16 @@ import ReviewComponent from "../../components/review/ReviewComponent";
 import { getReviews } from "../../lib/api/review";
 
 const ReviewContainer = () => {
-  const [reviews, setReviews] = useState(null);
+  const [reviews, setReviews] = useState<
+    { UserName: string; comment: string }[]
+  >([]);
   const [hospital, setHospital] = useState("");
-  const [rate, setRate] = useState();
+  const [rate, setRate] = useState(0);
   const [reload, setReload] = useState(false);
 
-  const getRate = (data) => {
+  const getRate = (data: any): number => {
     let sum = 0;
-    data.forEach((item) => (sum += Number(item.rate)));
+    data.forEach((item: any) => (sum += Number(item.rate)));
     return sum % data.length < 0.5
       ? Math.floor(sum / data.length)
       : Math.floor(sum / data.length) + 0.5;

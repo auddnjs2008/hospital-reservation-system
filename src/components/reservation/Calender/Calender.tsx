@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import styled from "styled-components";
+import { ICalender } from "../../../../types";
 import { getDoctorTimes } from "../../../lib/api/hospitalInfo";
 import CalenderHeader from "./CalenderHeader";
 import Dates from "./Dates";
@@ -16,12 +17,12 @@ const CalenderBlock = styled.div`
 
 const Header = styled.header``;
 
-const Calender = ({ doctor, hospitalName }) => {
+const Calender: React.FC<ICalender> = ({ doctor, hospitalName }) => {
   let today = new Date();
   const [mYear, setYear] = useState(Number(today.getFullYear()));
   const [mMonth, setMonth] = useState(Number(today.getMonth()) + 1);
-  const [mDay, setDay] = useState(null);
-  const [plans, setPlans] = useState(null);
+  const [mDay, setDay] = useState(0);
+  const [plans, setPlans] = useState<any>(null);
   const [timeWindow, setTimeWindow] = useState(false);
 
   useEffect(() => {
@@ -51,7 +52,6 @@ const Calender = ({ doctor, hospitalName }) => {
       <Dates
         mYear={mYear}
         mMonth={mMonth}
-        mDay={mDay}
         setDay={setDay}
         setTimeWindow={setTimeWindow}
       ></Dates>

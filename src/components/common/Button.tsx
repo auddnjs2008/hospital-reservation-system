@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { IButton } from "../../../types";
 import pallet from "../../lib/styles/pallet";
 const ButtonBlock = styled.button`
   all: unset;
@@ -15,7 +16,7 @@ const ButtonBlock = styled.button`
   }
 `;
 
-const Button = ({ content }) => {
+const Button: React.FC<IButton> = ({ content }) => {
   return <ButtonBlock>{content || "버튼"}</ButtonBlock>;
 };
 

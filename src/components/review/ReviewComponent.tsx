@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { reviewPage } from "../../modules/menupage";
 import ReviewWrite from "./ReviewWrite";
 import Loading from "../common/Loading";
+import { IReviewComponent } from "../../../types";
 
 const ReviewComponentBlock = styled.div`
   padding: 1rem;
@@ -66,9 +67,14 @@ const ReviewList = styled.ul`
   }
 `;
 
-const ReviewComponent = ({ hospital, reviews, rate, setReload }) => {
-  const [star, setStar] = useState([]);
-  const reviewpage = useRef();
+const ReviewComponent: React.FC<IReviewComponent> = ({
+  hospital,
+  reviews,
+  rate,
+  setReload,
+}) => {
+  const [star, setStar] = useState<number[]>([]);
+  const reviewpage = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
 
   const setArrStar = useCallback(() => {
@@ -132,9 +138,11 @@ const ReviewComponent = ({ hospital, reviews, rate, setReload }) => {
         <p className="noReview">등록된 후기가 없습니다</p>
       )}
       <ReviewWrite
+        scroll={0}
         hospital={hospital}
         rvPage={true}
         setReload={setReload}
+        setReview={null}
       ></ReviewWrite>
     </ReviewComponentBlock>
   );

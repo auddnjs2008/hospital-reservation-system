@@ -2,8 +2,9 @@ import React, { useCallback } from "react";
 import { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { IReservationComponent } from "../../../types";
 import { rvchatbtn } from "../../modules/chat";
 import { reservationPage } from "../../modules/menupage";
 import Calender from "./Calender/Calender";
@@ -43,14 +44,15 @@ const ReservationComponentBlock = styled.div`
   }
 `;
 
-const ReservationComponent = ({ hospitalName }) => {
-  const rvPage = useRef();
+const ReservationComponent: React.FC<IReservationComponent> = ({
+  hospitalName,
+  hospitals,
+}) => {
+  const rvPage = useRef<HTMLDivElement>(null);
   const [doctor, setDoctor] = useState("");
   const [phone, setPhone] = useState("");
   const [chat, setChat] = useState(false);
-  const { hospitals } = useSelector(({ map }) => ({
-    hospitals: map.hospitals,
-  }));
+
   const dispatch = useDispatch();
 
   const onChatClick = () => {

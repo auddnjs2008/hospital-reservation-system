@@ -4,7 +4,7 @@ import React, { useCallback, useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { IStore } from "../../../types";
+import { IIndex, IStore } from "../../../types";
 import { getDoctors, getDoctorTimes } from "../../lib/api/hospitalInfo";
 import ManagerDoctors from "./ManagerDoctors";
 import ManagerGraph from "./ManagerGraph";
@@ -38,7 +38,7 @@ const ManagerPage = () => {
     hospital: auth.auth.hospital,
   }));
   const [doctors, setDoctors] = useState([]);
-  const [times, setTimes] = useState<object[]>([]);
+  const [times, setTimes] = useState<IIndex[]>([]);
   const [graphData, setGraph] = useState(null);
   const [doctorIndex, setIndex] = useState(-1);
 
@@ -66,7 +66,7 @@ const ManagerPage = () => {
   );
 
   const getTimes = useCallback(async () => {
-    let times: object[] = [];
+    let times: IIndex[] = [];
     if (doctors.length) {
       for (let i = 0; i < doctors.length; i++) {
         const result = await getApiTime(doctors[i]);

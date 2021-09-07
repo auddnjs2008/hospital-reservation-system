@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 
 import styled from "styled-components";
+import { IAskComponent } from "../../../types";
 import pallet from "../../lib/styles/pallet";
 const AskComponentBlock = styled.div`
   width: 100vw;
@@ -77,18 +78,20 @@ const BtnInCircle = styled.div`
   transition: transform 0.4s ease-in-out;
 `;
 
-const AskComponent = ({ onItemClick }) => {
-  const sliderBox = useRef();
-  const sliderCircle = useRef();
+const AskComponent: React.FC<IAskComponent> = ({ onItemClick }) => {
+  const sliderBox = useRef<HTMLDivElement>(null);
+  const sliderCircle = useRef<HTMLDivElement>(null);
   const onClick = () => {
-    const scrollWidth = sliderBox.current.scrollWidth;
-    const scrollLeft = sliderBox.current.scrollLeft;
-    if (scrollLeft === 0) {
-      sliderBox.current.scrollLeft = scrollWidth / 2;
-      sliderCircle.current.style.transform = "translateX(100%)";
-    } else {
-      sliderBox.current.scrollLeft = 0;
-      sliderCircle.current.style.transform = "translateX(0%)";
+    if (sliderBox.current && sliderCircle.current) {
+      const scrollWidth = sliderBox.current.scrollWidth;
+      const scrollLeft = sliderBox.current.scrollLeft;
+      if (scrollLeft === 0) {
+        sliderBox.current.scrollLeft = scrollWidth / 2;
+        sliderCircle.current.style.transform = "translateX(100%)";
+      } else {
+        sliderBox.current.scrollLeft = 0;
+        sliderCircle.current.style.transform = "translateX(0%)";
+      }
     }
   };
 

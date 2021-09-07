@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { ISelectTime, IStore } from "../../../../types";
 import { getDoctorTimes } from "../../../lib/api/hospitalInfo";
 import { postReservation } from "../../../lib/api/reservation";
 import pallet from "../../../lib/styles/pallet";
@@ -105,7 +106,7 @@ const ConfirmBox = styled.div`
     }
   }
 `;
-const TimeBox = styled.div`
+const TimeBox = styled.div<{ show: boolean }>`
   height: 40px;
   display: flex;
   justify-content: center;
@@ -118,7 +119,7 @@ const TimeBox = styled.div`
     color: ${(props) => (props.show ? "white" : "black")};
   }
 `;
-const SelectTime = ({
+const SelectTime: React.FC<ISelectTime> = ({
   plans,
   setPlans,
   mDate,
@@ -126,8 +127,8 @@ const SelectTime = ({
   doctor,
   hospitalName,
 }) => {
-  const { id } = useSelector(({ auth }) => ({ id: auth.auth.id }));
-  const [btnShow, setBtnShow] = useState({
+  const { id } = useSelector(({ auth }: IStore) => ({ id: auth.auth.id }));
+  const [btnShow, setBtnShow] = useState<{ [index: string]: boolean }>({
     "9:00": false,
     "9:30": false,
     "10:00": false,
@@ -146,9 +147,9 @@ const SelectTime = ({
     "17:30": false,
     "18:00": false,
   });
-  const [time, setTime] = useState();
+  const [time, setTime] = useState("");
   const trimDates = useCallback(() => {
-    const buttonData = {
+    const buttonData: { [index: string]: boolean } = {
       "09:00": false,
       "09:30": false,
       "10:00": false,
@@ -167,24 +168,25 @@ const SelectTime = ({
       "17:30": false,
       "18:00": false,
     };
-    let trimPlans = plans?.map((item) => item.time);
+    let trimPlans = plans?.map((item: any) => item.time);
     trimPlans = trimPlans
-      ?.filter((item) =>
+      ?.filter((item: any) =>
         item.includes(
           `${mDate.month < 10 ? "0" + mDate.month : mDate.month}/${
             mDate.day < 10 ? "0" + mDate.day : mDate.day
           }`
         )
       )
-      .map((item) => item.split(" ")[1]);
+      .map((item: any) => item.split(" ")[1]);
 
-    trimPlans?.forEach((item) => (buttonData[item] = true));
+    trimPlans?.forEach((item: string) => (buttonData[item] = true));
     setBtnShow(buttonData);
   }, [mDate, plans]);
 
-  const onTimeClick = (e) => {
+  const onTimeClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) return;
-    if (e.target.className.includes("show")) setTime(e.target.innerText);
+    if ((e.target as Element).className.includes("show"))
+      setTime((e.target as HTMLElement).innerText);
   };
 
   const onConfirmClick = async () => {
@@ -332,7 +334,7 @@ const SelectTime = ({
           </span>
           <div>
             <button onClick={onConfirmClick}>확인</button>
-            <button onClick={() => setTime()}>취소</button>
+            <button onClick={() => setTime("")}>취소</button>
           </div>
         </ConfirmBox>
       )}

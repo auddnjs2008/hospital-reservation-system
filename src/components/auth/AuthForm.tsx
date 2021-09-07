@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../common/Button";
 import pallet from "../../lib/styles/pallet";
@@ -12,6 +12,7 @@ import { isManager, login } from "../../modules/auth";
 import Amplify, { Auth } from "aws-amplify";
 import AuthCheckBoxes from "./AuthCheckBoxes";
 import { managerConfig, config } from "../../lib/amplifyconfig";
+import { IAuthForm } from "../../../types";
 
 const AuthFormBlock = styled.div`
   width: 400px;
@@ -64,26 +65,26 @@ const AuthFormBlock = styled.div`
   }
 `;
 
-const AuthForm = ({ onChange, content, text, history }) => {
+const AuthForm: React.FC<IAuthForm> = ({ onChange, content, text }) => {
   const dispatch = useDispatch();
   const [confirmSw, setConfirmSw] = useState(false);
   const [hospitalName, setHospital] = useState("");
-  const id = useRef();
-  const password = useRef();
-  const email = useRef();
-  const manager = useRef();
-  const user = useRef();
+  const id = useRef<HTMLInputElement>(null);
+  const password = useRef<HTMLInputElement>(null);
+  const email = useRef<HTMLInputElement>(null);
+  const manager = useRef<HTMLInputElement>(null);
+  const user = useRef<HTMLInputElement>(null);
 
-  const LogInSubmit = async (e) => {
+  const LogInSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     let user;
     e.preventDefault();
 
     try {
-      manager.current.checked
+      manager.current && manager.current.checked
         ? Amplify.configure(managerConfig)
         : Amplify.configure(config);
-      user = await Auth.signIn(id.current.value, password.current.value);
-      if (manager.current.checked) {
+      user = await Auth.signIn(id.current!.value, password.current!.value);
+      if (manager.current && manager.current.checked) {
         dispatch(
           isManager({ hospital: user.attributes["custom:hospital_name"] })
         );
@@ -99,11 +100,11 @@ const AuthForm = ({ onChange, content, text, history }) => {
     if (user) dispatch(login({ id: user.username }));
   };
 
-  const SignUpSubmit = async (e) => {
+  const SignUpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      if (manager.current.checked) {
+      if (manager.current && manager.current.checked) {
         if (!hospitalName) {
           alert("병원이름을 적어주세요!!");
           return;
@@ -111,10 +112,10 @@ const AuthForm = ({ onChange, content, text, history }) => {
         Amplify.configure(managerConfig);
 
         await Auth.signUp({
-          username: id.current.value,
-          password: password.current.value,
+          username: id.current!.value,
+          password: password.current!.value,
           attributes: {
-            email: email.current.value,
+            email: email.current!.value,
             "custom:hospital_name": hospitalName,
           },
         });
@@ -122,15 +123,15 @@ const AuthForm = ({ onChange, content, text, history }) => {
       } else {
         Amplify.configure(config);
         await Auth.signUp({
-          username: id.current.value,
-          password: password.current.value,
+          username: id.current!.value,
+          password: password.current!.value,
           attributes: {
-            email: email.current.value,
+            email: email.current!.value,
           },
         });
       }
       setConfirmSw(true);
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === "InvalidPasswordException") {
         alert("최소8글자와 숫자,특수문자,대문자,소문자를 모두 사용해주세요");
       }
@@ -193,4 +194,4 @@ const AuthForm = ({ onChange, content, text, history }) => {
   );
 };
 
-export default withRouter(AuthForm);
+export default AuthForm;
