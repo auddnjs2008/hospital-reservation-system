@@ -1,17 +1,27 @@
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useRef } from "react";
 
 import styled from "styled-components";
 import { IAskComponent } from "../../../types";
 import pallet from "../../lib/styles/pallet";
+
 const AskComponentBlock = styled.div`
   width: 100vw;
   height: 100vh;
-  background-color: ${pallet.green[2]};
+  /* background-color: ${pallet.green[2]}; */
+  background-image: url("https://usecloud.s3.ap-northeast-1.amazonaws.com/cool-background+(2).png");
+  background-size: cover;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
+  font-family: "Nano";
   h1 {
+    font-weight: 700;
     font-size: 3rem;
     @media (max-width: 480px) {
       font-size: 2.5rem;
@@ -19,10 +29,34 @@ const AskComponentBlock = styled.div`
   }
 `;
 
+const PngBlock = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 500px;
+  height: 100%;
+  z-index: 5;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+  div {
+    position: absolute;
+    bottom: 0;
+
+    width: 70%;
+    background-color: #97acff;
+    height: 50px;
+  }
+`;
+
 const QuestionBox = styled.div`
-  background-color: ${pallet.black[0]};
+  /* background-color: ${pallet.black[1]}; */
+
+  background-color: white;
   border-radius: 10px;
   width: 30rem;
+  z-index: 10;
   display: grid;
   grid-template-columns: repeat(2, 30rem);
   overflow: hidden;
@@ -42,7 +76,7 @@ const QuestionWrapper = styled.ul`
   grid-template-columns: repeat(3, 1fr);
   li {
     padding: 5px;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     font-size: 1.3rem;
     display: flex;
     align-items: center;
@@ -56,42 +90,44 @@ const QuestionWrapper = styled.ul`
   }
 `;
 
-const ToggleSliderBtn = styled.button`
-  all: unset;
-  border: 1px solid black;
-  width: 3rem;
-  height: 1.5rem;
-  border-radius: 17px;
-  position: absolute;
-  bottom: 50px;
-  background-color: white;
-`;
-
-const BtnInCircle = styled.div`
-  height: 1.5rem;
-  width: 1.5rem;
-  border-radius: 50%;
-  border: 1px solid black;
-  background-color: white;
-
-  transform: translateX(0%);
-  transition: transform 0.4s ease-in-out;
+const BtnWrapper = styled.div`
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100px;
+  font-size: 1.5rem;
+  .page:nth-child(2) {
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    border-radius: 50%;
+  }
+  .page:nth-child(3) {
+    width: 10px;
+    height: 10px;
+    background-color: black;
+    border-radius: 50%;
+  }
 `;
 
 const AskComponent: React.FC<IAskComponent> = ({ onItemClick }) => {
   const sliderBox = useRef<HTMLDivElement>(null);
-  const sliderCircle = useRef<HTMLDivElement>(null);
-  const onClick = () => {
-    if (sliderBox.current && sliderCircle.current) {
-      const scrollWidth = sliderBox.current.scrollWidth;
-      const scrollLeft = sliderBox.current.scrollLeft;
-      if (scrollLeft === 0) {
-        sliderBox.current.scrollLeft = scrollWidth / 2;
-        sliderCircle.current.style.transform = "translateX(100%)";
-      } else {
-        sliderBox.current.scrollLeft = 0;
-        sliderCircle.current.style.transform = "translateX(0%)";
-      }
+  const leftDot = useRef<HTMLDivElement>(null);
+  const rightDot = useRef<HTMLDivElement>(null);
+  const onLeftClick = () => {
+    if (sliderBox.current && leftDot.current && rightDot.current) {
+      sliderBox.current.scrollLeft = 0;
+      leftDot.current.style.backgroundColor = "white";
+      rightDot.current.style.backgroundColor = "black";
+    }
+  };
+
+  const onRightClick = () => {
+    if (sliderBox.current && leftDot.current && rightDot.current) {
+      sliderBox.current.scrollLeft = sliderBox.current.scrollWidth;
+      rightDot.current.style.backgroundColor = "white";
+      leftDot.current.style.backgroundColor = "black";
     }
   };
 
@@ -124,9 +160,25 @@ const AskComponent: React.FC<IAskComponent> = ({ onItemClick }) => {
           <li id="정신건강의학과">정신건강의학과</li>
         </QuestionWrapper>
       </QuestionBox>
-      <ToggleSliderBtn onClick={onClick}>
-        <BtnInCircle ref={sliderCircle} />
-      </ToggleSliderBtn>
+      <BtnWrapper>
+        <FontAwesomeIcon
+          icon={faChevronLeft}
+          onClick={onLeftClick}
+        ></FontAwesomeIcon>
+        <div className="page" ref={leftDot} onClick={onLeftClick}></div>
+        <div className="page" ref={rightDot} onClick={onRightClick}></div>
+        <FontAwesomeIcon
+          icon={faChevronRight}
+          onClick={onRightClick}
+        ></FontAwesomeIcon>
+      </BtnWrapper>
+      <PngBlock>
+        <img
+          alt="hospital"
+          src="https://usecloud.s3.ap-northeast-1.amazonaws.com/hospitalHome2.png"
+        ></img>
+        <div></div>
+      </PngBlock>
     </AskComponentBlock>
   );
 };

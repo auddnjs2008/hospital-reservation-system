@@ -41,6 +41,7 @@ const SearchComponentBlock = styled.form`
     }
     span {
       margin-left: 5px;
+      color: white;
     }
   }
 `;

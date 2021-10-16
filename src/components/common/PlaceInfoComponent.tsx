@@ -1,7 +1,6 @@
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useCallback, useState } from "react";
-import { useRef } from "react";
+import React from "react";
 import styled from "styled-components";
 import pallet from "../../lib/styles/pallet";
 import InfoToggleBtn from "./InfoToggleBtn";
@@ -9,7 +8,7 @@ import Menu from "./Menu";
 import SearchComponent from "../search/SearchComponent";
 import { Link } from "react-router-dom";
 
-import { IHospitalItem, IMap } from "../../../types";
+import { IHospitalItem } from "../../../types";
 
 const PlaceInfoComponentBlock = styled.div`
   /* position: relative; */
@@ -25,7 +24,7 @@ const PlaceInfoComponentBlock = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    background-color: ${pallet.green[0]};
+    background-color: ${pallet.green[2]};
   }
   main {
     margin-top: 10px;
@@ -49,8 +48,8 @@ const Hospital = styled.div`
   width: 100%;
   height: 10rem;
   border-radius: 5px;
-  background-color: ${pallet.black[1]};
-
+  /* background-color: ${pallet.green[1]}; */
+  box-shadow: 0px 1px 1px rgba(15, 15, 15, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -61,8 +60,9 @@ const Hospital = styled.div`
   }
 
   h2 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 600;
+    color: black;
   }
   .detailInfo {
     width: 100%;
@@ -76,14 +76,14 @@ const Hospital = styled.div`
       margin-right: 10px;
     }
     a {
-      color: red;
+      color: black;
       z-index: 30;
       margin-right: 10px;
     }
   }
   .distance {
     margin-left: 10px;
-    color: red;
+    color: black;
   }
 `;
 
@@ -99,13 +99,16 @@ const HospitalList = styled.ul`
 
 const ToggleBtn = styled.button`
   all: unset;
-  box-shadow: 0px 1px 3px rgba(15, 15, 15, 0.4);
+  box-shadow: 0px 1px 1px rgba(15, 15, 15, 0.1);
   width: 100%;
   text-align: center;
   font-size: 20px;
   padding-top: 10px;
   &:active {
     transform: scale(0.99);
+  }
+  div {
+    font-size: 0.8rem;
   }
 `;
 
@@ -144,7 +147,7 @@ const PlaceInfoComponent: React.FC<IPlaceInfo> = ({
         <Menu></Menu>
       </header>
       <main ref={RefArray.main}>
-        <h1>Best Place</h1>
+        <h1>👍👍👍👍👍</h1>
         {hospitals && (
           <div key={hospitals[0]?.id}>
             <Hospital
@@ -192,9 +195,14 @@ const PlaceInfoComponent: React.FC<IPlaceInfo> = ({
         )}
         <ToggleBtn onClick={onInfoToggleClick}>
           {toggle === 0 ? (
-            <FontAwesomeIcon icon={faChevronDown}></FontAwesomeIcon>
+            <>
+              <div>더 보기</div>
+              <FontAwesomeIcon icon={faChevronDown}></FontAwesomeIcon>
+            </>
           ) : (
-            <FontAwesomeIcon icon={faChevronUp}></FontAwesomeIcon>
+            <>
+              <FontAwesomeIcon icon={faChevronUp}></FontAwesomeIcon>
+            </>
           )}
         </ToggleBtn>
         {hospitals && (

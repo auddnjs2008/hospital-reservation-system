@@ -22,8 +22,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "typeRoots": ["./node_modules/@types","./types"],
-   
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"
+    ],
+    "baseUrl": "."
   },
   "exclude": [
     "node_modeuls"
