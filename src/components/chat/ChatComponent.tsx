@@ -35,6 +35,9 @@ const ChatButton = styled.button`
   justify-content: center;
   font-size: 2.5rem;
   background-color: ${pallet.green[2]};
+  background-color: #ffc83d;
+  color: #ffc83d;
+  color: black;
   &:active {
     transform: scale(0.98);
   }
@@ -185,7 +188,7 @@ const ChatComponent: React.FC<IChatComponent> = ({
                     setChat(true);
                     getChatUsers();
                     if (chaterId) dispatch(backchatbtn());
-                    (webSocket.current as any).close();
+                    if (webSocket.current) (webSocket.current as any).close();
                   }}
                 ></FontAwesomeIcon>
                 <OnLineRight online={inChat}></OnLineRight>

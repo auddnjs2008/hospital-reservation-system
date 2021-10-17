@@ -64,6 +64,9 @@ const Hospital = styled.div`
     font-weight: 600;
     color: black;
   }
+  .Info {
+    color: gray;
+  }
   .detailInfo {
     width: 100%;
 
@@ -76,14 +79,14 @@ const Hospital = styled.div`
       margin-right: 10px;
     }
     a {
-      color: black;
+      color: ${pallet.green[2]};
       z-index: 30;
       margin-right: 10px;
     }
   }
   .distance {
     margin-left: 10px;
-    color: black;
+    color: gray;
   }
 `;
 
@@ -100,6 +103,7 @@ const HospitalList = styled.ul`
 const ToggleBtn = styled.button`
   all: unset;
   box-shadow: 0px 1px 1px rgba(15, 15, 15, 0.1);
+  border: 2px solid ${pallet.green[3]};
   width: 100%;
   text-align: center;
   font-size: 20px;
@@ -147,7 +151,7 @@ const PlaceInfoComponent: React.FC<IPlaceInfo> = ({
         <Menu></Menu>
       </header>
       <main ref={RefArray.main}>
-        <h1>👍👍👍👍👍</h1>
+        <h1>Best Place👍</h1>
         {hospitals && (
           <div key={hospitals[0]?.id}>
             <Hospital
@@ -158,7 +162,7 @@ const PlaceInfoComponent: React.FC<IPlaceInfo> = ({
               onMouseOut={onMouseOut}
             >
               <h2>{hospitals[0]?.place_name}</h2>
-              <div>
+              <div className="Info">
                 {hospitals[0]?.address_name}
                 {hospitals[0]?.distance && (
                   <span className="distance">{hospitals[0].distance}m</span>
@@ -219,7 +223,7 @@ const PlaceInfoComponent: React.FC<IPlaceInfo> = ({
                   >
                     <h2>{item.place_name.split(" ")[0]}</h2>
                     <h2>{item.place_name.split(" ")[1]}</h2>
-                    <div>
+                    <div className="Info">
                       {item.address_name}
                       {item.distance && (
                         <span className="distance">{item.distance}m</span>

@@ -21,7 +21,8 @@ const MapControllerBlock = styled.ul`
   right: 50px;
   box-shadow: 0px 3px 5px ${pallet.black[5]};
   z-index: 50;
-  background-color: #ecf0f1;
+  /* background-color: #ecf0f1; */
+  background-color: white;
   padding: 5px;
   border-radius: 5px;
 
@@ -117,7 +118,7 @@ const MapController: React.FC<IMapController> = ({ map }) => {
   const onBothToggleClick = () => {
     if (!both) {
       // 두개동시 모드 킬때
-      if (bothIcon.current) bothIcon.current.style.color = "blue";
+      if (bothIcon.current) bothIcon.current.style.color = "#FFC83D";
       if (!road) {
         if (mapBox && mapBox.current) mapBox.current.style.zIndex = "15";
         roadMapBox.a.style.zIndex = "18";

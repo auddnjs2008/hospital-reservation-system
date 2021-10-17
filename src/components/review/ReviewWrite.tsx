@@ -20,12 +20,13 @@ const ReviewWriteBlock = styled.div<{ rvPage: boolean; scroll: number }>`
   left: ${(props) => (props.rvPage ? "" : "50%")};
   transform: ${(props) => (props.rvPage ? "" : "translate(-50%, -50%)")};
   /* background-color: ${(props) => (props.rvPage ? "white" : "#f2f3f1")}; */
-  background-color: rgba(45, 52, 54, 1);
+  border: 2px solid ${pallet.green[3]};
+  background-color: white;
   h1 {
     font-size: 2rem;
     margin-bottom: 1rem;
     text-align: center;
-    color: white;
+    color: black;
   }
 
   form {
@@ -37,9 +38,10 @@ const ReviewWriteBlock = styled.div<{ rvPage: boolean; scroll: number }>`
     .rate {
       display: flex;
       align-items: center;
+      border-bottom: 2px solid ${pallet.green[3]};
       .starNum {
         font-size: 1.3rem;
-        color: white;
+        color: black;
       }
     }
     .starBox {
@@ -55,9 +57,10 @@ const ReviewWriteBlock = styled.div<{ rvPage: boolean; scroll: number }>`
     resize: none;
     padding: 0;
     font-size: 1rem;
-    /* background-color: #f2f3f1; */
-    color: white;
-    background-color: rgba(45, 52, 54, 0.9);
+    color: black;
+    border: none;
+    outline: none;
+    background-color: white;
     padding: 0.2rem;
   }
   input[type="submit"] {
@@ -67,13 +70,12 @@ const ReviewWriteBlock = styled.div<{ rvPage: boolean; scroll: number }>`
     justify-content: center;
     align-items: center;
     background-color: ${pallet.green[1]};
-    border: 1px solid black;
   }
   span.close {
     position: absolute;
     top: 0.3rem;
     right: 0.3rem;
-    color: white;
+    color: black;
     font-size: 1.5rem;
     &:active {
       transform: scale(0.98);

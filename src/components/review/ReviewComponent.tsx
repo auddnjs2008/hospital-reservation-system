@@ -10,6 +10,7 @@ import { reviewPage } from "../../modules/menupage";
 import ReviewWrite from "./ReviewWrite";
 import Loading from "../common/Loading";
 import { IReviewComponent } from "../../../types";
+import pallet from "src/lib/styles/pallet";
 
 const ReviewComponentBlock = styled.div`
   padding: 1rem;
@@ -18,7 +19,7 @@ const ReviewComponentBlock = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #07b495;
+  background-color: #f5f6fa;
   width: 70%;
 
   h1 {
@@ -26,7 +27,7 @@ const ReviewComponentBlock = styled.div`
     font-weight: 600;
     text-align: center;
     margin-bottom: 1rem;
-    color: white;
+    color: black;
   }
   p.noReview {
     font-size: 2rem;
@@ -37,32 +38,40 @@ const ReviewComponentBlock = styled.div`
   }
 `;
 const RateStar = styled.div`
+  span {
+    margin-right: 10px;
+  }
   font-size: 2rem;
   margin-bottom: 1rem;
   display: flex;
   justify-content: center;
 `;
 const ReviewList = styled.ul`
-  border: 1px solid black;
-  background-color: rgba(45, 52, 54, 0.9);
+  /* border: 1px solid black; */
+  /* background-color: rgba(45, 52, 54, 0.9); */
+  background-color: white;
+  /* border: 2px solid ${pallet.green[3]}; */
+  border-bottom: none;
   width: 90%;
   li {
     padding: 12px;
     margin-bottom: 0.8rem;
+
     .profile {
       span {
         margin-left: 0.5rem;
-        color: white;
+        color: black;
       }
       font-size: 1.2rem;
       margin-bottom: 1rem;
       padding: 0.3rem;
-      color: white;
+      color: black;
       font-weight: 600;
     }
     p {
       line-height: 1.5;
-      color: rgba(255, 234, 167, 1);
+      /* color: rgba(255, 234, 167, 1); */
+      color: black;
     }
   }
 `;
@@ -103,6 +112,7 @@ const ReviewComponent: React.FC<IReviewComponent> = ({
       <h1>{hospital}</h1>
       {star && (
         <RateStar>
+          <span>{rate}점</span>
           {star.map((item) =>
             item === 1 ? (
               <FontAwesomeIcon

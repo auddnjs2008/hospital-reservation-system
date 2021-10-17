@@ -7,6 +7,7 @@ export interface IUser {
 }
 export interface IAuth {
   auth: {
+    [key: string]: string | boolean;
     id: string;
     Inputid: string;
     InputPassword: string;

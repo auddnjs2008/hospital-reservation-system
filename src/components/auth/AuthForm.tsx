@@ -83,6 +83,7 @@ const AuthForm: React.FC<IAuthForm> = ({ onChange, content, text }) => {
       manager.current && manager.current.checked
         ? Amplify.configure(managerConfig)
         : Amplify.configure(config);
+      console.log(id.current!.value, password.current!.value);
       user = await Auth.signIn(id.current!.value, password.current!.value);
       if (manager.current && manager.current.checked) {
         dispatch(
@@ -96,6 +97,7 @@ const AuthForm: React.FC<IAuthForm> = ({ onChange, content, text }) => {
       // history.push("/user");
     } catch (e) {
       alert(`${e}`);
+      console.log(e);
     }
     if (user) dispatch(login({ id: user.username }));
   };
@@ -153,7 +155,7 @@ const AuthForm: React.FC<IAuthForm> = ({ onChange, content, text }) => {
             type="text"
             ref={id}
             placeholder="id"
-            value={text.email}
+            value={text.id}
             name="Inputid"
           ></input>
           <input

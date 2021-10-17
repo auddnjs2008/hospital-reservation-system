@@ -7,8 +7,8 @@ import { changeField } from "../../modules/auth";
 const RegisterForm = () => {
   const dispatch = useDispatch();
   const { id, password, email } = useSelector(({ auth: { auth } }: IStore) => ({
-    id: auth.id,
-    password: auth.password,
+    id: auth.Inputid,
+    password: auth.InputPassword,
     email: auth.email,
   }));
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
