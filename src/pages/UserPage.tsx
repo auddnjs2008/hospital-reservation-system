@@ -14,14 +14,15 @@ interface IWrapper {
 }
 
 const UserPage = () => {
-  const { manager } = useSelector(({ auth }: IWrapper) => ({
+  const { manager, id } = useSelector(({ auth }: IWrapper) => ({
     manager: auth.auth.manager,
+    id: auth.auth.id,
   }));
 
   return (
     <UserWrapper>
       {!manager && <PlaceInfoContainer />}
-      <MypageContainer manager={manager} />
+      <MypageContainer id={id} manager={manager} />
     </UserWrapper>
   );
 };

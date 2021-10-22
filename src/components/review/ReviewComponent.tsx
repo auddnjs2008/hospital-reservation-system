@@ -10,7 +10,6 @@ import { reviewPage } from "../../modules/menupage";
 import ReviewWrite from "./ReviewWrite";
 import Loading from "../common/Loading";
 import { IReviewComponent } from "../../../types";
-import pallet from "src/lib/styles/pallet";
 
 const ReviewComponentBlock = styled.div`
   padding: 1rem;
@@ -40,6 +39,7 @@ const ReviewComponentBlock = styled.div`
 const RateStar = styled.div`
   span {
     margin-right: 10px;
+    color: #ff5d5d;
   }
   font-size: 2rem;
   margin-bottom: 1rem;
@@ -47,10 +47,8 @@ const RateStar = styled.div`
   justify-content: center;
 `;
 const ReviewList = styled.ul`
-  /* border: 1px solid black; */
-  /* background-color: rgba(45, 52, 54, 0.9); */
   background-color: white;
-  /* border: 2px solid ${pallet.green[3]}; */
+
   border-bottom: none;
   width: 90%;
   li {
@@ -70,7 +68,6 @@ const ReviewList = styled.ul`
     }
     p {
       line-height: 1.5;
-      /* color: rgba(255, 234, 167, 1); */
       color: black;
     }
   }
@@ -112,7 +109,7 @@ const ReviewComponent: React.FC<IReviewComponent> = ({
       <h1>{hospital}</h1>
       {star && (
         <RateStar>
-          <span>{rate}점</span>
+          <span>{rate}</span>
           {star.map((item) =>
             item === 1 ? (
               <FontAwesomeIcon

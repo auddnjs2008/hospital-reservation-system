@@ -9,8 +9,10 @@ import { getDoctors, getDoctorTimes } from "../../lib/api/hospitalInfo";
 import ManagerDoctors from "./ManagerDoctors";
 import ManagerGraph from "./ManagerGraph";
 
-const ManagerPageBlock = styled.div`
+const ManagerPageBlock = styled.div<{ windowSize: number }>`
   display: flex;
+  flex-direction: ${(props) => (props.windowSize > 800 ? "" : "column")};
+
   height: 90%;
 `;
 
@@ -41,6 +43,7 @@ const ManagerPage = () => {
   const [times, setTimes] = useState<IIndex[]>([]);
   const [graphData, setGraph] = useState(null);
   const [doctorIndex, setIndex] = useState(-1);
+  const [windowSize, setWindow] = useState(window.innerWidth);
 
   const getApiDoctors = useCallback(async () => {
     try {
@@ -77,6 +80,12 @@ const ManagerPage = () => {
   }, [doctors, getApiTime]);
 
   useEffect(() => {
+    window.addEventListener("resize", () => setWindow(window.innerWidth));
+    return () =>
+      window.removeEventListener("resize", () => setWindow(window.innerWidth));
+  }, []);
+
+  useEffect(() => {
     getApiDoctors();
   }, [getApiDoctors]);
 
@@ -85,7 +94,7 @@ const ManagerPage = () => {
   }, [doctors, getTimes]);
 
   return (
-    <ManagerPageBlock>
+    <ManagerPageBlock windowSize={windowSize}>
       <UserProfile>
         <div className="icon">
           <FontAwesomeIcon icon={faUserTie}></FontAwesomeIcon>
@@ -98,6 +107,7 @@ const ManagerPage = () => {
         doctorIndex={doctorIndex}
         setIndex={setIndex}
         setGraph={setGraph}
+        windowSize={windowSize}
       ></ManagerDoctors>
       <ManagerGraph
         graphData={graphData}

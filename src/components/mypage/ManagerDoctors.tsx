@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
+import pallet from "src/lib/styles/pallet";
 import styled from "styled-components";
 import { IIndex, ITimes } from "../../../types";
 
-const ManagerDoctorsBlock = styled.div`
-  width: 30rem;
+const ManagerDoctorsBlock = styled.div<{ windowSize: number }>`
+  width: ${(props) => (props.windowSize > 800 ? "30rem" : "")};
   height: 100%;
-  padding: 12px;
+  padding: ${(props) => (props.windowSize > 800 ? "12px" : "50px")};
   background-color: #363b3e;
   display: grid;
   grid-template-columns: 50px 1fr;
@@ -17,7 +18,7 @@ const DoctorBar = styled.ul`
   display: grid;
   align-items: center;
 
-  grid-auto-rows: 1fr;
+  grid-auto-rows: 90px;
   /* background-color: #363b3e; */
   color: white;
 `;
@@ -27,13 +28,13 @@ const BarLI = styled.li<{ now: boolean }>`
   display: flex;
   align-items: center;
   cursor: pointer;
-  background-color: ${(props) => (props.now ? "#005666" : "#363b3e")};
+  background-color: ${(props) =>
+    props.now ? `${pallet.green[3]}` : "#363b3e"};
 `;
 
 const RvBox = styled.ul`
   background-color: #363b3e;
   height: 100%;
-  table-layout: fixed;
   overflow: auto;
   header,
   li {
@@ -56,7 +57,9 @@ const RvBox = styled.ul`
     }
   }
   header {
-    background-color: #005666;
+    /* background-color: #005666; */
+
+    background-color: ${pallet.green[3]};
     div {
       font-size: 1.3rem;
       font-weight: 500;
@@ -71,6 +74,7 @@ interface IManagerDoctors {
   doctorIndex: number;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
   setGraph: React.Dispatch<React.SetStateAction<any>>;
+  windowSize: number;
 }
 const ManagerDoctors: React.FC<IManagerDoctors> = ({
   times,
@@ -78,6 +82,7 @@ const ManagerDoctors: React.FC<IManagerDoctors> = ({
   doctorIndex,
   setIndex,
   setGraph,
+  windowSize,
 }) => {
   const [timeArray, setTimeArray] = useState<any>([]);
 
@@ -116,7 +121,7 @@ const ManagerDoctors: React.FC<IManagerDoctors> = ({
   }, [doctorIndex, setGraph, times, doctors, timeArray]);
 
   return (
-    <ManagerDoctorsBlock>
+    <ManagerDoctorsBlock windowSize={windowSize}>
       <DoctorBar>
         <BarLI key={0} now={-1 === doctorIndex} onClick={() => setIndex(-1)}>
           시간별

@@ -34,10 +34,9 @@ const ChatButton = styled.button`
   align-items: center;
   justify-content: center;
   font-size: 2.5rem;
-  background-color: ${pallet.green[2]};
-  background-color: #ffc83d;
-  color: #ffc83d;
-  color: black;
+  background-color: ${pallet.green[3]};
+
+  color: white;
   &:active {
     transform: scale(0.98);
   }
@@ -51,7 +50,7 @@ const ChatWrapper = styled.div`
   height: 80vh;
   border-radius: 0.5rem;
   box-shadow: 0px 1px 20px rgba(15, 15, 15, 0.15);
-  background-color: #f2f3f1;
+  background-color: white;
   @keyframes chatBox {
     0% {
       transform: scale(0);
@@ -95,19 +94,20 @@ const OnLineRight = styled.div<{ online: boolean }>`
 
 const ChatterList = styled.ul`
   font-size: 2rem;
-  background-color: ${pallet.green[3]};
+  border: 2px solid ${pallet.green[1]};
+  /* background-color: ${pallet.green[3]}; */
   height: 100%;
   overflow: auto;
-  padding: 3px;
+
   li {
     display: grid;
     grid-template-columns: 1fr 1fr 2fr;
     justify-items: center;
     margin-bottom: 10px;
-    padding: 5px;
+    padding: 8px;
     cursor: pointer;
     &:hover {
-      background-color: white;
+      background-color: ${pallet.green[1]};
       span.isRead {
         color: black;
       }

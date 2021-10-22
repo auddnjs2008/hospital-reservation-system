@@ -35,7 +35,11 @@ const StyledLi = styled.li<{ isColor: boolean }>`
   border-radius: 0.3rem;
   padding: 5px;
   background-color: ${(props) => (props.isColor ? "#485460" : "#f2f3f4")};
+
   color: ${(props) => (props.isColor ? "white" : "black")};
+  .icon {
+    color: ${(props) => (props.isColor ? "white" : "gray")};
+  }
   cursor: pointer;
   &:active {
     transform: scale(0.99);

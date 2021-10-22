@@ -12,7 +12,8 @@ const CalenderHeaderBlock = styled.ul`
   justify-content: space-between;
   align-items: center;
   height: 10rem;
-  background-color: ${pallet.green[3]};
+  background-color: ${pallet.green[0]};
+  background-color: #485460;
   color: white;
   font-size: 21px;
   border-top-left-radius: 7px;

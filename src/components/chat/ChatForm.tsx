@@ -10,9 +10,9 @@ const ChatFormBlock = styled.div`
   display: grid;
   grid-template-rows: 1fr 50px;
   ul {
-    border: 1px solid black;
-    background-color: ${pallet.green[3]};
-    padding: 5px;
+    /* border: 1px solid black; */
+    background-color: ${pallet.green[0]};
+    padding: 8px;
     overflow: auto;
     &::-webkit-scrollbar {
       display: none;
@@ -20,6 +20,7 @@ const ChatFormBlock = styled.div`
 
     li {
       margin-bottom: 1rem;
+
       span.time {
         font-size: 0.7rem;
         font-weight: 600;
@@ -86,6 +87,8 @@ const ChatFormBlock = styled.div`
       border: none;
       outline: none;
       background-color: ${pallet.green[0]};
+      background-color: #f5f6fa;
+      background-color: #ced6e0;
       font-size: 1rem;
       &:active {
         transform: scale(0.9);
@@ -266,7 +269,15 @@ const ChatForm: React.FC<IChatForm> = ({
                   ) : (
                     ""
                   )}
-                  <span className="time">{item.time}</span>
+                  <span className="time">
+                    {item.time.split(":")[0] +
+                      ":" +
+                      `${
+                        Number(item.time.split(":")[1]) < 10
+                          ? "0" + item.time.split(":")[1]
+                          : item.time.split(":")[1]
+                      }`}
+                  </span>
                 </div>
                 <div className="message">{item.message}</div>
               </li>

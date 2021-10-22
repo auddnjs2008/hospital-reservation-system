@@ -8,10 +8,9 @@ import { getRecentPage, getReservations } from "../../lib/api/reservation";
 import pallet from "../../lib/styles/pallet";
 
 const UserMypageBlock = styled.div`
-  background-color: white;
+  background-color: #f5f6fa;
   width: 100%;
-  height: 100%;
-  margin-top: 20px;
+  min-height: 100%;
   padding: 1rem;
 `;
 const UserMenu = styled.ul`
@@ -22,6 +21,7 @@ const UserMenu = styled.ul`
 const MenuList = styled.li<{ now: boolean }>`
   border: 1px solid black;
   border-radius: 1rem;
+
   padding: 10px;
   cursor: pointer;
   font-size: 16px;
@@ -40,7 +40,7 @@ const ReservationBox = styled.ul`
     width: 30rem;
     height: 9rem;
     min-width: 300px;
-
+    background-color: white;
     border-radius: 12px;
     box-shadow: 0 2px 6px 0 rgb(0 0 0 / 5%), inset 0px 0px 5px rgb(0 0 0/ 30%);
     padding: 20px;
@@ -62,7 +62,7 @@ const ReservationBox = styled.ul`
       margin-bottom: 1rem;
       font-size: 20px;
       font-weight: 600;
-      text-decoration: ${pallet.green[3]} underline 4.5px;
+      text-decoration: ${pallet.green[0]} underline 4.5px;
     }
     .doctorName {
       display: flex;

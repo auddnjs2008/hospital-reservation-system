@@ -4,7 +4,7 @@ import { ResponsiveLine } from "@nivo/line";
 import { useEffect } from "react";
 
 const ManagerGraphBox = styled.div`
-  width: 800px;
+  width: 750px;
   height: 100%;
   background-color: #363b3e;
 `;
