@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Loader from "react-loader-spinner";
+import pallet from "../../lib/styles/pallet";
 
 const LoadingBlock = styled.div`
   position: absolute;
@@ -22,7 +23,7 @@ const Loading = () => {
     <LoadingBlock>
       <Loader
         type="Puff"
-        color="#10ac84"
+        color={`${pallet.green[3]}`}
         height={300}
         width={300}
         timeout={100000}

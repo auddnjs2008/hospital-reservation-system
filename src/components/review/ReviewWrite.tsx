@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
-import { IReviewWrite, IStore } from "../../../types";
+import { IReviewWrite, IStore, Props } from "../../../types";
 import { postReviews, setRates } from "../../lib/api/review";
 import pallet from "../../lib/styles/pallet";
 
@@ -101,17 +101,15 @@ const ReviewWrite: React.FC<IReviewWrite> = ({
   const [starNum, setStarNum] = useState(0);
   const [text, setText] = useState("");
 
-<<<<<<< HEAD:src/components/review/ReviewWrite.js
-  const onClick = (e) => {
-    setStarNum(e.currentTarget.id);
-=======
+  // const onClick = (e) => {
+  //   setStarNum(e.currentTarget.id);
+
   const onClick = (e: React.MouseEvent<SVGSVGElement | HTMLDivElement>) => {
     if (Number(e.currentTarget.id) <= starNum) {
       setStarNum(0);
       return;
     }
     setStarNum(Number(e.currentTarget.id));
->>>>>>> refactory:src/components/review/ReviewWrite.tsx
   };
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

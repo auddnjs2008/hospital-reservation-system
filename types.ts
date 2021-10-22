@@ -157,7 +157,7 @@ export interface IReviewComponent {
   setReload: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export interface IReviewWrite {
+export interface IReviewWrite extends RouteComponentProps {
   scroll: number;
   hospital: string;
   setReview: React.Dispatch<React.SetStateAction<boolean>> | null;

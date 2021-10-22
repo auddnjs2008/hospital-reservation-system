@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import pallet from "src/lib/styles/pallet";
 import styled from "styled-components";
 import { IIndex, ITimes } from "../../../types";
+import pallet from "../../lib/styles/pallet";
 
 const ManagerDoctorsBlock = styled.div<{ windowSize: number }>`
   width: ${(props) => (props.windowSize > 800 ? "30rem" : "")};

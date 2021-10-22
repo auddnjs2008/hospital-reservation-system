@@ -17,11 +17,13 @@ import { IAuthForm } from "../../../types";
 const AuthFormBlock = styled.div`
   width: 400px;
   height: 500px;
-  transform: translateY(-50%);
+
+  /* transform: translateY(-50%); */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   margin: auto;
+  margin-top: 1rem;
   border-radius: 10px;
   border: 3px solid ${pallet.green[2]};
   h2 {
