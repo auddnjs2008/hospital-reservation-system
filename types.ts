@@ -152,7 +152,7 @@ export interface ISelectTime {
 
 export interface IReviewComponent {
   hospital: string;
-  reviews: { UserName: string; comment: string }[];
+  reviews: { UserName: string; comment: string; rate: string }[];
   rate: number;
   setReload: React.Dispatch<React.SetStateAction<boolean>>;
 }

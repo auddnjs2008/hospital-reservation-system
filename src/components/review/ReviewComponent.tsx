@@ -32,7 +32,7 @@ const ReviewComponentBlock = styled.div`
     font-size: 2rem;
     margin-top: 5rem;
     margin-bottom: 3rem;
-    color: white;
+    color: black;
     font-weight: 600;
   }
 `;
@@ -52,9 +52,11 @@ const ReviewList = styled.ul`
   border-bottom: none;
   width: 90%;
   li {
+    display: grid;
+    grid-template-columns: minmax(100px, auto) 8fr;
     padding: 12px;
     margin-bottom: 0.8rem;
-
+    border: 1px solid black;
     .profile {
       span {
         margin-left: 0.5rem;
@@ -69,6 +71,13 @@ const ReviewList = styled.ul`
     p {
       line-height: 1.5;
       color: black;
+    }
+    .userStar {
+      display: flex;
+      li {
+        all: unset;
+        margin-bottom: 10px;
+      }
     }
   }
 `;
@@ -94,6 +103,15 @@ const ReviewComponent: React.FC<IReviewComponent> = ({
     }
     setStar(arr);
   }, [rate]);
+
+  const userStars = (number: number) => {
+    const starArr = [];
+    for (let i = 0; i < number; i++) {
+      starArr.push(1);
+    }
+    return starArr;
+  };
+
   useEffect(() => {
     if (rate) {
       setArrStar();
@@ -137,7 +155,20 @@ const ReviewComponent: React.FC<IReviewComponent> = ({
                 <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
                 <span>{item.UserName}</span>
               </div>
-              <p>{item.comment}</p>
+              <div>
+                <ul className="userStar">
+                  {userStars(Number(item.rate)).map((item) => (
+                    <li>
+                      <FontAwesomeIcon
+                        icon={faStar}
+                        style={{ color: "#ffc048" }}
+                      ></FontAwesomeIcon>
+                    </li>
+                  ))}
+                  {item.rate}
+                </ul>
+                <p>{item.comment}</p>
+              </div>
             </li>
           ))}
         </ReviewList>

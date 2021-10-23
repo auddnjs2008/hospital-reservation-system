@@ -77,7 +77,7 @@ const InfoToggleBtn: React.FC<IInfoToggleBtn> = ({
           }
         }
       }
-      (mapContainer as any).relayout();
+      if (mapContainer) (mapContainer as any).relayout();
       roadMapBox?.relayout();
       setSlider(!slider);
       dispatch(infoToggleClick());

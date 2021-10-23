@@ -77,30 +77,33 @@ const RoadviewComponent = () => {
     [map, roadview]
   );
 
-  const rvCustomOverlay = (position: any, content: string) => {
-    if (mapPrevWalker) mapPrevWalker.setMap(null);
-    const result = new (window as any).kakao.maps.CustomOverlay({
-      position: position,
-      content,
-      xAnchor: 0.5,
-      yAnchor: 1.1,
-    });
+  const rvCustomOverlay = useCallback(
+    (position: any, content: string) => {
+      if (mapPrevWalker) mapPrevWalker.setMap(null);
+      const result = new (window as any).kakao.maps.CustomOverlay({
+        position: position,
+        content,
+        xAnchor: 0.5,
+        yAnchor: 1.1,
+      });
 
-    result.setMap(roadview);
+      result.setMap(roadview);
 
-    setTimeout(() => {
-      const projection = roadview.getProjection();
-      const viewPoint = projection.viewpointFromCoords(
-        result.getPosition(),
-        result.getAltitude()
-      );
-      roadview.setViewpoint(viewPoint);
-    }, 850);
-    const newWalker = new CMapWalker(position);
-    setPrevMapWalker(newWalker);
-    newWalker.setMap(map);
-    walkerViewChange(newWalker);
-  };
+      setTimeout(() => {
+        const projection = roadview.getProjection();
+        const viewPoint = projection.viewpointFromCoords(
+          result.getPosition(),
+          result.getAltitude()
+        );
+        roadview.setViewpoint(viewPoint);
+      }, 850);
+      const newWalker = new CMapWalker(position);
+      setPrevMapWalker(newWalker);
+      newWalker.setMap(map);
+      walkerViewChange(newWalker);
+    },
+    [map, mapPrevWalker, roadview, walkerViewChange]
+  );
 
   const onMouseDown = (e: React.MouseEvent<HTMLElement>) => {
     const proj = map.getProjection();
@@ -187,7 +190,7 @@ const RoadviewComponent = () => {
         alert(`${e}`);
       }
     }
-  }, [roadview]);
+  }, [roadview, rvCustomOverlay]);
 
   useEffect(() => {
     if (mapPrevWalker) {

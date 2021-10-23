@@ -13,6 +13,7 @@ import DoctorComponent from "./DoctorComponent";
 const ReservationComponentBlock = styled.div`
   padding: 1rem;
   position: absolute;
+  background-color: #f5f6fa;
   right: 0;
   display: flex;
   flex-direction: column;

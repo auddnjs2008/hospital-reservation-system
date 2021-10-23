@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import Auth from "@aws-amplify/auth";
+import React, { useCallback, useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { withRouter } from "react-router-dom";
@@ -19,9 +20,18 @@ const ReservationContainer = ({ history }: Props) => {
     const id: string = decodeURI(window.location.href).split("reservation/")[1];
     setHospitalName(id);
   };
+
+  const findId = useCallback(async () => {
+    let result;
+    await Auth.currentAuthenticatedUser().then((data) => {
+      result = data;
+    });
+    if (!result) history.push("/login");
+  }, [history]);
   useEffect(() => {
-    if (!id) history.push("/login");
-  }, [history, id]);
+    findId();
+    // if (!id) history.push("/login");
+  }, [history, id, findId]);
 
   useEffect(() => {
     findHospital();

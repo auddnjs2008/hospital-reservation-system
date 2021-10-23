@@ -153,14 +153,15 @@ const ChatForm: React.FC<IChatForm> = ({
     if (chatBox.current)
       chatBox.current.scrollTop = chatBox.current.scrollHeight;
 
-    (webSocket.current as any).send(
-      JSON.stringify({
-        action: "sendPrivate",
-        message: (e.currentTarget.firstChild! as HTMLInputElement).value,
-        to: oneChater,
-        from: id,
-      })
-    );
+    if (webSocket.current)
+      (webSocket.current as any).send(
+        JSON.stringify({
+          action: "sendPrivate",
+          message: (e.currentTarget.firstChild! as HTMLInputElement).value,
+          to: oneChater,
+          from: id,
+        })
+      );
     (e.currentTarget.firstChild! as HTMLInputElement).value = "";
   };
 

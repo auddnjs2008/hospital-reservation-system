@@ -6,7 +6,7 @@ import { getReviews } from "../../lib/api/review";
 
 const ReviewContainer = () => {
   const [reviews, setReviews] = useState<
-    { UserName: string; comment: string }[]
+    { UserName: string; comment: string; rate: string }[]
   >([]);
   const [hospital, setHospital] = useState("");
   const [rate, setRate] = useState(0);
@@ -14,6 +14,7 @@ const ReviewContainer = () => {
 
   const getRate = (data: any): number => {
     let sum = 0;
+
     data.forEach((item: any) => (sum += Number(item.rate)));
     return sum % data.length < 0.5
       ? Math.floor(sum / data.length)

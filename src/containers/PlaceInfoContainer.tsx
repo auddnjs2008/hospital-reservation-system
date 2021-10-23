@@ -110,15 +110,16 @@ const PlaceInfoContainer = () => {
   const onBoxClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const hospital = hospitals[Number(e.currentTarget.id)];
     if ((e.target as HTMLDivElement).tagName === "A") {
-      axiosFun(hospital.place_name);
+      if (hospital) axiosFun(hospital.place_name);
     }
-    dispatch(
-      changeCoordinate({
-        latitude: hospital.y,
-        longitude: hospital.x,
-        name: hospital.place_name,
-      })
-    );
+    if (hospital)
+      dispatch(
+        changeCoordinate({
+          latitude: hospital.y,
+          longitude: hospital.x,
+          name: hospital.place_name,
+        })
+      );
     onMouseOut();
   };
 
