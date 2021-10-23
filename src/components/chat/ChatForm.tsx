@@ -240,17 +240,13 @@ const ChatForm: React.FC<IChatForm> = ({
   }, [id, oneChater]);
 
   useEffect(() => {
-    if (webSocket.current) {
-      webSocket.current = new WebSocket(process.env.REACT_APP_SOCKET as string);
-      webSocket.current.addEventListener("message", (message: MessageEvent) =>
-        socketReceive(message)
-      );
-      webSocket.current.addEventListener("open", () => {
-        webSocket.current!.send(
-          JSON.stringify({ action: "setName", name: id })
-        );
-      });
-    }
+    webSocket.current = new WebSocket(process.env.REACT_APP_SOCKET as string);
+    webSocket.current.addEventListener("message", (message: MessageEvent) =>
+      socketReceive(message)
+    );
+    webSocket.current.addEventListener("open", () => {
+      webSocket.current!.send(JSON.stringify({ action: "setName", name: id }));
+    });
   }, [id, webSocket, socketReceive]);
 
   useEffect(() => {

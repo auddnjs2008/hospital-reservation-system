@@ -23,9 +23,14 @@ const ReservationContainer = ({ history }: Props) => {
 
   const findId = useCallback(async () => {
     let result;
-    await Auth.currentAuthenticatedUser().then((data) => {
-      result = data;
-    });
+    await Auth.currentAuthenticatedUser()
+      .then((data) => {
+        result = data;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
     if (!result) history.push("/login");
   }, [history]);
   useEffect(() => {
